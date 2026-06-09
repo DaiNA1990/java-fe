@@ -1,0 +1,39 @@
+<nb-page-list [service]="userService" [formFilter]="formFilter">
+    <nb-table-col header="Mã" field="code" [canSort]="true"></nb-table-col>
+    <nb-table-col header="Tài khoản" field="userName"></nb-table-col>
+    <nb-table-col header="Tên" field="lastName"></nb-table-col>
+    <nb-table-col header="Email" field="email"></nb-table-col>
+    <nb-table-col header="SĐT" field="phone"></nb-table-col>
+    <nb-table-col header="Ngày tạo" field="dateCreated"></nb-table-col>
+    <nb-table-col header="Trạng thái" field="isShow">
+        <ng-template #body let-item="item">
+            <span class="badge" [ngClass]="{'badge-light-success': item.isShow, 'badge-light-danger': !item.isShow}">
+                {{item.isShow ? 'Hoạt động' : 'Không hoạt động'}}
+            </span>
+        </ng-template>
+    </nb-table-col>
+    <ng-container filter>
+        <nb-layout-grid>
+            <nb-layout-grid-item size="12">
+                <nb-select
+                    [dataSource]="[{'value': true, 'text': 'Hoạt động'}, {'value': false, 'text': 'Không hoạt động'}]"
+                    [formCtrl]="formFilter.controls.isShow" label="Trạng thái" placeholder="Chọn trạng thái." />
+            </nb-layout-grid-item>
+            <nb-layout-grid-item size="6">
+                <nb-datetime [formCtrl]="formFilter.controls.dateFrom" label="Từ ngày" placeholder="Chọn thời gian." />
+            </nb-layout-grid-item>
+            <nb-layout-grid-item size="6">
+                <nb-datetime [formCtrl]="formFilter.controls.dateTo" label="Đến ngày" placeholder="Chọn thời gian." />
+            </nb-layout-grid-item>
+        </nb-layout-grid>
+    </ng-container>
+    <app-user-edit edit></app-user-edit>
+    <ng-template #rowActionsTemplate let-item="item">
+        <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="Phân quyền"
+            (click)="assignRole(item.id)" *appPermission="['USER_ADMIN']">
+            <app-keenicon name="shield" class="fs-2"></app-keenicon>
+        </a>
+    </ng-template>
+</nb-page-list>
+
+<app-user-role-map-assign></app-user-role-map-assign>

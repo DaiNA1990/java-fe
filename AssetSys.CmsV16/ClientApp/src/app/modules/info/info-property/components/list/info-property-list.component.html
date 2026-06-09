@@ -1,0 +1,14 @@
+<!--GENERATE-->
+<nb-page-list [service]="service" 
+	[formFilter]="formFilter" 
+	[minWidth]="'0px'"
+	[isButtonAddIcon]="true" 
+	[isRowCheckbox]="false"
+	[isButtonMore]="false"
+	[isShowPagingReport]="false"
+	[isScrollable]="true"
+	[scrollHeight]="'25vh'">
+	<nb-table-col header="Thông tin" field="name"></nb-table-col>
+	<app-info-property-edit [groupId]="groupId" edit></app-info-property-edit>
+	<ng-container filter></ng-container>
+</nb-page-list>

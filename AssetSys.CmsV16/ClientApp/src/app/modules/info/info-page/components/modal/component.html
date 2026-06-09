@@ -1,0 +1,26 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h2 style="color: rgb(0, 107, 104); font-size: 180%; font-weight: 600;">{{ formItem.name }}</h2>
+    <!--<h2>&nbsp;</h2>-->
+    <div class="btn btn-sm btn-icon btn-active-color-primary" (click)="close()">
+      <app-keenicon name="cross" class="fs-1"></app-keenicon>
+    </div>
+  </div>
+  <!--<div class="modal-body">
+    <ng-content></ng-content>
+      <ng-container *ngTemplateOutlet="body" />
+  </div> -->
+  <ng-container *ngTemplateOutlet="body" />
+  <!--<div class="modal-footer">
+      <button type="button" class="btn btn-outline-secondary" (click)="dismiss()"
+        *ngIf="modalConfig.hideDismissButton === undefined || !modalConfig.hideDismissButton()"
+        [disabled]="modalConfig.disableDismissButton !== undefined && modalConfig.disableDismissButton()">
+        {{ modalConfig.dismissButtonLabel }}
+      </button>
+      <button type="button" class="btn btn-outline-primary" (click)="close()"
+        *ngIf="modalConfig.hideCloseButton === undefined || !modalConfig.hideCloseButton()"
+        [disabled]="modalConfig.disableCloseButton !== undefined && modalConfig.disableCloseButton()">
+        {{ modalConfig.closeButtonLabel }}
+      </button>
+    </div>-->
+</ng-template>

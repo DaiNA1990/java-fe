@@ -1,0 +1,8 @@
+<p-dialog header="Header" [(visible)]="isVisible" [modal]="true" [maximizable]="false"
+    [style]="{ width: '100vw', 'min-height': '100vh', border: 'none' }" [draggable]="false" [resizable]="false"
+    [contentStyle]="{'background-color': '#fcfcfc', 'overflow': 'hidden' }" (onHide)="onHiden()">
+    <ng-template pTemplate="header">
+        <span class="p-dialog-title">Xây dựng thông tin: {{group?.name}}</span>
+    </ng-template>
+    <app-info-form-design [layoutId]="layoutId" [groupId]="group.id" *ngIf="group !== null" />
+</p-dialog>

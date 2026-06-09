@@ -1,0 +1,12 @@
+<!--GENERATE-->
+<nb-page-list [service]="service" [formFilter]="formFilter">
+	<nb-table-col header="Id" field="id"></nb-table-col>
+	<nb-table-col header="Loại" field="typeId"></nb-table-col>
+	<nb-table-col header="Tài khoản" field="userId"></nb-table-col>
+	<nb-table-col header="Mã" field="code"></nb-table-col>
+	<nb-table-col header="Thiết bị" field="device"></nb-table-col>
+	<nb-table-col header="Ngày tạo" field="dateCreated"></nb-table-col>
+	<nb-table-col header="Trạng thái" field="isShow"></nb-table-col>
+    <app-user-connection-edit edit></app-user-connection-edit>
+    <ng-container filter></ng-container>
+</nb-page-list>

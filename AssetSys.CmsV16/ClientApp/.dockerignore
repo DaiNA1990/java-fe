@@ -1,0 +1,6 @@
+**/.angular
+**/dist
+**/Dockerfile*
+**/node_modules
+LICENSE
+README.md

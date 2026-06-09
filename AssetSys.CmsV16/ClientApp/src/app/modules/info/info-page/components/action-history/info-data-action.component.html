@@ -1,0 +1,86 @@
+<button
+  class="btn"
+  [class]="formItem.cssClass"
+  [style]="formItem.cssStyle"
+  (click)="open()"
+>
+  <ng-container *ngIf="formItem.icon !== null && formItem.icon !== ''">
+    <app-keenicon
+      [name]="formItem.icon"
+      [class]="formItem.iconClass"
+    ></app-keenicon>
+  </ng-container>
+  <ng-container
+    *ngIf="
+      formItem.cssClass !== null && formItem.cssClass.indexOf('btn-icon') === -1
+    "
+  >
+    {{ formItem.name }}
+  </ng-container>
+</button>
+<p-dialog
+  header="Header"
+  [(visible)]="isVisible"
+  [modal]="true"
+  [maximizable]="false"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [contentStyle]="{ 'background-color': '#fcfcfc' }"
+>
+  <ng-template pTemplate="header">
+    <span class="p-dialog-title">Lịch sử thao tác</span>
+  </ng-template>
+  <div class="history-container">
+
+    <!-- Header -->
+    <div class="history-header">
+      <div class="col-icon"></div>
+      <div class="col-time">Thời gian</div>
+      <div class="col-action">Thao tác</div>
+      <div class="col-user">Người thực hiện</div>
+    </div>
+
+    <!-- Body -->
+    <div class="history-body">
+
+      <div
+        class="history-row"
+        *ngFor="let item of actions"
+      >
+        <!-- Icon + line -->
+        <div class="col-icon">
+          <div class="timeline-icon"
+               [ngStyle]="{
+                 color: item.color
+               }">
+            <i [class]="item.icon"></i>
+          </div>
+        </div>
+
+        <!-- Time -->
+        <div class="col-time">
+          {{ item.time | date:'dd/MM/yyy HH:mm:ss' }}
+        </div>
+
+        <!-- Action -->
+        <div class="col-action">
+          {{ item.action }}
+        </div>
+
+        <!-- User -->
+        <div class="col-user">
+          {{ item.user }} - {{ item.fullName }}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="d-flex justify-content-end">
+      <a href="javascript:;" class="btn btn-light me-5" (click)="close()"
+        >Đóng</a
+      >
+    </div>
+  </ng-template>
+</p-dialog>

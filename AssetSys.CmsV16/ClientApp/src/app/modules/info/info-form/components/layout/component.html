@@ -1,0 +1,128 @@
+<!-- https://preview.keenthemes.com/metronic8/demo1/dashboards/online-courses.html -->
+<p-panel header="Giao diện" [toggleable]="true" [collapsed]="true">
+	<ng-template pTemplate="icons">
+		<button class="p-panel-header-icon p-link mr-2" (click)="open()">
+			<i class="ki-duotone ki-add-item fs-2">
+				<span class="path1"></span>
+				<span class="path2"></span>
+				<span class="path3"></span>
+			</i>
+		</button>
+	</ng-template>
+	<div class="pt-6" style="height: 40vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;">
+		<ng-container *ngFor="let item of layouts">
+			<div class="d-flex flex-stack" cdkDrag [cdkDragData]="item">
+				<a href="javascript:;"
+					class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px me-4 w-25px"
+					cdkDragHandle>
+					<i class="ki-duotone ki-sort fs-2">
+						<span class="path1"></span>
+						<span class="path2"></span>
+						<span class="path3"></span>
+						<span class="path4"></span>
+					</i>
+				</a>
+				<div class="d-flex align-items-center flex-row-fluid flex-wrap">
+					<div class="flex-grow-1 me-2">
+						<a href="javascript:;" class="text-gray-800 text-hover-primary fs-6 fw-bold"
+							(click)="open(item)">{{item.name}}</a>
+						<a href="/info/info-page/{{item.id}}" target="_blank"
+							class="text-gray-800 text-hover-primary fs-6 fw-bold mx-3">
+							<i class="ki-duotone ki-fasten">
+								<span class="path1"></span>
+								<span class="path2"></span>
+							</i>
+						</a>
+						<span class="text-muted fw-semibold d-block fs-7">{{item.code}}</span>
+					</div>
+					<a href="javascript:;"
+						class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px"
+						(click)="deleteItem($event, item)">
+						<i class="ki-duotone ki-cross fs-2">
+							<span class="path1"></span>
+							<span class="path2"></span>
+						</i>
+					</a>
+					<a href="javascript:;"
+						class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+						(click)="showCopyDialog(item)">
+						<i class="ki-duotone ki-copy fs-2"></i>
+					</a>
+					<a href="javascript:;"
+						class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px"
+						[class.btn-warning]="currentItem !== undefined && item.id === currentItem.id"
+						(click)="builder(item)">
+						<i class="ki-duotone ki-arrow-right fs-2">
+							<span class="path1"></span>
+							<span class="path2"></span>
+						</i>
+					</a>
+					<a href="javascript:;"
+						class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2 btn-danger"
+						title="Mở khoá sửa" (click)="unlock(item)" *ngIf="item.isEditing">
+						<i class="ki-duotone ki-exit-left fs-2">
+							<span class="path1"></span>
+							<span class="path2"></span>
+						</i>
+					</a>
+				</div>
+			</div>
+			<div class="d-flex flex-stack my-2" *ngIf="item.editBy !== null && item.editBy !== ''">
+				<span class="text-gray-500 fw-bold">
+					<i class="ki-duotone ki-lock mx-2">
+						<span class="path1"></span>
+						<span class="path2"></span>
+						<span class="path3"></span>
+					</i>
+					<a href="javascript:;" class="text-gray-800 text-hover-primary fw-bold">Editing by</a>
+				</span>
+				<span class="badge badge-light-danger">{{item.editBy}}</span>
+			</div>
+			<div class="separator separator-dashed my-4"></div>
+		</ng-container>
+	</div>
+</p-panel>
+
+<app-info-layout-edit [groupId]="groupId" (onSubmited)="onSubmit($event)" />
+
+<p-dialog header="Copy layout" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }"
+	[styleClass]="'blockui'">
+	<ng-template pTemplate="header">
+		<div class="inline-flex align-items-center justify-content-center gap-2">
+			<span class="font-bold white-space-nowrap">
+				Copy layout
+			</span>
+		</div>
+	</ng-template>
+	<div [formGroup]="formCopyControl">
+		<div class="mb-10">
+			<label class="form-label required">Copy to:</label>
+			<select class="form-select form-select-solid" formControlName="to">
+				<option value="CLONE">Clone</option>
+				<option value="OTHER_GROUP">Copy đến</option>
+			</select>
+		</div>
+
+		<div class="mb-10" [ngClass]="{'min-h-150px': autoGroups.length > 0}"
+			*ngIf="formCopyControl.controls.to.value === 'OTHER_GROUP'">
+			<label class="d-flex align-items-center fs-6 form-label mb-2">Nhóm:</label>
+			<p-autoComplete formControlName="group" [suggestions]="autoGroups" (completeMethod)="search($event)"
+				placeholder="Lựa chọn" inputStyleClass="form-control form-control-solid" styleClass="w-100"
+				optionLabel="name" [inputStyle]="{'border-radius': 0}" />
+		</div>
+
+	</div>
+	<ng-template pTemplate="footer">
+		<p-button label="Đóng" [text]="true" severity="secondary" styleClass="mx-3" (click)="visible = false" />
+		<p-button label="Thực hiện" [outlined]="true" severity="secondary" (click)="copyItem($event)" />
+	</ng-template>
+	<div class="blockui-overlay bg-warning bg-opacity-5" style="z-index: 10;" [ngClass]="{'d-none': !isSubmiting}">
+		<div class="blockui-message">
+			<span class="spinner-border text-primary"></span>
+			Đang thực hiện...
+		</div>
+	</div>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

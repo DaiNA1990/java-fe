@@ -1,0 +1,218 @@
+{
+    "actions": [
+        {
+            "name": "Click",
+            "value": "CLICK"
+        },
+        {
+            "name": "Select on change",
+            "value": "SELECT_ON_CHANGE"
+        },
+        {
+            "name": "Modal on open",
+            "value": "MODAL_ON_OPEN"
+        },
+        {
+            "name": "Modal on close",
+            "value": "MODAL_ON_CLOSE"
+        },
+        {
+            "name": "Form on submit",
+            "value": "FORM_ON_SUBMIT"
+        },
+        {
+            "name": "Update field",
+            "value": "UPDATE_FIELD"
+        },
+        {
+            "name": "Table on receive",
+            "value": "TABLE_ON_RECEIVE"
+        },
+        {
+            "name": "Table on load",
+            "value": "TABLE_ON_LOAD"
+        },
+        {
+            "name": "Table on init",
+            "value": "TABLE_ON_INIT"
+        },
+        {
+            "name": "Map field",
+            "value": "MAP_FIELD"
+        },
+        {
+            "name": "Pre action",
+            "value": "PRE_ACTION"
+        },
+        {
+            "name": "Post action",
+            "value": "POST_ACTION"
+        },
+        {
+            "name": "Send email",
+            "value": "SEND_EMAIL"
+        }
+    ],
+    "events": [
+        {
+            "name": "Modal open",
+            "value": "MODAL_OPEN"
+        },
+        {
+            "name": "Modal close",
+            "value": "MODAL_CLOSE"
+        },
+        {
+            "name": "Form submit",
+            "value": "FORM_SUBMIT"
+        },
+        {
+            "name": "Form reset",
+            "value": "FORM_RESET"
+        },
+        {
+            "name": "Form reload",
+            "value": "FORM_RELOAD"
+        },
+        {
+            "name": "Form refresh",
+            "value": "FORM_REFRESH"
+        },
+        {
+            "name": "Form update field",
+            "value": "FORM_UPDATE_FIELD"
+        },
+        {
+            "name": "Form update line field",
+            "value": "FORM_UPDATE_LINE_FIELD"
+        },
+        {
+            "name": "Form set value",
+            "value": "FORM_SET_VALUE"
+        },
+        {
+            "name": "Table import excel",
+            "value": "TABLE_IMPORT_EXCEL"
+        },
+        {
+            "name": "Table export excel",
+            "value": "TABLE_EXPORT_EXCEL"
+        },
+        {
+            "name": "Table filter",
+            "value": "TABLE_FILTER"
+        },
+        {
+            "name": "Table refresh",
+            "value": "TABLE_REFRESH"
+        },
+        {
+            "name": "Table delete",
+            "value": "TABLE_DELETE"
+        },
+        {
+            "name": "Table delete select",
+            "value": "TABLE_DELETE_SELECT"
+        },
+        {
+            "name": "Table update select",
+            "value": "TABLE_UPDATE_SELECT"
+        },
+        {
+            "name": "Table select send",
+            "value": "TABLE_SELECT_SEND"
+        },
+        {
+            "name": "Table select receive",
+            "value": "TABLE_SELECT_RECEIVE"
+        },
+        {
+            "name": "Table sum",
+            "value": "TABLE_SUM"
+        },
+        {
+            "name": "Table count",
+            "value": "TABLE_COUNT"
+        },
+        {
+            "name": "Table last row",
+            "value": "TABLE_LAST_ROW"
+        },
+        {
+            "name": "Table max",
+            "value": "TABLE_MAX"
+        },
+        {
+            "name": "Table min",
+            "value": "TABLE_MIN"
+        },
+        {
+            "name": "Select reload",
+            "value": "SELECT_RELOAD"
+        },
+        {
+            "name": "Value",
+            "value": "FIELD_VALUE"
+        },
+        {
+            "name": "Map field to",
+            "value": "MAP_FIELD_TO"
+        },
+        {
+            "name": "Form Validate",
+            "value": "FORM_VALIDATE"
+        },
+        {
+            "name": "Form Clone",
+            "value": "FORM_CLONE"
+        },
+        {
+            "name": "Form Collection",
+            "value": "FORM_COLLECTION"
+        },
+        {
+            "name": "Form bind data",
+            "value": "FORM_BIND_VALUE"
+        },
+        {
+            "name": "Duyệt All",
+            "value": "FORM_APPROVE_ALL"
+        },
+        {
+            "name": "Duyệt PB",
+            "value": "FORM_APPROVE_PB"
+        },
+        {
+            "name": "Xuất báo cáo",
+            "value": "EXECUTE_REPORT"
+        },
+        {
+            "name": "Tải file",
+            "value": "DOWNLOAD_FILE"
+        },
+        {
+            "name": "Email send",
+            "value": "EMAIL_SEND"
+        },
+        {
+            "name": "Email send to email",
+            "value": "EMAIL_SEND_TO_EMAIL"
+        },
+        {
+            "name": "Email send to user",
+            "value": "EMAIL_SEND_TO_USER"
+        },
+        {
+            "name": "Email send to role",
+            "value": "EMAIL_SEND_TO_ROLE"
+        },
+        {
+            "name": "Email send to department",
+            "value": "EMAIL_SEND_TO_DEPARTMENT"
+        },
+        {
+            "name": "Email send to field",
+            "value": "EMAIL_SEND_TO_FIELD"
+        }
+    ]
+}

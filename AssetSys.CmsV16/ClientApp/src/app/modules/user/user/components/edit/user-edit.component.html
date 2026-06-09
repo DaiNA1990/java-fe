@@ -1,0 +1,91 @@
+<nb-page-dialog [title]="form.controls.id.value !== null ? 'Cập nhật thông tin' : 'Thêm mới'">
+    <ng-template #edit>
+        <nb-layout-grid>
+            <nb-layout-grid-item size="3">
+                <nb-layout-card title="Thông tin phòng ban">
+                    <nb-layout-grid>
+                        <nb-layout-grid-item size="12">
+                            <nb-tree [dataSource]="departmentDataSource" [formCtrl]="form.controls.departmentId"
+                                label="Phòng ban" message="Vui lòng chọn phòng ban">
+                            </nb-tree>
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="12">
+                            <nb-select [dataSource]="levelDataSource" [formCtrl]="form.controls.levelId" label="Cấp bậc"
+                                placeholder="Chọn cấp bậc." message="Vui lòng chọn cấp bậc">
+                            </nb-select>
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="12">
+                            <nb-select [dataSource]="titleDataSource" [formCtrl]="form.controls.titleId"
+                                label="Chức danh" placeholder="Chọn chức danh." message="Vui lòng chọn chức danh">
+                            </nb-select>
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="12">
+                            <nb-autocomplete [dataSource]="roleDataSource" [formCtrl]="form.controls.titleId"
+                                label="Quyền truy cập" placeholder="Chọn quyền.">
+                            </nb-autocomplete>
+                        </nb-layout-grid-item>
+                    </nb-layout-grid>
+                </nb-layout-card>
+            </nb-layout-grid-item>
+            <nb-layout-grid-item size="9">
+                <nb-layout-card title="Thông tin tài khoản">
+                    <nb-layout-grid>
+                        <nb-layout-grid-item size="4">
+                            <nb-text [formCtrl]="form.controls.code" label="Mã tài khoản" placeholder="Nhập thông tin..."
+                                message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-text [formCtrl]="form.controls.twoFACode" label="Mã xác thực"
+                                placeholder="Nhập thông tin..." message="Vui lòng nhập thông tin." />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-text [formCtrl]="form.controls.userName" label="Tài khoản"
+                                placeholder="Nhập thông tin..." message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-text [formCtrl]="form.controls.password" label="Mật khẩu"
+                                placeholder="Nhập thông tin..." message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-text [formCtrl]="form.controls.firstName" label="Tên họ" placeholder="Nhập thông tin..."
+                                message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-text [formCtrl]="form.controls.lastName" label="Tên" placeholder="Nhập thông tin..."
+                                message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-text [formCtrl]="form.controls.phone" label="SĐT" placeholder="Nhập thông tin..."
+                                message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-text [formCtrl]="form.controls.email" label="Email" placeholder="Nhập thông tin..."
+                                message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-datetime [formCtrl]="form.controls.dateOfBirth" label="Ngày sinh"
+                                placeholder="Nhập thông tin..." message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-text [formCtrl]="form.controls.address" label="Địa chỉ" placeholder="Nhập thông tin..."
+                                message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-radio [formCtrl]="form.controls.gender"
+                                [dataSource]="[{'value': true, 'name': 'Nam'}, {'value': false, 'name': 'Nữ'}]"
+                                label="Giới tính" message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="4">
+                            <nb-checkbox [formCtrl]="form.controls.isShow" label="Trạng thái"
+                                placeholder="Hoạt đông/Không hoạt động" message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                        <nb-layout-grid-item size="12">
+                            <nb-editor [formCtrl]="form.controls.description" label="Mô tả"
+                                placeholder="Nhập thông tin..." message="Vui lòng nhập thông tin" />
+                        </nb-layout-grid-item>
+                    </nb-layout-grid>
+                </nb-layout-card>
+            </nb-layout-grid-item>
+        </nb-layout-grid>
+    </ng-template>
+</nb-page-dialog>

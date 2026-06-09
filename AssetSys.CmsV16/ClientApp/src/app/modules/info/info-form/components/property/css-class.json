@@ -1,0 +1,34 @@
+[
+    {
+        "text": "btn-primary",
+        "value": "btn-primary"
+    },
+    {
+        "text": "d-block",
+        "value": "d-block"
+    },
+    {
+        "text": "text-start",
+        "value": "text-start"
+    },
+    {
+        "text": "text-center",
+        "value": "text-center"
+    },
+    {
+        "text": "text-end",
+        "value": "text-end"
+    },
+    {
+        "text": "card-title",
+        "value": "card-title"
+    },
+    {
+        "text": "min-w-750px",
+        "value": "min-w-750px"
+    },
+    {
+        "text": "mw-750px",
+        "value": "mw-750px"
+    }     
+]

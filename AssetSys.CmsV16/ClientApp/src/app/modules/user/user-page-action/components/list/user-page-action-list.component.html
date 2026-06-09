@@ -1,0 +1,24 @@
+<!--GENERATE-->
+<p-dialog header="Header" [(visible)]="isVisible" [modal]="true" [maximizable]="true" [style]="{ width: '50vw' }"
+	[draggable]="true" [resizable]="false" [contentStyle]="{'background-color': '#fcfcfc' }">
+	<ng-template pTemplate="header">
+		<span class="p-dialog-title">Danh sách chức năng</span>
+	</ng-template>
+	<nb-page-list [service]="service" [formFilter]="formFilter">
+		<nb-table-col header="Id" field="id"></nb-table-col>
+		<nb-table-col header="Chức năng" field="pageId"></nb-table-col>
+		<nb-table-col header="Tên" field="name"></nb-table-col>
+		<nb-table-col header="Mã" field="code"></nb-table-col>
+		<nb-table-col header="Ngày tạo" field="dateCreated"></nb-table-col>
+		<nb-table-col header="Trạng thái" field="isShow"></nb-table-col>
+		<app-user-page-action-edit edit></app-user-page-action-edit>
+		<ng-container filter></ng-container>
+	</nb-page-list>
+	<ng-template pTemplate="footer">
+		<div class="d-flex justify-content-end">
+			<a href="javascript:;" class="btn btn-light" (click)="close()">
+				Đóng
+			</a>
+		</div>
+	</ng-template>
+</p-dialog>

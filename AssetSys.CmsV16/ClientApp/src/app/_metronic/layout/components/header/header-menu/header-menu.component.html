@@ -1,0 +1,51 @@
+<ng-container *ngFor="let item of items">
+  <ng-container *ngTemplateOutlet="menu;context: {item: item}" />
+</ng-container>
+
+<ng-template #menu let-item="item">
+  <ng-container *ngTemplateOutlet="item.subs === undefined ? menuNoSub : menuSubs;context: {item: item}" />
+</ng-template>
+
+<ng-template #menuNoSub let-item="item">
+  <div class="menu-item me-lg-1">
+    <a class="menu-link py-3" routerLinkActive="active menu-here" [routerLink]="item.link">
+      <ng-container *ngTemplateOutlet="item.icon === undefined ? null : icon;context: {item: item}" />
+      <span class="menu-title" [translate]="item.name"></span>
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #menuSubs let-item="item">
+  <div class="menu-item menu-lg-down-accordion me-lg-1" data-kt-menu-trigger="{default:'click', lg: 'hover'}"
+    [attr.data-kt-menu-placement]="item.placement">
+    <span class="menu-link py-3" [ngClass]="calculateMenuItemCssClass(item.link)">
+      <ng-container *ngTemplateOutlet="item.icon === undefined ? null : icon;context: {item: item}" />
+      <span class="menu-title" [attr.data-link]="item.link">
+        {{item.name}}
+      </span>
+      <span class="menu-arrow d-lg-none" [class.d-lg-none]="item.placement === 'bottom-start'"></span>
+    </span>
+    <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px"
+      data-kt-menu-dismiss="true">
+      <ng-container *ngFor="let sub of item.subs">
+        <ng-container *ngTemplateOutlet="sub.subs === undefined ? menuNoSub : menuSubs;context: {item: sub}" />
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #icon let-item="item">
+  <ng-container *ngTemplateOutlet="item.icon === 'dot' ? dot : iconApp;context: {item: item}" />
+</ng-template>
+
+<ng-template #iconApp let-item="item">
+  <span class="menu-icon">
+    <i [attr.class]="item.icon"></i>
+  </span>
+</ng-template>
+
+<ng-template #dot>
+  <span class="menu-bullet">
+    <span class="bullet bullet-dot"></span>
+  </span>
+</ng-template>

@@ -1,0 +1,107 @@
+<label class="d-flex align-items-center fs-6 fw-semibold mb-2">Thao tác:</label>
+<div class="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4 me-6 mb-3">
+	<ng-container *ngIf="hasAction">
+		<span class="fs-6 text-gray-700 fw-bold">Có thao tác</span>
+		<div class="fw-semibold text-gray-500">Click để thay đổi</div>
+	</ng-container>
+	<div class="my-1 text-center">
+		<a href="javascript:;" (click)="open()">
+			<i class="ki-duotone ki-plus fs-2" *ngIf="!hasAction"></i>
+			<i class="ki-duotone ki-pencil fs-2" *ngIf="hasAction">
+				<span class="path1"></span>
+				<span class="path2"></span>
+			</i>
+		</a>
+	</div>
+</div>
+
+<p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{ width: '70rem' }">
+	<ng-template pTemplate="header">
+		<div class="inline-flex align-items-center justify-content-center gap-2">
+			<span class="font-bold white-space-nowrap">Thao tác</span>
+		</div>
+	</ng-template>
+	<div class="table-responsive mb-10">
+		<label class="form-label mb-10">Thông tin hành động</label>
+		<ng-container *ngTemplateOutlet="condGroupTemp;context: {item: dataActions}" />
+	</div>
+	<ng-template pTemplate="footer">
+		<p-button label="Đóng" [text]="true" severity="secondary" styleClass="mx-3" (click)="visible = false" />
+		<p-button label="Lưu thông tin" [outlined]="true" severity="secondary" (click)="save()" />
+	</ng-template>
+</p-dialog>
+
+<ng-template #condGroupTemp let-item="item" let-parent="parent">
+	<div class="border border-dashed border-gray-300 rounded px-7 py-3 mb-5">
+		<div class="row mb-3">
+			<div class="col-6"></div>
+			<div class="col-6 text-end">
+				<a href="javascript:;"
+					class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+					(click)="addCondition(item)">
+					<i class="ki-duotone ki-plus fs-2"></i>
+				</a>
+				<a href="javascript:;"
+					class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+					(click)="addConditionGroup(item)">
+					<i class="ki-duotone ki-element-plus fs-2">
+						<span class="path1"></span>
+						<span class="path2"></span>
+						<span class="path3"></span>
+						<span class="path4"></span>
+						<span class="path5"></span>
+					</i>
+				</a>
+				<a href="javascript:;"
+					class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+					(click)="removeConditionGroup(item, parent)" *ngIf="parent !== undefined">
+					<i class="ki-duotone ki-trash fs-2">
+						<span class="path1"></span>
+						<span class="path2"></span>
+						<span class="path3"></span>
+						<span class="path4"></span>
+						<span class="path5"></span>
+					</i>
+				</a>
+			</div>
+		</div>
+		<ng-container *ngFor="let rule of item.rules">
+			<ng-container *ngTemplateOutlet="rule.condition !== undefined ? condGroupTemp : condTemp;context: {item: rule, parent: item}" />
+		</ng-container>
+	</div>
+</ng-template>
+
+<ng-template #condTemp let-item="item" let-parent="parent">
+	<div class="border border-dashed border-gray-300 rounded px-3 py-3 mb-5">
+		<div class="input-group mb-5">
+			<select class="form-select" [(ngModel)]="item.action">
+				<option>Thao tác</option>
+				<option [value]="action.value" *ngFor="let action of actions">{{action.name}}</option>
+			</select>
+			<p-autoComplete [(ngModel)]="item.target" [suggestions]="targets" (completeMethod)="search($event)"
+				inputStyleClass="form-control" [inputStyle]="{'border-radius': 0}" (onSelect)="select($event, item)" />
+			<select class="form-select" [(ngModel)]="item.event">
+				<option>Sự kiện</option>
+				<option [value]="event.value" *ngFor="let event of events">{{event.name}}</option>
+			</select>
+			<input type="text" class="form-control" placeholder="Thông tin khác" [(ngModel)]="item.data" />
+			<a href="javascript:;" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+				(click)="addCondition(item)">
+				<i class="ki-duotone ki-plus fs-2"></i>
+			</a>
+			<a href="javascript:;" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+				(click)="removeCondition(item, parent)">
+				<i class="ki-duotone ki-trash fs-2">
+					<span class="path1"></span>
+					<span class="path2"></span>
+					<span class="path3"></span>
+					<span class="path4"></span>
+					<span class="path5"></span>
+				</i>
+			</a>
+		</div>
+		<ng-container *ngFor="let rule of item.rules">
+			<ng-container *ngTemplateOutlet="condTemp;context: {item: rule, parent: item}" />
+		</ng-container>
+	</div>
+</ng-template>

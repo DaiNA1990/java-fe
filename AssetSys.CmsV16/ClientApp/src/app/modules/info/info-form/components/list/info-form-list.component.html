@@ -1,0 +1,10 @@
+<nb-page-list [service]="service" [formFilter]="formFilter">
+	<nb-table-col header="Id" field="id"></nb-table-col>
+	<nb-table-col header="Tên" field="name"></nb-table-col>
+	<nb-table-col header="Trường" field="propertyItem.name"></nb-table-col>
+	<nb-table-col header="Hiển thị" field="controlType"></nb-table-col>
+	<nb-table-col header="Ngày tạo" field="dateCreated"></nb-table-col>
+	<nb-table-col header="Hoạt động" field="isShow"></nb-table-col>
+	<app-info-form-edit [layoutId]="layoutId" [groupId]="groupId" edit></app-info-form-edit>
+	<ng-container filter></ng-container>
+</nb-page-list>

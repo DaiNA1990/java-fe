@@ -1,0 +1,18 @@
+.radio-container {
+  display: flex;
+  flex-direction: column; /* Đảm bảo các item luôn xuống dòng */
+  gap: 3px; /* khoảng cách giữa các radio */
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* Loại bỏ khoảng dư giữa radio và label nếu có */
+.radio-item label {
+  margin: 0;
+  user-select: none;
+}

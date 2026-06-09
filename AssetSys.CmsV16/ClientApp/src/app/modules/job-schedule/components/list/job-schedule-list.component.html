@@ -1,0 +1,514 @@
+<div class="p-4 job-schedule-root">
+  <h1 class="text-xl font-bold mb-4">Jobs Management</h1>
+
+  <p-tabView [(activeIndex)]="activeIndex" (onChange)="onTabChange($event)">
+    <!-- TAB: Jobs -->
+    <p-tabPanel>
+      <ng-template pTemplate="header">
+        <div class="header">
+          <div>Jobs</div>
+          <span
+            [class]="
+              (stats?.failed ||
+                stats?.enqueued ||
+                stats?.scheduled ||
+                stats?.processing) > 0
+                ? stats?.failed > 0
+                  ? 'metric metric-danger highlighted'
+                  : 'metric metric-info'
+                : 'metric metric-default'
+            "
+            >{{
+              stats?.failed ||
+              stats?.enqueued ||
+              stats?.scheduled ||
+              stats?.processing
+                ? stats?.failed ||
+                  stats?.enqueued ||
+                  stats?.scheduled ||
+                  stats?.processing
+                : 0
+            }}</span
+          >
+        </div>
+      </ng-template>
+
+      <div class="container-fluid mt-3">
+        <div class="row">
+          <!-- Sidebar -->
+          <div class="col-3">
+            <div class="card shadow-sm">
+              <div class="list-group list-group-flush">
+                <button
+                  *ngFor="let item of jobStatuses"
+                  class="list-group-item list-group-item-action job-item"
+                  [ngClass]="{ active: selectedStatus === item.key }"
+                  (click)="selectStatus(item.key)"
+                >
+                  {{ item.label }}
+                  <ng-container [ngSwitch]="item.key">
+                    <span
+                      *ngSwitchCase="'enqueued'"
+                      [class]="
+                        item.count > 0
+                          ? 'metric metric-info'
+                          : 'metric metric-default'
+                      "
+                    >
+                      {{ item.count }}/{{ stats?.queues ?? 0 }}
+                    </span>
+                    <span
+                      *ngSwitchCase="'scheduled'"
+                      [class]="
+                        item.count > 0
+                          ? 'metric metric-info'
+                          : 'metric metric-default'
+                      "
+                    >
+                      {{ item.count }}
+                    </span>
+                    <span
+                      *ngSwitchCase="'processing'"
+                      [class]="
+                        item.count > 0
+                          ? 'metric metric-warning'
+                          : 'metric metric-default'
+                      "
+                    >
+                      {{ item.count }}
+                    </span>
+                    <span
+                      *ngSwitchCase="'failed'"
+                      [class]="
+                        item.count > 0
+                          ? 'metric metric-danger highlighted'
+                          : 'metric metric-default'
+                      "
+                    >
+                      {{ item.count }}
+                    </span>
+                    <span *ngSwitchDefault [class]="'metric metric-default'">
+                      {{ item.count }}
+                    </span>
+                  </ng-container>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- main content -->
+          <div class="col-9" *ngIf="showJobDetail">
+            <app-job-details #jobDetails></app-job-details>
+          </div>
+
+          <div class="col-9" *ngIf="!showJobDetail">
+            <h4 class="fw-bold mb-3">{{ selectedStatus | titlecase }} Jobs</h4>
+
+            <p-button
+              label="Delete selected"
+              icon="pi pi-trash"
+              styleClass="p-button-danger custom-trigger-btn"
+              (onClick)="deleteSelected()"
+              *ngIf="['scheduled','processing','failed'].includes(selectedStatus)"
+            ></p-button>
+
+            <!-- ENQUEUED / Queues -->
+            <p-table *ngIf="selectedStatus === 'enqueued'" [value]="queues" dataKey="name" [rows]="10" [paginator]="true" [scrollable]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th scope="col" alignFrozen="left" pFrozenColumn [frozen]="true">
+                    Queue
+                  </th>
+                  <th scope="col" alignFrozen="left" pFrozenColumn [frozen]="true">
+                    Length
+                  </th>
+                  <th scope="col" alignFrozen="left" pFrozenColumn [frozen]="true">
+                    Fetched
+                  </th>
+                  <th scope="col">Next Jobs</th>
+                </tr>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td alignFrozen="left" pFrozenColumn [frozen]="true">
+                    {{ row.name }}
+                  </td>
+                  <td alignFrozen="left" pFrozenColumn [frozen]="true">
+                    {{ row.length }}
+                  </td>
+                  <td alignFrozen="left" pFrozenColumn [frozen]="true">
+                    {{ row.fetched }}
+                  </td>
+                  <td>
+                    <span *ngIf="!(row.jobs?.length > 0)">No jobs queued</span>
+
+                    <table
+                      class="table table-sm mb-0 inner-table"
+                      *ngIf="row.jobs?.length > 0"
+                    >
+                    <caption class="visually-hidden">
+                      Job list of current row
+                    </caption>
+                      <thead class="table-light">
+                        <tr>
+                          <th>Job Id</th>
+                          <th>State</th>
+                          <th>Job Type</th>
+                          <th>Method</th>
+                          <th>Enqueued At</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let job of row.jobs; trackBy: trackByJobId">
+                          <td>{{ job.id }}</td>
+                          <td>
+                            <span class="badge" [ngClass]="{
+                              'bg-success': job.state === 'Succeeded',
+                              'bg-danger': job.state === 'Failed',
+                              'bg-warning text-dark': job.state === 'Enqueued'
+                            }">{{ job.state }}</span>
+                          </td>
+                          <td>{{ job.jobType }}</td>
+                          <td>{{ job.method }}</td>
+                          <td>{{ job.enqueuedAt | date: 'dd/MM/yyyy HH:mm:ss' }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <!-- SCHEDULED -->
+            <p-table *ngIf="selectedStatus === 'scheduled'"
+                     #tblScheduled
+                     [value]="scheduled.data"
+                     [paginator]="true"
+                     [rows]="10"
+                     [totalRecords]="scheduled.total"
+                     (onLazyLoad)="loadScheduled($event)"
+                     [lazy]="true"
+                     [(selection)]="selectedJobs"
+                     dataKey="jobId"
+                     selectionMode="multiple">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th scope="col" style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th scope="col">Id</th>
+                  <th scope="col">Enqueue</th>
+                  <th scope="col">Job</th>
+                  <th scope="col">Scheduled At</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td><p-tableCheckbox [value]="row"></p-tableCheckbox></td>
+                  <td><a (click)="onShowJobDetail(row.jobId, row.tenant)" href="javascript:void(0)">{{ row.jobId }}</a></td>
+                  <td>{{ row.enqueueAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                  <td>{{ row.method }}</td>
+                  <td>{{ row.scheduledAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <!-- PROCESSING -->
+            <p-table *ngIf="selectedStatus === 'processing'"
+                     #tblProcessing
+                     [value]="processing.data"
+                     [paginator]="true"
+                     [rows]="10"
+                     [totalRecords]="processing.total"
+                     (onLazyLoad)="loadProcessing($event)"
+                     [lazy]="true"
+                     [(selection)]="selectedJobs"
+                     dataKey="jobId"
+                     selectionMode="multiple">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th scope="col" style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th scope="col">Id</th>
+                  <th scope="col">Server</th>
+                  <th scope="col">Job</th>
+                  <th scope="col">Started</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td><p-tableCheckbox [value]="row"></p-tableCheckbox></td>
+                  <td><a (click)="onShowJobDetail(row.jobId, row.tenant)" href="javascript:void(0)">{{ row.jobId }}</a></td>
+                  <td>{{ row.serverId }}</td>
+                  <td>{{ row.method }}</td>
+                  <td>{{ row.startedAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <!-- SUCCEEDED -->
+            <p-table *ngIf="selectedStatus === 'succeeded'"
+                     #tblSucceeded
+                     [value]="succeeded.data"
+                     [paginator]="true"
+                     [rows]="10"
+                     [totalRecords]="succeeded.total"
+                     (onLazyLoad)="loadSucceeded($event)"
+                     [lazy]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Job</th>
+                  <th scope="col">Total Duration</th>
+                  <th scope="col">Succeeded</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td><a (click)="onShowJobDetail(row.jobId, row.tenant)" href="javascript:void(0)">{{ row.jobId }}</a></td>
+                  <td>{{ row.method }}</td>
+                  <td>{{ row.duration/1000 }}s</td>
+                  <td>{{ row.succeededAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <!-- FAILED -->
+            <p-table *ngIf="selectedStatus === 'failed'"
+                     #tblFailed
+                     [value]="failed.data"
+                     [paginator]="true"
+                     [rows]="10"
+                     [totalRecords]="failed.total"
+                     (onLazyLoad)="loadFailed($event)"
+                     [lazy]="true"
+                     [(selection)]="selectedJobs"
+                     dataKey="jobId"
+                     selectionMode="multiple">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th scope="col" style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th scope="col">Id</th>
+                  <th scope="col">Job</th>
+                  <th scope="col">Exception</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td><p-tableCheckbox [value]="row"></p-tableCheckbox></td>
+                  <td><a (click)="onShowJobDetail(row.jobId, row.tenant)" href="javascript:void(0)">{{ row.jobId }}</a></td>
+                  <td>{{ row.method }}</td>
+                  <td>{{ row.failedAt }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <!-- DELETED -->
+            <p-table *ngIf="selectedStatus === 'deleted'"
+                     #tblDeleted
+                     [value]="deleted.data"
+                     [paginator]="true"
+                     [rows]="10"
+                     [totalRecords]="deleted.total"
+                     (onLazyLoad)="loadDeleted($event)"
+                     [lazy]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Job</th>
+                  <th scope="col">Deleted</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td><a (click)="onShowJobDetail(row.jobId, row.tenant)" href="javascript:void(0)">{{ row.jobId }}</a></td>
+                  <td>{{ row.method }}</td>
+                  <td>{{ row.deletedAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <!-- AWAITING -->
+            <p-table *ngIf="selectedStatus === 'awaiting'"
+                     #tblAwaiting
+                     [value]="awaiting.data"
+                     [paginator]="true"
+                     [rows]="10"
+                     [totalRecords]="awaiting.total"
+                     (onLazyLoad)="loadAwaiting($event)"
+                     [lazy]="true">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th scope="col">Job</th>
+                  <th scope="col">Awaiting Reason</th>
+                  <th scope="col">Created At</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td>{{ row.method }}</td>
+                  <td>{{ row.reason }}</td>
+                  <td>{{ row.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+        </div>
+      </div>
+    </p-tabPanel>
+
+    <!-- TAB: Retries (separate tab) -->
+    <p-tabPanel>
+      <ng-template pTemplate="header">
+        <div class="header">
+          <div class="title">Retries</div>
+          <span [class]="stats?.retries > 0 ? 'metric metric-warning' : 'metric metric-default'">
+            {{ stats?.retries ?? 0 }}
+          </span>
+        </div>
+      </ng-template>
+
+      <p-button label="Delete selected" icon="pi pi-trash" styleClass="p-button-danger custom-trigger-btn" (onClick)="deleteSelected()"></p-button>
+
+      <p-table #tblRetries
+               [value]="retries.data"
+               [paginator]="true"
+               [rows]="10"
+               [totalRecords]="retries.total"
+               (onLazyLoad)="loadRetries($event)"
+               [lazy]="true"
+               [(selection)]="selectedJobs"
+               dataKey="jobId"
+               selectionMode="multiple">
+        <ng-template pTemplate="header">
+          <tr>
+            <th scope="col" style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th scope="col">Id</th>
+            <th scope="col">State</th>
+            <th scope="col">Job</th>
+            <th scope="col">Reason</th>
+            <th scope="col">Retry</th>
+            <th scope="col">Created</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td><p-tableCheckbox [value]="row"></p-tableCheckbox></td>
+            <td><a (click)="onShowJobDetail(row.jobId, row.tenant)" href="javascript:void(0)">{{ row.jobId }}</a></td>
+            <td>{{ row.state }}</td>
+            <td>{{ row.method }}</td>
+            <td>{{ row.reason }}</td>
+            <td>{{ row.retryCount }}</td>
+            <td>{{ row.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+
+    <!-- TAB: Recurring -->
+    <p-tabPanel>
+      <ng-template pTemplate="header">
+        <div class="header">
+          <div class="title">Recurring Jobs</div>
+          <span class="metric metric-default">{{ stats?.recurring ?? 0 }}</span>
+        </div>
+      </ng-template>
+
+      <p-button label="Trigger now" icon="pi pi-play" styleClass="p-button-primary custom-trigger-btn" (onClick)="triggerNow()"></p-button>
+
+      <p-table #tblRecurring
+               [value]="recurring.data"
+               [paginator]="true"
+               [rows]="10"
+               [totalRecords]="recurring.total"
+               (onLazyLoad)="loadRecurring($event)"
+               [lazy]="true"
+               [(selection)]="selectedRecurringJobs"
+               dataKey="id"
+               selectionMode="multiple">
+        <ng-template pTemplate="header">
+          <tr>
+            <th scope="col" style="width: 3rem">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th scope="col">Job</th>
+            <th scope="col">Cron</th>
+            <th scope="col">Time zone</th>
+            <th scope="col">Next execution</th>
+            <th scope="col">Last execution</th>
+            <th scope="col">Created</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td><p-tableCheckbox [value]="row"></p-tableCheckbox></td>
+            <td>{{ row.id }}</td>
+            <td><code class="cron-badge">{{ row.cron }}</code></td>
+            <td>{{ row.timeZone }}</td>
+            <td>{{ row.nextExecution | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+            <td>{{ row.lastExecution ? (row.lastExecution | date:'yyyy-MM-dd HH:mm:ss') : 'N/A' }}</td>
+            <td>{{ row.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+
+    <!-- TAB: Servers -->
+    <p-tabPanel>
+      <ng-template pTemplate="header">
+        <div class="header">
+          <div class="title">Servers</div>
+          <span class="metric metric-default">{{ stats?.servers ?? 0 }}</span>
+        </div>
+      </ng-template>
+
+      <p-table [value]="servers">
+        <ng-template pTemplate="header">
+          <tr>
+            <th scope="col">Server</th>
+            <th scope="col">Workers</th>
+            <th scope="col">Queues</th>
+            <th scope="col">Started</th>
+            <th scope="col">Heartbeat</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+          <tr>
+            <td>{{ row.name }}</td>
+            <td>{{ row.workersCount }}</td>
+            <td>{{ row.queues?.join(', ') }}</td>
+            <td>{{ row.startedAt | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+            <td>{{ row.heartbeat | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+
+    <!-- Optional Transform Data -->
+    <p-tabPanel *ngIf="stats?.enableTransform === 'true'">
+      <ng-template pTemplate="header">
+        <div class="header"><div class="title">Transform Data</div></div>
+      </ng-template>
+
+      <p-fileUpload name="file" [customUpload]="true" [multiple]="true"
+                    chooseLabel="Chọn file" uploadLabel="Tải lên" cancelLabel="Hủy"
+                    (uploadHandler)="uploadFile($event)"></p-fileUpload>
+    </p-tabPanel>
+  </p-tabView>
+
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>
+
+  <p-dialog [(visible)]="loading" [modal]="true" [closable]="false" [draggable]="false" [style]="{ width: '400px' }">
+    <div class="p-d-flex p-jc-center p-ai-center" style="height:120px; text-align:center">
+      <p-progressSpinner [style]="{ width: '50px' }" strokeWidth="5" fill="var(--surface-ground)" animationDuration=".5s"></p-progressSpinner>
+      <p style="margin:5px 0">Đang thực hiện, vui lòng chờ...</p>
+    </div>
+  </p-dialog>
+</div>

@@ -1,0 +1,114 @@
+<p-panel header="Giao diện" [toggleable]="true" *ngIf="isLoadProperty">
+	<ng-template pTemplate="icons">
+		<button class="p-panel-header-icon p-link mr-2" (click)="itemSave()">
+			<i class="ki-duotone ki-check-circle fs-2">
+				<span class="path1"></span>
+				<span class="path2"></span>
+			</i>
+		</button>
+	</ng-template>
+	<div style="height: 40vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;">
+		<nb-layout-grid>
+			<nb-layout-grid-item size="12">
+				<nb-select [formCtrl]="formControl.controls.parentId" [dataSource]="formDS" label="Cấp cha"
+					placeholder="Nhập thông tin" [isFilter]="true" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.name" label="Tên" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.code" label="Mã" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-select [formCtrl]="formControl.controls.controlType" [dataSource]="controlTypes"
+					label="Kiểu hiển thị" placeholder="Lựa chọn" [isGroup]="true" [isFilter]="true" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.permission" label="Quyền truy cập" placeholder="Nhập thông tin: ACTION1,ACTION2" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-checkbox [formCtrl]="formControl.controls.isReadOnly" label="Chỉ Xem" placeholder="Có/Không" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-checkbox [formCtrl]="formControl.controls.isShow" label="Hoạt động" placeholder="Có/Không" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-autocomplete [formCtrl]="formControl.controls.size" label="Kích thước" placeholder="Nhập thông tin"
+					[dataSource]="sizeItems" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-autocomplete [formCtrl]="formControl.controls.displayOrder" label="Số thứ tự"
+					placeholder="Nhập thông tin" [dataSource]="sizeItems" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-autocomplete [formCtrl]="formControl.controls.icon" label="Icon" placeholder="Nhập thông tin"
+					[dataSource]="iconItems" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.iconClass" label="Icon class" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-autocomplete [formCtrl]="formControl.controls.cssClass" label="Class" placeholder="Nhập thông tin"
+					[dataSource]="classItems" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.cssStyle" label="Style" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<app-info-form-property-build-action [formCtrl]="formControl.controls.action" [groupId]="groupId"
+					[layoutId]="layoutId" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.referenceCode" label="Mã tham chiếu"
+					placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+		</nb-layout-grid>
+	</div>
+</p-panel>
+<p-panel header="Dữ liệu" [toggleable]="true" [collapsed]="false" *ngIf="isLoadProperty">
+	<div style="height: 40vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;">
+		<nb-layout-grid>
+			<nb-layout-grid-item size="12">
+				<nb-select [formCtrl]="formControl.controls.propertyId" [dataSource]="propertyDS" label="Trường"
+					placeholder="Nhập thông tin" [isFilter]="true" />
+			</nb-layout-grid-item>
+			<!-- <nb-layout-grid-item size="12">
+				<nb-checkbox [formCtrl]="formControl.controls.isRequired" label="Bắt buộc" placeholder="Có/Không" />
+			</nb-layout-grid-item> -->
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.hint" label="Mô tả" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.message" label="Thông báo" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.placeholder" label="Gợi ý" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="formControl.controls.defaultValue" label="Giá trị mặc định"
+					placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<app-info-form-property-build-data [formCtrl]="formControl.controls.lookupData" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<app-info-form-property-build-validate [formCtrl]="formControl.controls.expressionValidate" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<app-info-form-property-build-condition-ui [formCtrl]="formControl.controls.expressionDisplay"
+					[label]="'Điều kiện hiển thị'" [groupId]="groupId" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<app-info-form-property-build-condition-readonly [formCtrl]="formControl.controls.expressionReadonly"
+					[label]="'Điều kiện ReadOnly'" [groupId]="groupId" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<app-info-form-property-build-condition-data [formCtrl]="formControl.controls.expressionData"
+					[groupId]="groupId" />
+			</nb-layout-grid-item>
+		</nb-layout-grid>
+	</div>
+</p-panel>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

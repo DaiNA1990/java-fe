@@ -1,0 +1,267 @@
+[
+  {
+    "name": "MENU.DASHBOARD",
+    "link": "/dashboard"
+  },
+  {
+    "name": "Layout Builder",
+    "link": "/builder"
+  },
+  {
+    "name": "Resource",
+    "placement": "bottom-start",
+    "subs": [
+      {
+        "icon": "dot",
+        "name": "All",
+        "link": "/resource/resource"
+      },
+      {
+        "icon": "dot",
+        "name": "Email template",
+        "link": "/resource/email-template"
+      }
+    ]
+  },
+  {
+    "name": "Crafted",
+    "placement": "bottom-start",
+    "subs": [
+      {
+        "icon": "bi fs-3 bi-archive",
+        "name": "Pages",
+        "placement": "right-start",
+        "link": "",
+        "subs": [
+          {
+            "icon": "dot",
+            "name": "Profile",
+            "link": "/crafted/pages/profile",
+            "placement": "right-start",
+            "subs": [
+              {
+                "icon": "dot",
+                "name": "Overview",
+                "link": "/crafted/pages/profile/overview"
+              },
+              {
+                "icon": "dot",
+                "name": "Projects",
+                "link": "/crafted/pages/profile/projects"
+              },
+              {
+                "icon": "dot",
+                "name": "Campaigns",
+                "link": "/crafted/pages/profile/campaigns"
+              },
+              {
+                "icon": "dot",
+                "name": "Documents",
+                "link": "/crafted/pages/profile/documents"
+              },
+              {
+                "icon": "dot",
+                "name": "Connections",
+                "link": "/crafted/pages/profile/connections"
+              }
+            ]
+          },
+          {
+            "name": "Wizards",
+            "icon": "dot",
+            "link": "/crafted/pages/wizards",
+            "placement": "right-start",
+            "subs": [
+              {
+                "icon": "dot",
+                "name": "Horizontal",
+                "link": "/crafted/pages/wizards/horizontal"
+              },
+              {
+                "icon": "dot",
+                "name": "Vertical",
+                "link": "/crafted/pages/wizards/vertical"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "icon": "bi bi-person-circle",
+        "name": "Accounts",
+        "placement": "right-start",
+        "link": "/crafted/account",
+        "subs": [
+          {
+            "icon": "dot",
+            "name": "Overview",
+            "link": "/crafted/account/overview"
+          },
+          {
+            "icon": "dot",
+            "name": "Settings",
+            "link": "/crafted/account/settings"
+          }
+        ]
+      },
+      {
+        "icon": "bi bi-bug",
+        "name": "Errors",
+        "link": "/errors",
+        "placement": "right-start",
+        "subs": [
+          {
+            "icon": "dot",
+            "name": "Error 404",
+            "link": "/error/404"
+          },
+          {
+            "icon": "dot",
+            "name": "Error 500",
+            "link": "/error/500"
+          }
+        ]
+      },
+      {
+        "icon": "bi bi-grid",
+        "name": "Widgets",
+        "link": "/crafted/widgets",
+        "placement": "right-start",
+        "subs": [
+          {
+            "icon": "dot",
+            "name": "Lists",
+            "link": "/crafted/widgets/lists"
+          },
+          {
+            "icon": "dot",
+            "name": "Statistics",
+            "link": "/crafted/widgets/statistics"
+          },
+          {
+            "icon": "dot",
+            "name": "Charts",
+            "link": "/crafted/widgets/charts"
+          },
+          {
+            "icon": "dot",
+            "name": "Mixed",
+            "link": "/crafted/widgets/mixed"
+          },
+          {
+            "icon": "dot",
+            "name": "Tables",
+            "link": "/crafted/widgets/tables"
+          },
+          {
+            "icon": "dot",
+            "name": "Feeds",
+            "link": "/crafted/widgets/feeds"
+          }
+        ]
+      },
+      {
+        "icon": "bi bi-ui-checks-grid",
+        "name": "Forms",
+        "link": "/crafted/forms",
+        "placement": "right-start",
+        "subs": [
+          {
+            "icon": "dot",
+            "name": "Auto complete",
+            "link": "/crafted/forms/autocomplete"
+          },
+          {
+            "icon": "dot",
+            "name": "Checkbox",
+            "link": "/crafted/forms/checkbox"
+          },
+          {
+            "icon": "dot",
+            "name": "Datetime",
+            "link": "/crafted/forms/datetime"
+          },
+          {
+            "icon": "dot",
+            "name": "Number",
+            "link": "/crafted/forms/number"
+          },
+          {
+            "icon": "dot",
+            "name": "Editor",
+            "link": "/crafted/forms/editor"
+          },
+          {
+            "icon": "dot",
+            "name": "File",
+            "link": "/crafted/forms/file"
+          },
+          {
+            "icon": "dot",
+            "name": "Picture",
+            "link": "/crafted/forms/picture"
+          },
+          {
+            "icon": "dot",
+            "name": "Radio",
+            "link": "/crafted/forms/radio"
+          },
+          {
+            "icon": "dot",
+            "name": "Select",
+            "link": "/crafted/forms/select"
+          },
+          {
+            "icon": "dot",
+            "name": "Text",
+            "link": "/crafted/forms/text"
+          },
+          {
+            "icon": "dot",
+            "name": "Text area",
+            "link": "/crafted/forms/textarea"
+          },
+          {
+            "icon": "dot",
+            "name": "Tree",
+            "link": "/crafted/forms/tree"
+          },
+          {
+            "icon": "dot",
+            "name": "Form",
+            "link": "/crafted/forms/form"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Apps",
+    "placement": "bottom-start",
+    "subs": [
+      {
+        "icon": "bi bi-chat",
+        "name": "Chat",
+        "link": "/apps/chat",
+        "placement": "right-start",
+        "subs": [
+          {
+            "icon": "dot",
+            "name": "Private Chat",
+            "link": "/apps/chat/private-chat"
+          },
+          {
+            "icon": "dot",
+            "name": "Group Chat",
+            "link": "/apps/chat/group-chat"
+          },
+          {
+            "icon": "dot",
+            "name": "Drawer Chat",
+            "link": "/apps/chat/drawer-chat"
+          }
+        ]
+      }
+    ]
+  }
+]

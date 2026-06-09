@@ -1,0 +1,56 @@
+<!--GENERATE-->
+<nb-page-dialog [title]="form.controls.id.value !== null ? 'Cập nhật thông tin' : 'Thêm mới'">
+	<ng-template #edit>
+		<nb-layout-grid>
+			<nb-layout-grid-item size="3">
+				<nb-layout-card title="Thông tin">
+					<nb-layout-grid>
+						<nb-layout-grid-item size="12">
+							<nb-text label="Tên" [formCtrl]="form.controls.name"
+								[name]="'Name'" [message]="'Tên <strong>bắt buộc</strong>'"
+								[hint]="'Vui lòng nhập <strong>tên</strong>'">
+							</nb-text>
+						</nb-layout-grid-item>
+						<nb-layout-grid-item size="12">
+							<nb-text label="Mã" [formCtrl]="form.controls.code"
+								[message]="'Mã <strong>bắt buộc</strong>'" [hint]="'Vui lòng nhập <strong>mã</strong>'">
+							</nb-text>
+						</nb-layout-grid-item>
+						<nb-layout-grid-item size="12">
+							<nb-text label="Giá trị" [formCtrl]="form.controls.value"
+								[message]="'Giá trị <strong>bắt buộc</strong>'"
+								[hint]="'Vui lòng nhập <strong>giá trị</strong>'">
+							</nb-text>
+						</nb-layout-grid-item>
+						<nb-layout-grid-item size="12">
+							<nb-number ktBvFormControl column="12" label="Số thứ tự"
+								[formCtrl]="form.controls.displayOrder" [name]="'DisplayOrder'"
+								[hint]="'Vui lòng nhập <strong>số thứ tự</strong>'">
+							</nb-number>
+						</nb-layout-grid-item>
+						<nb-layout-grid-item size="12">
+							<nb-checkbox ktBvFormControl column="12" label="Hoạt động"
+								[formCtrl]="form.controls.isShow" [name]="'IsShow'"
+								[hint]="'Hoạt động/Không hoạt động'">
+							</nb-checkbox>
+						</nb-layout-grid-item>
+					</nb-layout-grid>
+				</nb-layout-card>
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="9">
+				<nb-layout-card title="Nội dung">
+					<nb-layout-grid>
+						<nb-layout-grid-item size="12">
+							<nb-editor [formCtrl]="form.controls.summary" label="Mô tả"
+								placeholder="Nhập thông tin..." message="Vui lòng nhập thông tin" />
+						</nb-layout-grid-item>
+						<nb-layout-grid-item size="12">
+							<nb-editor [formCtrl]="form.controls.detail" label="Chi tiết"
+								placeholder="Nhập thông tin..." message="Vui lòng nhập thông tin" />
+						</nb-layout-grid-item>
+					</nb-layout-grid>
+				</nb-layout-card>
+			</nb-layout-grid-item>
+		</nb-layout-grid>
+	</ng-template>
+</nb-page-dialog>

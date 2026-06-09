@@ -1,0 +1,20 @@
+<!--GENERATE-->
+<nb-page-list [service]="service" [formFilter]="formFilter">
+	<nb-table-col header="Id" field="id"></nb-table-col>
+	<!-- <nb-table-col header="Cấp cha" field="parentId"></nb-table-col> -->
+	<nb-table-col header="Tên" field="name"></nb-table-col>
+	<nb-table-col header="Mã" field="code"></nb-table-col>
+	<nb-table-col header="Sắp xếp" field="displayOrder"></nb-table-col>
+	<nb-table-col header="Ngày tạo" field="dateCreated"></nb-table-col>
+	<nb-table-col header="Trạng thái" field="isShow"></nb-table-col>
+	<app-user-page-edit edit></app-user-page-edit>
+	<ng-container filter></ng-container>
+	<ng-template #rowActionsTemplate let-item="item">
+        <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="Phân quyền"
+            (click)="addActions(item.id)">
+            <app-keenicon name="shield" class="fs-2"></app-keenicon>
+        </a>
+    </ng-template>
+</nb-page-list>
+
+<app-user-page-action-list></app-user-page-action-list>

@@ -1,0 +1,68 @@
+<div id="kt_app_sidebar_menu_scroll" class="scroll-y my-5 mx-3" data-kt-scroll="true" data-kt-scroll-activate="true"
+  data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
+  data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
+  <div class="menu menu-column menu-rounded menu-sub-indention fw-semibold fs-6" id="#kt_app_sidebar_menu"
+    data-kt-menu="true" data-kt-menu-expand="false">
+    <ng-container *ngFor="let item of items">
+      <ng-container
+        *ngTemplateOutlet="item.link === undefined && item.subs === undefined ? separator : menu;context: {item: item}" />
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #menu let-item="item">
+  <ng-container *ngTemplateOutlet="item.subs === undefined ? menuNoSub : menuSubs;context: {item: item}" />
+</ng-template>
+
+<ng-template #menuNoSub let-item="item">
+  <div class="menu-item">
+    <a class="menu-link without-sub" [routerLink]="item.link" routerLinkActive="active" *appPermission="item.permission">
+      <ng-container *ngTemplateOutlet="icon;context: {item: item}" />
+      <span class="menu-title" [translate]="item.name"></span>
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #menuSubs let-item="item">
+  <div class="menu-item menu-accordion" data-kt-menu-trigger="click" routerLinkActive="here show">
+    <span class="menu-link">
+      <ng-container *ngTemplateOutlet="item.icon === undefined ? dot : icon;context: {item: item}" />
+      <span class="menu-title" [attr.data-link]="item.link">{{item.name}}</span>
+      <span class="menu-arrow"></span>
+    </span>
+    <div class="menu-sub menu-sub-accordion" routerLinkActive="menu-active-bg">
+      <ng-container *ngFor="let sub of item.subs">
+        <ng-container *ngTemplateOutlet="sub.subs === undefined ? menuSub : menuSubs;context: {item: sub}" />
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #menuSub let-item="item">
+  <div class="menu-item">
+    <a class="menu-link without-sub" routerLinkActive="active" [routerLink]="item.link" *appPermission="item.permission">
+      <ng-container [ngTemplateOutlet]="dot" />
+      <span class="menu-title">{{item.name}}</span>
+    </a>
+  </div>
+</ng-template>
+
+<ng-template #separator let-item="item">
+  <div class="menu-item">
+    <div class="menu-content pt-8 pb-2">
+      <span class="menu-section text-muted text-uppercase fs-8 ls-1">{{item.name}}</span>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #icon let-item="item">
+  <span class="menu-icon">
+    <app-keenicon [name]="item.icon" class="fs-2"></app-keenicon>
+  </span>
+</ng-template>
+
+<ng-template #dot>
+  <span class="menu-bullet">
+    <span class="bullet bullet-dot"></span>
+  </span>
+</ng-template>

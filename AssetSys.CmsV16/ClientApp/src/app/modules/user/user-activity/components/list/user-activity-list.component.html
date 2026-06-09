@@ -1,0 +1,10 @@
+<!--GENERATE-->
+<nb-page-list [service]="service" [formFilter]="formFilter">
+	<nb-table-col header="Id" field="id"></nb-table-col>
+	<nb-table-col header="Tài khoản" field="user.userName"></nb-table-col>
+	<nb-table-col header="Hành động" field="name"></nb-table-col>
+	<nb-table-col header="Ngày tạo" field="dateCreated"></nb-table-col>
+	<nb-table-col header="Trạng thái" field="isShow"></nb-table-col>
+    <app-user-activity-edit edit></app-user-activity-edit>
+    <ng-container filter></ng-container>
+</nb-page-list>

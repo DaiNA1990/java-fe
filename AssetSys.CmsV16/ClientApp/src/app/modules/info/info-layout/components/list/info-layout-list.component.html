@@ -1,0 +1,26 @@
+<!--GENERATE-->
+<nb-page-list [service]="service"
+	[formFilter]="formFilter"
+	[minWidth]="'0px'"
+	[isButtonAddIcon]="true"
+	[isRowCheckbox]="false"
+	[isButtonMore]="false"
+	[isShowPagingReport]="false"
+	[isScrollable]="true"
+	[scrollHeight]="'25vh'">
+	<nb-table-col header="Tên" field="name" [columnTemplate]="nameTmp">
+		<ng-template #nameTmp let-item="item">
+			<a [href]="'info/info-page/' + item.id" target="_blank" class="text-gray-800 text-hover-primary" style="text-decoration: underline;" [title]="item.name">
+				{{item.name}}
+			</a>
+		</ng-template>
+	</nb-table-col>
+    <app-info-layout-edit [groupId]="groupId" edit></app-info-layout-edit>
+    <ng-container filter></ng-container>
+    <ng-template #rowActionsTemplate let-item="item">
+		<a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="Dựng form"
+			(click)="loadForm(item)">
+			<app-keenicon name="design-frame" class="fs-2"></app-keenicon>
+		</a>
+	</ng-template>
+</nb-page-list>

@@ -1,0 +1,16 @@
+<div class="radio-container" *ngIf="isLoaded">
+  <div class="radio-item" *ngFor="let item of items">
+    <p-radioButton
+      [name]="groupRadioName"
+      [value]="item.value"
+      [formControl]="formCtrl">
+    </p-radioButton>
+    <label>{{ item.name }}</label>
+  </div>
+</div>
+<!-- <div *ngIf="isLoaded && (formItem.isReadOnly || readOnly)">{{ getValueReadOnly(formCtrl.value) }}</div> -->
+<div class="form-control form-control-solid text-center" data-kt-indicator="on" *ngIf="!isLoaded">
+  <span class="indicator-progress">
+      <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+  </span>
+</div>

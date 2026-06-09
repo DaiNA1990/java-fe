@@ -1,0 +1,18 @@
+<p-splitter [panelSizes]="[20, 80]" [style]="{ height: '90vh' }">
+  <ng-template pTemplate>
+    <div class="w-100 mw-100">
+      <app-info-form-report [reportId]="reportId" />
+    </div>
+  </ng-template>
+  <ng-template pTemplate
+    ><div class="w-100 mw-100">
+      <app-info-form-report-setup />
+    </div>
+  </ng-template>
+  <!-- <ng-template pTemplate>
+		<app-info-form-property />
+	</ng-template> -->
+</p-splitter>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

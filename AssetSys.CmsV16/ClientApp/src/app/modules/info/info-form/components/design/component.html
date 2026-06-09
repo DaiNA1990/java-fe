@@ -1,0 +1,73 @@
+<p-splitter [panelSizes]="[15, 70, 15]" [style]="{ height: '90vh' }">
+	<ng-template pTemplate>
+		<div class="w-100 mw-100">
+			<app-info-form-data-field [groupId]="groupId" />
+			<app-info-form-layout [groupId]="groupId" />
+			<app-info-form-control />
+		</div>
+	</ng-template>
+	<ng-template pTemplate>
+		<p-panel [toggleable]="true" class="w-100">
+			<ng-template pTemplate="header">
+				<b>Xây dựng giao diện: {{layoutItem?.name}}</b>
+			</ng-template>
+			<ng-template pTemplate="icons">
+				<button class="p-panel-header-icon p-link mr-2" (click)="itemAdd()">
+					<app-keenicon name="plus-square" class="fs-2"></app-keenicon>
+				</button>
+				<button class="p-panel-header-icon p-link mr-2" (click)="itemPate($event)" title="Pate">
+					<app-keenicon name="clipboard" class="fs-2"></app-keenicon>
+				</button>
+			</ng-template>
+			<ng-template pTemplate="content">
+				<div class="px-2" style="height: calc(100vh - 130px); overflow-y: auto;" cdkDropListGroup>
+					<ng-container *ngFor="let item of filterByParent()">
+						<ng-container *ngTemplateOutlet="showControlTemp;context: {item: item}"></ng-container>
+					</ng-container>
+				</div>
+			</ng-template>
+		</p-panel>
+	</ng-template>
+	<ng-template pTemplate>
+		<app-info-form-property />
+	</ng-template>
+</p-splitter>
+<!-- https://stackblitz.com/edit/angular-cdk-nested-drag-drop-demo -->
+<ng-template #showControlTemp let-item="item">
+	<div class="border border-dashed rounded px-2 py-2 mb-3 mx-0" [class.border-gray-300]="item.isDesignChosen !== true"
+		[class.border-gray-900]="item.isDesignChosen"
+		[ngClass]="item.controlType === 'grid-item' ? 'col-' + item.size : ''" [class.row]="item.controlType === 'grid'"
+		cdkDropList [cdkDropListData]="item" (cdkDropListDropped)="drop($event)" [id]="item.ddid"
+		[cdkDropListConnectedTo]="getConnectedDropListsIds(item.id)">
+		<div class="d-flex flex-stack mb-1 position-relative" [id]="item.ddid" cdkDrag [cdkDragData]="item">
+			<div class="me-1">
+				<a href="javascript:;" class="text-gray-800 fw-bold"
+					(click)="itemChosen(item)">#{{item.displayOrder}}.{{item.name}}({{item.controlType}}){{item.hint}}</a>
+			</div>
+			<div class="m-0">
+				<button class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
+					(click)="itemPate($event, item)" title="Pate">
+					<app-keenicon name="clipboard" class="fs-1"></app-keenicon>
+				</button>
+				<button class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
+					(click)="itemCopy(item)" title="Copy">
+					<app-keenicon name="copy" class="fs-1"></app-keenicon>
+				</button>
+				<button class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
+					(click)="itemAdd(item)" title="Add">
+					<app-keenicon name="plus" class="fs-1"></app-keenicon>
+				</button>
+				<button class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
+					(click)="itemRemove($event, item)" title="Remove">
+					<app-keenicon name="cross" class="fs-1"></app-keenicon>
+				</button>
+			</div>
+		</div>
+		<ng-container *ngFor="let control of filterByParent(item.id)">
+			<ng-container *ngTemplateOutlet="showControlTemp;context: {item: control}"></ng-container>
+		</ng-container>
+	</div>
+</ng-template>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

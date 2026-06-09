@@ -1,0 +1,220 @@
+[
+    {
+        "value": "form-control",
+        "text": "Form control",
+        "items": [
+            {
+                "value": "plaintext",
+                "text": "Plaintext"
+            },
+            {
+                "value": "value",
+                "text": "Value"
+            },
+            {
+                "value": "readonly",
+                "text": "Readonly"
+            },
+            {
+                "value": "text",
+                "text": "Text"
+            },
+            {
+                "value": "textarea",
+                "text": "Textarea"
+            },
+            {
+                "value": "select",
+                "text": "Select"
+            },
+            {
+                "value": "selectLazy",
+                "text": "Select Lazy"
+            },
+            {
+                "value": "multiSelect",
+                "text": "MultiSelect"
+            },
+            {
+                "value": "autocomplete",
+                "text": "Autocomplete"
+            },
+            {
+                "value": "checkbox",
+                "text": "Checkbox"
+            },
+            {
+                "value": "datetime",
+                "text": "Datetime"
+            },
+            {
+                "value": "year",
+                "text": "Year"
+            },
+            {
+                "value": "number",
+                "text": "Number"
+            },
+            {
+                "value": "numberAuto",
+                "text": "Number Auto"
+            },
+            {
+                "value": "decimal",
+                "text": "Decimal"
+            },
+            {
+                "value": "radio",
+                "text": "Radio"
+            },
+            {
+                "value": "file",
+                "text": "File"
+            },
+            {
+                "value": "file-download",
+                "text": "File download"
+            },
+            {
+                "value": "file-ecm",
+                "text": "File-ECM"
+            },
+            {
+                "value": "file-download-ecm",
+                "text": "File download-ECM"
+            },
+            {
+                "value": "data",
+                "text": "Data"
+            }
+        ]
+    },
+    {
+        "value": "component",
+        "text": "Components",
+        "items":[
+            {
+                "value": "button",
+                "text": "Button"
+            },
+            {
+                "value": "button-history",
+                "text": "Button History"
+            },
+            {
+                "value": "menu",
+                "text": "Menu"
+            },
+            {
+                "value": "menu-item",
+                "text": "Menu item"
+            },
+            {
+                "value": "layout",
+                "text": "Layout"
+            },
+            {
+                "value": "container",
+                "text": "Container"
+            },
+            {
+                "value": "separator",
+                "text": "Separator"
+            }
+        ]
+    },
+    {
+        "value": "grid-layout",
+        "text": "Grid",
+        "items":[
+            {
+                "value": "grid",
+                "text": "Grid"
+            },
+            {
+                "value": "grid-item",
+                "text": "Grid item"
+            }
+        ]
+    },
+    {
+        "value": "card-layout",
+        "text": "Card",
+        "items":[
+            {
+                "value": "card",
+                "text": "Card"
+            },
+            {
+                "value": "card-header",
+                "text": "Card header"
+            },
+            {
+                "value": "card-body",
+                "text": "Card body"
+            },
+            {
+                "value": "card-footer",
+                "text": "Card footer"
+            }
+        ]
+    },
+    {
+        "value": "modal-layout",
+        "text": "Modal",
+        "items":[
+            {
+                "value": "modal",
+                "text": "Modal"
+            },
+            {
+                "value": "modal-content",
+                "text": "Modal content"
+            },
+            {
+                "value": "modal-header",
+                "text": "Modal header"
+            },
+            {
+                "value": "modal-body",
+                "text": "Modal body"
+            },
+            {
+                "value": "modal-footer",
+                "text": "Modal footer"
+            }
+        ]
+    },
+    {
+        "value": "table-layout",
+        "text": "Table",
+        "items":[
+            {
+                "value": "table",
+                "text": "Table"
+            },
+            {
+              "value": "table-filter",
+              "text": "Table Filter"
+            },
+            {
+                "value": "table-column",
+                "text": "Table column"
+            }
+        ]
+    },
+    {
+        "value": "tab-layout",
+        "text": "Tab",
+        "items":[
+            {
+                "value": "tab",
+                "text": "Tab"
+            },
+            {
+                "value": "tab-item",
+                "text": "Tab item"
+            }
+        ]
+    }
+]

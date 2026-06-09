@@ -1,0 +1,128 @@
+{
+    "maths": [
+        {
+            "name": "+",
+            "value": "+"
+        },
+        {
+            "name": "-",
+            "value": "-"
+        },
+        {
+            "name": "x",
+            "value": "*"
+        },
+        {
+            "name": "/",
+            "value": "/"
+        },
+        {
+            "name": "%",
+            "value": "%"
+        }
+    ],
+    "fieldMaths": [
+        {
+            "name": "Mặc định",
+            "value": ""
+        },
+        {
+            "name": "+",
+            "value": "+"
+        },
+        {
+            "name": "-",
+            "value": "-"
+        },
+        {
+            "name": "x",
+            "value": "*"
+        },
+        {
+            "name": "/",
+            "value": "/"
+        },
+        {
+            "name": "%",
+            "value": "%"
+        },
+        {
+            "name": "+ date",
+            "value": "+date"
+        },
+        {
+            "name": "+ day",
+            "value": "+day"
+        },
+        {
+            "name": "+ month",
+            "value": "+month"
+        },
+        {
+            "name": "- Duration day end",
+            "value": "-duration-day-e"
+        },
+        {
+            "name": "- Duration day start",
+            "value": "-duration-day-s"
+        }
+    ],
+    "operators": [
+        {
+            "name": "=",
+            "value": "=="
+        },
+        {
+            "name": "=|null",
+            "value": "=|null"
+        },
+        {
+            "name": "<",
+            "value": "<"
+        },
+        {
+            "name": "<=",
+            "value": "<="
+        },
+        {
+            "name": ">=",
+            "value": ">="
+        },
+        {
+            "name": ">",
+            "value": ">"
+        },
+        {
+            "name": "!=",
+            "value": "!="
+        },
+        {
+            "name": "in",
+            "value": "in"
+        },
+        {
+            "name": "not in",
+            "value": "not in"
+        },
+        {
+            "name": "contains",
+            "value": "contains"
+        },
+        {
+            "name": "is null",
+            "value": "is null"
+        },
+        {
+            "name": "is not null",
+            "value": "is not null"
+        },
+        {
+            "name": "max",
+            "value": "max"
+        },
+        {
+            "name": "starts with",
+            "value": "starts with"
+        }
+    ]
+}

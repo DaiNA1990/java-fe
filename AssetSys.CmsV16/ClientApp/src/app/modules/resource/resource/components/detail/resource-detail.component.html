@@ -1,0 +1,101 @@
+<!--GENERATE-->
+<!-- https://preview.keenthemes.com/metronic8/demo1/apps/subscriptions/view.html -->
+<nb-page-dialog [title]="'Chi tiết'" [width]="50">
+	<ng-template #edit>
+		<div class="card card-flush pt-3 mb-5 mb-xl-10">
+			<div class="card-body pt-3">
+				<div class="mb-10">
+					<h5 class="mb-4">Thông tin:</h5>
+					<div class="d-flex flex-wrap py-5">
+						<div class="flex-equal me-5">
+							<table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+								<thead style="display: none;">
+									<tr>
+										<th scope="col">Tên</th>
+										<th scope="col">Mã</th>
+										<th scope="col">Giá trị</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="text-gray-500 min-w-175px w-175px">Tên</td>
+										<td class="text-gray-800 min-w-200px">
+											{{resData.data.name}}
+										</td>
+									</tr>
+									<tr>
+										<td class="text-gray-500 min-w-175px w-175px">Mã</td>
+										<td class="text-gray-800 min-w-200px">{{resData.data.code}}</td>
+									</tr>
+									<tr>
+										<td class="text-gray-500 min-w-175px w-175px">Giá trị</td>
+										<td class="text-gray-800 min-w-200px">{{resData.data.value}}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="flex-equal">
+							<table class="table fs-6 fw-semibold gs-0 gy-2 gx-2 m-0">
+								<thead style="display: none;">
+									<tr>
+										<th scope="col">Người tạo</th>
+										<th scope="col">Ngày tạo</th>
+										<th scope="col">Ngày sửa</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class="text-gray-500">Người tạo:</td>
+										<td class="text-gray-800">{{resData.data.createdBy}}</td>
+									</tr>
+									<tr>
+										<td class="text-gray-500">Ngày tạo:</td>
+										<td class="text-gray-800">{{resData.data.dateCreated | date:'dd/MM/yyyy HH:mm'}}
+										</td>
+									</tr>
+									<tr>
+										<td class="text-gray-500">Ngày sửa:</td>
+										<td class="text-gray-800">{{resData.data.dateUpdated | date:'dd/MM/yyyy HH:mm'}}
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="card card-flush pt-3 mb-5 mb-xl-10" *ngIf="histories.length > 0">
+			<div class="card-body pt-3">
+				<div class="mb-0">
+					<h5 class="mb-4">Lịch sử:</h5>
+					<div class="table-responsive">
+						<table class="table align-middle table-row-dashed fs-6 gy-4 mb-0">
+							<thead>
+								<tr
+									class="border-bottom border-gray-200 text-start text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+									<th scope="col">Khách</th>
+									<th scope="col">Phiếu</th>
+									<th scope="col">Thời gian</th>
+								</tr>
+							</thead>
+							<tbody class="fw-semibold text-gray-800">
+								<tr *ngFor="let item of histories; track $index">
+									<td>
+										<b>{{item.name}}</b>
+									</td>
+									<td>
+										{{item.ticket?.title}}({{item.ticket?.code}})
+									</td>
+									<td>
+										{{item.dateCreated | date:'dd/MM/yyyy HH:mm'}}
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+</nb-page-dialog>

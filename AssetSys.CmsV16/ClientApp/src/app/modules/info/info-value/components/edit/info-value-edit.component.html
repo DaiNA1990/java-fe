@@ -1,0 +1,19 @@
+<!--GENERATE-->
+<nb-page-dialog [title]="form.controls.id.value !== null ? 'Cập nhật thông tin' : 'Thêm mới'" [width]="25">
+	<ng-template #edit>
+		<nb-layout-grid>
+			<nb-layout-grid-item size="12">
+				<nb-number [formCtrl]="form.controls.dataId" label="DataId" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-number [formCtrl]="form.controls.propertyId" label="PropertyId" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="form.controls.value" label="Value" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-checkbox [formCtrl]="form.controls.isShow" label="IsShow" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+		</nb-layout-grid>
+	</ng-template>    
+</nb-page-dialog>

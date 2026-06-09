@@ -1,0 +1,216 @@
+<p-table
+  [value]="items"
+  [lazy]="true"
+  [autoLayout]="true"
+  [scrollable]="true"
+  [totalRecords]="itemTotal"
+  [showCurrentPageReport]="true"
+  [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
+  [currentPageReportTemplate]="itemTotal === null ? '' : 'Hiển thị từ {first} đến {last} của {totalRecords} bản ghi'"
+  [paginator]="true"
+  [rows]="10"
+  [styleClass]="'p-datatable-gridlines'"
+  [resizableColumns]="false"
+  [(selection)]="itemSelection"
+  (selectionChange)="selectionChange($event)"
+  (onPage)="onPage($event)"
+  (onSort)="onSort($event)"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th scope="col" style="width: 4rem">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
+      <th scope="col" style="width: 4rem">STT</th>
+      <th
+        scope="col"
+        *ngFor="let col of cols"
+        [pSortableColumn]="col.propertyItem.code !== '' ? col.propertyItem.code : undefined"
+        [ngStyle]="{'min-width': (col.size || getTextWidth(col.name)) + 'px'}"
+        alignFrozen="right"
+        pFrozenColumn
+        [frozen]="col.isFrozen"
+      >
+        {{col.name}}
+        <p-sortIcon
+          [field]="col.propertyItem.code"
+          *ngIf="col.propertyItem.code !== ''"
+        ></p-sortIcon>
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item let-index="rowIndex">
+    <tr class="border-bottom border-dashed border-gray-300">
+      <td>
+        <p-tableCheckbox [value]="item" [title]="item['id']"></p-tableCheckbox>
+      </td>
+      <td>
+        <span>{{ index + 1 }}</span>
+      </td>
+      <td
+        *ngFor="let col of cols"
+        [class]="col.cssClass"
+        [style]="col.cssStyle"
+        alignFrozen="right"
+        pFrozenColumn
+        [frozen]="col.isFrozen"
+        [ngClass]="{
+          'text-end': col.controlType === 'number' || col.controlType === 'decimal'
+        }"
+      >
+        <ng-container [ngSwitch]="col.controlType">
+          <!-- SELECT -->
+          <ng-container *ngSwitchCase="'select'">
+            <ng-container *ngIf="col.optionLst?.length > 0">
+              {{ getValueReadOnly(item[col.propertyItem.code], col.optionLst) }}
+            </ng-container>
+          </ng-container>
+          <!-- CHECKBOX -->
+          <ng-container *ngSwitchCase="'checkbox'">
+            <p-checkbox
+              [binary]="true"
+              [disabled]="true"
+              [ngModel]="item[col.propertyItem.code] === true ||
+                 item[col.propertyItem.code] === 'True' ||
+                 item[col.propertyItem.code] === 'true'"
+            >
+            </p-checkbox>
+          </ng-container>
+          <!-- DEFAULT -->
+          <ng-container *ngSwitchDefault>
+            <span [ngClass]="col.cssClass" [style]="col.cssStyle">
+              {{ col.controlType === 'year' ? item[col.propertyItem.code] :
+              item[col.propertyItem.code] | formatText :
+              col.propertyItem.typeData }}
+            </span>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngFor="let tp of funcGetChild(col.id)">
+          <ng-container *ngIf="checkIsDisplay(tp, item)">
+            <ng-container [ngSwitch]="tp.controlType">
+              <ng-container *ngSwitchCase="'select'">
+                {{ item[col.propertyItem.code] |
+                formatText:col.propertyItem.typeData }}
+              </ng-container>
+              <ng-container *ngSwitchCase="'file-download'">
+                <span
+                  [class]="tp.cssClass"
+                  [style]="tp.cssStyle"
+                  [title]="tp.name"
+                >
+                  {{ item[tp.propertyItem.code] ? item[tp.propertyItem.code].split('|')[0] : item[tp.propertyItem.code] }}
+                </span>
+                <a
+                  href="javascript:;"
+                  class="mx-1"
+                  (click)="rowClick($event, item, tp)"
+                  title="Tải về"
+                  *ngIf="item[tp.propertyItem.code] !== null && item[tp.propertyItem.code] !== '' && !item.isDownload"
+                >
+                  <i class="ki-duotone ki-file-down fs-3 text-primary">
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </i>
+                </a>
+                <span
+                  class="indicator-progress"
+                  style="display: inline-block"
+                  *ngIf="item.isDownload"
+                >
+                  <span
+                    class="spinner-border spinner-border-sm align-middle ms-2"
+                  ></span>
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'file-download-ecm'">
+                <span
+                  [class]="tp.cssClass"
+                  [style]="tp.cssStyle"
+                  [title]="tp.name"
+                >
+                  {{ item[tp.propertyItem.code] ? item[tp.propertyItem.code].split('|')[0] : item[tp.propertyItem.code] }}
+                </span>
+                <a
+                  href="javascript:;"
+                  class="mx-1"
+                  (click)="rowClick($event, item, tp)"
+                  title="Tải về"
+                  *ngIf="item[tp.propertyItem.code] !== null && item[tp.propertyItem.code] !== '' && !item.isDownload"
+                >
+                  <i class="ki-duotone ki-file-down fs-3 text-primary">
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </i>
+                </a>
+                <span
+                  class="indicator-progress"
+                  style="display: inline-block"
+                  *ngIf="item.isDownload"
+                >
+                  <span
+                    class="spinner-border spinner-border-sm align-middle ms-2"
+                  ></span>
+                </span>
+              </ng-container>
+              <ng-container *ngSwitchCase="'button'">
+                <a
+                  href="javascript:;"
+                  class="btn w-30px h-30px mx-2"
+                  [class]="tp.cssClass"
+                  [style]="tp.cssStyle"
+                  (click)="rowClick($event, item, tp)"
+                  [title]="tp.name"
+                >
+                  <app-keenicon
+                    [name]="tp.icon"
+                    [class]="tp.iconClass"
+                    [cssStyle]="tp.cssStyle"
+                  ></app-keenicon>
+                </a>
+              </ng-container>
+              <ng-container *ngSwitchDefault>
+                <span [ngClass]="tp.cssClass" [style]="tp.cssStyle"
+                  >{{ item[tp.propertyItem.code] |
+                  formatText:tp.propertyItem.typeData }}</span
+                >
+              </ng-container>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td [attr.colspan]="(cols)?.length">
+        <p class="text-center" *ngIf="itemTotal === null">
+          Đang tải dữ liệu...
+        </p>
+        <p class="text-center" *ngIf="itemTotal === 0">
+          Không tìm thấy thông tin phù hợp.
+        </p>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+<p-dialog
+  [(visible)]="isOnSubmit"
+  [modal]="true"
+  [closable]="false"
+  [draggable]="false"
+  [style]="{width: '400px'}"
+  [appendTo]="'body'"
+>
+  <div
+    class="p-d-flex p-jc-center p-ai-center"
+    style="height: 120px; text-align: center"
+  >
+    <p-progressSpinner
+      [style]="{'width': '50px'}"
+      strokeWidth="5"
+      fill="var(--surface-ground)"
+      animationDuration=".5s"
+    />
+    <p style="margin: 5px 0">Đang thực hiện, vui lòng chờ...</p>
+  </div>
+</p-dialog>

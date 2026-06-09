@@ -1,0 +1,39 @@
+<!--GENERATE-->
+<nb-page-list
+  [service]="service"
+  [formFilter]="formFilter"
+  [rowActionWidth]="'220px'"
+  [isLimitAction]="!currentUser.roleCodes.includes('FPT_REPORT')"
+>
+  <nb-table-col header="Id" field="id"></nb-table-col>
+  <nb-table-col header="Tên" field="name"></nb-table-col>
+  <nb-table-col header="Mã" field="code"></nb-table-col>
+  <nb-table-col header="Phân hệ" field="module"></nb-table-col>
+  <nb-table-col header="Thời gian tạo" field="dateCreated"></nb-table-col>
+  <nb-table-col header="Hoạt động" field="isShow"></nb-table-col>
+  <app-info-group-edit edit></app-info-group-edit>
+  <ng-container filter></ng-container>
+  <ng-template #rowActionsTemplate let-item="item">
+    <a
+      href="javascript:;"
+      class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+      title="Xây dựng form"
+      (click)="openBuildForm(item)"
+      *ngIf="currentUser.roleCodes.includes('FPT_REPORT')"
+    >
+      <app-keenicon name="design-2" class="fs-2"></app-keenicon>
+    </a>
+    <a
+      href="javascript:;"
+      class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+      title="Xóa tất cả dữ liệu của Nhóm này"
+      (click)="confirmDeleteData($event, item)"
+    >
+      <app-keenicon name="cross" class="fs-2"></app-keenicon>
+    </a>
+  </ng-template>
+</nb-page-list>
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>
+<app-info-group-build-form />
+

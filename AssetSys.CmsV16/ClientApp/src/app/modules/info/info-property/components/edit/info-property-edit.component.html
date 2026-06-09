@@ -1,0 +1,26 @@
+<!--GENERATE-->
+<nb-page-dialog [title]="form.controls.id.value !== null ? 'Cập nhật thông tin' : 'Thêm mới'" [width]="25">
+	<ng-template #edit>
+		<nb-layout-grid>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="form.controls.name" label="Tên" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="form.controls.code" label="Mã" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-select [formCtrl]="form.controls.typeData" [dataSource]="typeDatas" label="Kiểu dữ liệu"
+					placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-textarea [formCtrl]="form.controls.description" label="Mô tả" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-checkbox [formCtrl]="form.controls.isShow" label="Hoạt động" placeholder="On/Off" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-textarea [formCtrl]="form.controls.permission" label="Phân quyền" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+		</nb-layout-grid>
+	</ng-template>
+</nb-page-dialog>

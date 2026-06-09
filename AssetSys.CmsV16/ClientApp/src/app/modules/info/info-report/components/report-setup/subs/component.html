@@ -1,0 +1,56 @@
+<p-panel [toggleable]="false" *ngIf="isLoadProperty && dataId">
+  <ng-template pTemplate="header">
+    <b>Xây dựng dữ liệu: {{reportSetupName}}</b>
+  </ng-template>
+  <ng-template pTemplate="icons">
+    <button class="p-panel-header-icon p-link mr-2" (click)="itemSave()">
+      <i class="ki-duotone ki-check-circle fs-2">
+        <span class="path1"></span>
+        <span class="path2"></span>
+      </i>
+    </button>
+  </ng-template>
+  <nb-layout-grid>
+    <nb-layout-grid-item size="12">
+      <nb-number
+        [formCtrl]="formControl.controls.startRow"
+        label="Dòng bắt đầu"
+        placeholder="Nhập thông tin"
+      />
+    </nb-layout-grid-item>
+    <nb-layout-grid-item size="12">
+      <nb-text
+        [formCtrl]="formControl.controls.numColumn"
+        label="Cột số thứ tự trong excel"
+        placeholder="Nhập thông tin"
+      />
+    </nb-layout-grid-item>
+    <nb-layout-grid-item size="12">
+      <app-info-form-report-build-map-column
+        [formCtrl]="formControl.controls.mapColumn"
+      />
+    </nb-layout-grid-item>
+    <nb-layout-grid-item size="12">
+      <app-info-form-report-build-group-data
+        [formCtrl]="formControl.controls.groupData"
+      />
+    </nb-layout-grid-item>
+    <nb-layout-grid-item size="12">
+      <nb-text
+        [formCtrl]="formControl.controls.groupCode"
+        label="Mã Group lấy từ chức năng Xây dựng thông tin"
+        placeholder="Nhập thông tin"
+      />
+    </nb-layout-grid-item>
+    <nb-layout-grid-item size="12">
+      <nb-text
+        [formCtrl]="formControl.controls.sqlData"
+        label="SQL"
+        placeholder="Nhập thông tin"
+      />
+    </nb-layout-grid-item>
+  </nb-layout-grid>
+</p-panel>
+
+<p-confirmDialog></p-confirmDialog>
+<p-toast></p-toast>

@@ -1,0 +1,29 @@
+::ng-deep {
+  .custom-close-button {
+    position: absolute;
+    top: 0.75rem;
+    right: 1.5rem;
+    z-index: 1;
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: #6b6b6b;
+  }
+  .modal {
+    --bs-modal-zindex: 999;
+  }
+  .modal-backdrop-z999 {
+    z-index: 999 !important;
+  }
+  .modal-header {
+    max-height: 65px;
+    border-bottom: rgb(0, 107, 104) solid 1px;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+@for $i from 1 through 100 {
+  ::ng-deep .w#{$i} {
+    --bs-modal-width: #{$i}vw;
+  }
+}

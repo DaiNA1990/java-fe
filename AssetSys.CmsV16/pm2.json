@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "asset-cms",
+      "script": "AssetSys.CmsV16.dll",
+      "interpreter": "dotnet",
+      "args": "http-port=5016",
+      "error_file": "err.log",
+      "out_file": "out.log"
+    }
+  ]
+}

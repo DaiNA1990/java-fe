@@ -1,0 +1,75 @@
+::ng-deep {
+  .history-container {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* ===== HEADER ===== */
+
+.history-header {
+  display: grid;
+  grid-template-columns: 80px 200px 180px 1fr;
+  font-weight: 600;
+  padding: 12px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* ===== BODY ===== */
+
+.history-body {
+  position: relative;
+}
+
+/* 🔥 LINE DỌC DUY NHẤT */
+.history-body::before {
+  content: "";
+  position: absolute;
+  top: 36px;       /* bắt đầu từ giữa icon đầu */
+  bottom: 36px;    /* kết thúc giữa icon cuối */
+  left: 39px;      /* căn giữa cột icon (80px / 2 - 1px) */
+  width: 2px;
+  background: #d9d9d9;
+}
+
+/* ===== ROW ===== */
+
+.history-row {
+  display: grid;
+  grid-template-columns: 80px 200px 180px 1fr;
+  align-items: center;
+  padding: 18px 0;
+}
+
+/* ===== ICON ===== */
+
+.col-icon {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+.timeline-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ededed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== TEXT ===== */
+
+.col-action,
+.col-user {
+  text-align: left;
+  justify-self: start;   /* 🔥 cái này quan trọng nếu dùng grid */
+}
+.col-time {
+  justify-self: center;
+  text-align: center;
+}
+
+}

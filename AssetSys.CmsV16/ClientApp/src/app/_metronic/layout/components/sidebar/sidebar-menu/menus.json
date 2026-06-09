@@ -1,0 +1,296 @@
+[
+  {
+    "icon": "element-11",
+    "name": "MENU.DASHBOARD",
+    "link": "/dashboard"
+  },
+  {
+    "name": "Xây dựng"
+  },
+  {
+    "icon": "graph-up",
+    "name": "Xây dựng thông tin",
+    "link": "/info/info-group",
+    "permission": "USER_ADMIN"
+  },
+  {
+    "icon": "graph-up",
+    "name": "Xây dựng báo cáo",
+    "link": "/info/info-report",
+    "permission": "USER_ADMIN"
+  },
+  {
+    "name": "Kế hoạch"
+  },
+  {
+    "icon": "devices",
+    "name": "Đăng ký kế hoạch tại phòng ban",
+    "link": "/info/info-page/2212",
+    "permission": "ACCESSKH1"
+  },
+  {
+    "icon": "devices",
+    "name": "Tổng hợp kế hoạch phòng ban",
+    "link": "/info/info-page/2640",
+    "permission": "ACCESSTHKHPB"
+  },
+  {
+    "icon": "devices",
+    "name": "Kế hoạch mua sắm tài sản",
+    "link": "/info/info-page/2195",
+    "permission": "ACCESSKH2"
+  },
+  {
+    "icon": "devices",
+    "name": "Điều chỉnh phân bổ kế hoạch",
+    "link": "/info/info-page/2234",
+    "permission": "ACCESSKH3"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập/duyệt kế hoạch Xây dựng cơ bản",
+    "link": "/info/info-page/2173",
+    "permission": "ACCESSKH4"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập/duyệt kế hoạch mua bất động sản",
+    "link": "/info/info-page/2245",
+    "permission": "ACCESSKH5"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập/duyệt kế hoạch CNTT (Ban/TT TSC đăng ký)",
+    "link": "/info/info-page/2466",
+    "permission": "ACCESSKH6",
+    "subs": [
+      {
+        "icon": "devices",
+        "name": "Kế hoạch CNTT",
+        "link": "/info/info-page/2466",
+        "permission": "ACCESSKH7"
+      },
+      {
+        "icon": "devices",
+        "name": "Kế hoạch PTPM",
+        "link": "/info/info-page/2498",
+        "permission": "ACCESSKH7"
+      }
+    ]
+  },
+  {
+    "icon": "devices",
+    "name": "Lập/duyệt KH TSCNTT (Mua và thuê TS CNTT)",
+    "link": "/info/info-page/2356",
+    "permission": "ACCESSKH7"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập/duyệt kế hoạch thuê hoạt động trụ sở",
+    "link": "/info/info-page/2353",
+    "permission": "ACCESSKH8"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập/duyệt kế hoạch thuê hoạt động ô tô",
+    "link": "/info/info-page/2374",
+    "permission": "ACCESSKH9"
+  },
+  {
+    "icon": "devices",
+    "name": "Đăng ký KH thuê hoạt động QSD đất",
+    "link": "/info/info-page/2793",
+    "permission": "ACCESSKH10"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập duyệt kế hoạch thanh lý",
+    "link": "/info/info-page/2621",
+    "permission": "ACCESSKH11"
+  },
+  {
+    "name": "Phương án mua sắm"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập/duyệt phương án mua BĐS",
+    "link": "/info/info-page/2271",
+    "permission": "ACCESSPA1"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập/duyệt phương án mua sắm tài sản",
+    "link": "/info/info-page/2244",
+    "permission": "ACCESSPA2"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập duyệt phương án thanh lý",
+    "link": "/info/info-page/2363",
+    "permission": "ACCESSPA3"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập duyệt phương án thuê ô tô",
+    "link": "/info/info-page/2346",
+    "permission": "ACCESSPA4"
+  },
+  {
+    "icon": "devices",
+    "name": "Lập duyệt phương án thuê trụ sở",
+    "link": "/info/info-page/2372",
+    "permission": "ACCESSPA5"
+  },
+  {
+    "name": "Tài sản"
+  },
+  {
+    "icon": "graph",
+    "name": "QL đợt kiểm kê",
+    "link": "/info/info-page/2552",
+    "permission": "ACCESSTS2"
+  },
+  {
+    "icon": "devices",
+    "name": "Chức năng thanh lý",
+    "link": "/info/info-page/2341",
+    "permission": "ACCESSTS1"
+  },
+  {
+    "name": "Thực hiện kế hoạch"
+  },
+  {
+    "icon": "devices",
+    "name": "Quản lý hợp đồng thuê hoạt động (trụ sở, ô tô, QSD đất, CNTT)",
+    "link": "/info/info-page/2400",
+    "permission": "ACCESSTK1"
+  },
+  {
+    "icon": "devices",
+    "name": "Quản lý thanh toán, tăng tài sản THĐ (trụ sở, ô tô, QSD đất, CNTT)",
+    "link": "/info/info-page/2342",
+    "permission": "ACCESSTK2"
+  },
+  {
+    "icon": "devices",
+    "name": "Khai báo hợp đồng mua sắm, đầu tư XDCB",
+    "link": "/info/info-page/2242",
+    "permission": "ACCESSTK3"
+  },
+  {
+    "icon": "devices",
+    "name": "Giao dịch ứng trước cho nhà thầu/NCC",
+    "link": "/info/info-page/2355",
+    "permission": "ACCESSTK4"
+  },
+  {
+    "icon": "devices",
+    "name": "Tạm quyết toán/Quyết toán tăng tài sản",
+    "link": "/info/info-page/2671",
+    "permission": "ACCESSTK5"
+  },
+  {
+    "name": "Danh mục kế hoạch"
+  },
+  {
+    "icon": "bank",
+    "name": "Quản lý danh mục phương án mua sắm",
+    "link": "/info/info-page/2202",
+    "permission": "ACCESSDM1"
+  },
+  {
+    "icon": "bank",
+    "name": "Quản lý vốn dự phòng của các kế hoạch",
+    "link": "/info/info-page/2204",
+    "permission": "ACCESSVON"
+  },
+  {
+    "icon": "bank",
+    "name": "Khóa kỳ kế hoạch đầu năm",
+    "link": "/info/info-page/2210",
+    "permission": "ACCESSKY"
+  },
+  {
+    "icon": "bank",
+    "name": "Quản lý danh mục địa điểm",
+    "link": "/info/info-page/2217",
+    "permission": "ACCESSDM2"
+  },
+  {
+    "icon": "bank",
+    "name": "danh mục hệ thống",
+    "link": "/info/info-page/1147",
+    "permission": "USER_ADMIN"
+  },
+  {
+    "name": "Báo cáo"
+  },
+  {
+    "icon": "bank",
+    "name": "Báo cáo kiểm kê chi tiết tài sản, công cụ",
+    "link": "/info/info-page/3933"
+  },
+  {
+    "icon": "bank",
+    "name": "Báo cáo danh sách tài sản, công cụ đã thực hiện kiểm kê",
+    "link": "/info/info-page/3974"
+  },
+  {
+    "icon": "bank",
+    "name": "Báo cáo kế hoạch mua sắm tài sản",
+    "link": "/info/info-page/3912"
+  },
+  {
+    "name": "Hệ thống"
+  },
+  {
+    "icon": "profile-user",
+    "name": "Tài khoản",
+    "link": "/user",
+    "permission": "USER_ADMIN",
+    "subs": [
+      {
+        "name": "Danh sách",
+        "link": "/user/user",
+        "permission": "USER_ADMIN"
+      },
+      {
+        "name": "Chức năng",
+        "link": "/user/user-page",
+        "permission": "USER_ADMIN"
+      },
+      {
+        "name": "Quyền truy cập",
+        "link": "/user/user-role",
+        "permission": "USER_ADMIN"
+      },
+      {
+        "name": "Phòng ban",
+        "link": "/user/user-department",
+        "permission": "USER_ADMIN"
+      },
+      {
+        "name": "Cấp bậc",
+        "link": "/user/user-level",
+        "permission": "USER_ADMIN"
+      },
+      {
+        "name": "Chức danh",
+        "link": "/user/user-title",
+        "permission": "USER_ADMIN"
+      }
+    ]
+  },
+  {
+    "icon": "menu",
+    "name": "Danh mục menu",
+    "link": "/resource/menu",
+    "permission": "USER_ADMIN"
+  },
+  {
+    "icon": "job",
+    "name": "Quản lý Job Schedule",
+    "link": "/job-schedule",
+    "permission": "USER_ADMIN"
+  }
+]

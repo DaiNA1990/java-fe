@@ -1,0 +1,199 @@
+.list-group-item.active {
+        color: #555;
+        background-color: #e7e7e7;
+        border-color: #e7e7e7;
+      }
+
+      .card {
+        border-radius: 8px;
+      }
+
+      h4 {
+        margin-bottom: 1rem;
+      }
+      a:hover {
+        cursor: pointer !important;
+        text-decoration: underline !important; /* gạch chân khi hover */
+      }
+      .cron-badge {
+        display: inline-block;
+        max-width: 125px;
+        white-space: normal;
+        word-break: break-word;
+      }
+      code {
+        padding: 2px 4px;
+        font-size: 90%;
+        color: #c7254e;
+        background-color: #f9f2f4;
+        border-radius: 4px;
+      }
+      span.metric-default {
+        color: #777;
+        border-color: #777;
+      }
+      span.metric {
+        display: inline-block;
+        min-width: 10px;
+        padding: 2px 6px;
+        font-size: 12px;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        background-color: transparent;
+        border-radius: 10px;
+        border: solid 1px;
+        -webkit-transition: color 0.1s ease-out, background 0.1s ease-out,
+          border 0.1s ease-out;
+        -moz-transition: color 0.1s ease-out, background 0.1s ease-out,
+          border 0.1s ease-out;
+        -ms-transition: color 0.1s ease-out, background 0.1s ease-out,
+          border 0.1s ease-out;
+        -o-transition: color 0.1s ease-out, background 0.1s ease-out,
+          border 0.1s ease-out;
+        transition: color 0.1s ease-out, background 0.1s ease-out,
+          border 0.1s ease-out;
+      }
+
+      span.metric.highlighted {
+        font-weight: bold;
+        color: #fff !important;
+      }
+
+      span.metric-default {
+        color: #777;
+        border-color: #777;
+      }
+
+      span.metric-default.highlighted {
+        background-color: #777;
+      }
+
+      .clickable-metric,
+      .clickable-metric:hover,
+      .clickable-metric:active,
+      .clickable-metric:visited,
+      .clickable-metric:focus {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      div.metric {
+        border: solid 1px transparent;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+        transition: color 0.1s ease-out, background 0.1s ease-out,
+          border 0.1s ease-out;
+      }
+
+      div.metric .metric-body {
+        padding: 15px 15px 0;
+        font-size: 26px;
+        text-align: center;
+      }
+
+      div.metric .metric-description {
+        padding: 0 15px 15px;
+        text-align: center;
+      }
+
+      div.metric.metric-default {
+        border-color: #ddd;
+      }
+
+      div.metric-info,
+      span.metric-info {
+        color: #5bc0de;
+        border-color: #5bc0de;
+      }
+
+      span.metric-info.highlighted {
+        background-color: #5bc0de;
+      }
+
+      div.metric-warning,
+      span.metric-warning {
+        color: #f0ad4e;
+        border-color: #f0ad4e;
+      }
+
+      span.metric-warning.highlighted {
+        background-color: #f0ad4e;
+      }
+
+      div.metric-success,
+      span.metric-success {
+        color: #5cb85c;
+        border-color: #5cb85c;
+      }
+
+      span.metric-success.highlighted {
+        background-color: #5cb85c;
+      }
+
+      div.metric-danger,
+      span.metric-danger {
+        color: #d9534f;
+        border-color: #d9534f;
+      }
+
+      span.metric-danger.highlighted {
+        background-color: #d9534f;
+      }
+
+      span.metric-null,
+      div.metric-null {
+        display: none;
+      }
+
+      .header {
+        color: #555;
+        display: flex;
+        align-items: center; /* căn giữa theo chiều dọc */
+        gap: 8px; /* khoảng cách giữa 2 phần tử */
+      }
+
+      .job-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f5f5f5; /* màu nền xám nhạt */
+        border: none;
+        color: #555;
+        font-size: 14px;
+        padding: 8px 12px;
+      }
+
+      .job-item.active {
+        background-color: #e6e6e6; /* màu active */
+        font-weight: 600;
+      }
+      .custom-trigger-btn {
+        background-color: #337ab7 !important; /* màu xanh như ảnh */
+        border: 1px solid #2e6da4 !important;
+        color: #fff !important;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+      }
+
+      .custom-trigger-btn:hover {
+        background-color: #286090 !important; /* màu khi hover */
+        border-color: #204d74 !important;
+      }
+      span.metric-danger.highlighted {
+        background-color: #d9534f;
+      }
+
+      span.metric.highlighted {
+        font-weight: bold;
+        color: #fff !important;
+      }
+      div.metric-danger,
+      span.metric-danger {
+        color: #d9534f;
+        border-color: #d9534f;
+      }
