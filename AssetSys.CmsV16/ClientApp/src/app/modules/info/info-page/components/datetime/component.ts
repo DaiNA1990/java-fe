@@ -73,7 +73,6 @@ export class InfoPageDatetimeComponent implements OnDestroy, OnInit {
     }
 
     setValue() {
-      if(this.formItem.propertyItem.code == 'ngay_ket_thuc') debugger
       if (this.formCtrl.value != null && typeof this.formCtrl.value === 'string') {
           const _date = dateUtil.parseDate(this.formCtrl.value);
           this.formCtrl.setValue(_date);

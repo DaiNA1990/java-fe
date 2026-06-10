@@ -364,11 +364,11 @@ export class InfoPageFormComponent
         expression
       );
       const controlName =
-        item.propertyItem === undefined ||
-        item.propertyItem === null ||
-        item.propertyItem?.code === ''
+        item.property === undefined ||
+        item.property === null ||
+        item.property?.code === ''
           ? item.code
-          : item.propertyItem.code;
+          : item.property.code;
       const control = this.form.get(controlName);
       if (control) {
         if (item.readOnly && control.enabled)
@@ -402,11 +402,11 @@ export class InfoPageFormComponent
       );
       if (!hasChanged && relevantFields.length > 0) return;
       const controlName =
-        item.propertyItem === undefined ||
-        item.propertyItem === null ||
-        item.propertyItem?.code === ''
+        item.property === undefined ||
+        item.property === null ||
+        item.property?.code === ''
           ? item.code
-          : item.propertyItem.code;
+          : item.property.code;
       const control = this.form.get(controlName);
       control?.updateValueAndValidity({ emitEvent: false });
     } catch (ex) {
@@ -487,9 +487,9 @@ export class InfoPageFormComponent
             this.convertDatesToStrings(this.valueTransform)
           );
           this.setFieldValue(
-            property.propertyItem.code,
+            property.property.code,
             result,
-            property.propertyItem.typeData,
+            property.property.typeData,
             false
           );
           return;
@@ -497,7 +497,7 @@ export class InfoPageFormComponent
           const relevantFields: any = [];
           _expression = this.buildExpressionData(
             obj.data,
-            property.propertyItem?.typeData,
+            property.property?.typeData,
             relevantFields
           );
           const hasChanged = relevantFields.some(
@@ -507,9 +507,9 @@ export class InfoPageFormComponent
           const expr = jsonata(_expression);
           const result = await expr.evaluate(this.valueTransform);
           this.setFieldValue(
-            property.propertyItem.code,
+            property.property.code,
             result,
-            property.propertyItem.typeData,
+            property.property.typeData,
             false
           );
           return;
@@ -589,8 +589,8 @@ export class InfoPageFormComponent
     return childShow;
   }
   setOnValidControl(item: any) {
-    if (item.propertyItem?.code != null && item.propertyItem?.code != '') {
-      const controlName = item.propertyItem.code;
+    if (item.property?.code != null && item.property?.code != '') {
+      const controlName = item.property.code;
       const control = this.form.get(controlName);
       const syncValidators = this.getValidator(item);
       const asyncValidators = this.getValidatorAsync(item);
@@ -601,11 +601,11 @@ export class InfoPageFormComponent
   }
   setOffValidControl(item: any) {
     const controlName =
-      item.propertyItem === undefined ||
-      item.propertyItem === null ||
-      item.propertyItem?.code === ''
+      item.property === undefined ||
+      item.property === null ||
+      item.property?.code === ''
         ? item.code
-        : item.propertyItem.code;
+        : item.property.code;
     const control = this.form.get(controlName);
     control?.clearValidators();
     control?.clearAsyncValidators();
@@ -623,7 +623,7 @@ export class InfoPageFormComponent
   getControl(item: any): FormControl {
     return (
       (this.form.get(
-        item.propertyItem.code === '' ? item.code : item.propertyItem.code
+        item.property.code === '' ? item.code : item.property.code
       ) as FormControl) || new FormControl()
     );
   }
@@ -694,9 +694,9 @@ export class InfoPageFormComponent
           arr.push(
             this.expressionValidatorAsync(
               val.value,
-              item.propertyItem?.code === ''
+              item.property?.code === ''
                 ? item.code
-                : item.propertyItem.code
+                : item.property.code
             )
           );
       }
@@ -744,7 +744,7 @@ export class InfoPageFormComponent
       return Boolean(result);
     } catch (ex) {
       console.log(
-        (item.propertyItem?.code ?? item.code) +
+        (item.property?.code ?? item.code) +
           ' checkIsDisplay:' +
           expression +
           ' ' +
@@ -868,9 +868,9 @@ export class InfoPageFormComponent
     this.categoryService.setPath(this.initPath(formItem));
 
     res.data.forEach((item: any) => {
-      this.groupId = item.layoutItem.groupId;
-      this.groupCode = item.layoutItem.groupItem.code;
-      this.parentGroupId = item.layoutItem.groupParentId;
+      this.groupId = item.layout.groupId;
+      this.groupCode = item.layout.group.code;
+      this.parentGroupId = item.layout.groupParentId;
       if (
         item.controlType == 'button' &&
         item.expressionDisplay != null &&
@@ -934,8 +934,8 @@ export class InfoPageFormComponent
       this.form.removeControl(key);
       for (const item of this.forms.filter(
         (v) =>
-          (v.propertyItem?.code && v.propertyItem.code !== ''
-            ? v.propertyItem.code
+          (v.property?.code && v.property.code !== ''
+            ? v.property.code
             : v.code) === key
       )) {
         arrControls.push(Object.assign({}, item));
@@ -943,8 +943,8 @@ export class InfoPageFormComponent
       this.forms = this.forms.filter(
         (v) =>
           !(
-            (v.propertyItem?.code && v.propertyItem.code !== ''
-              ? v.propertyItem.code
+            (v.property?.code && v.property.code !== ''
+              ? v.property.code
               : v.code) === key
           )
       );
@@ -952,7 +952,7 @@ export class InfoPageFormComponent
 
     for (const item of this.forms.filter(
       (c: any) =>
-        c.propertyItem.code !== '' || (c.code !== null && c.code !== '')
+        c.property.code !== '' || (c.code !== null && c.code !== '')
     )) {
       if (
         controlTypes[0].items.filter((s: any) => s.value == item.controlType)
@@ -968,13 +968,13 @@ export class InfoPageFormComponent
     await Promise.all(
       arrControls.map(async (item: any) => {
         let _value = null;
-        if (item.propertyItem?.code == 'dateupdated')
+        if (item.property?.code == 'dateupdated')
           _value = resValue?.data['date_updated'] || null;
-        else if (item.propertyItem?.code == 'updatedby')
+        else if (item.property?.code == 'updatedby')
           _value = resValue?.data['updated_by'] || null;
         else
           _value =
-            resValue?.data[item.propertyItem?.code] || null;
+            resValue?.data[item.property?.code] || null;
         if (
           item.controlType == 'button' &&
           item.expressionDisplay != null &&
@@ -988,7 +988,7 @@ export class InfoPageFormComponent
         if (_value === null && cloneValue !== null && dataId === null) {
           _value =
             this.evalValue(
-              cloneValue[item.propertyItem?.code],
+              cloneValue[item.property?.code],
               item.controlType
             ) ?? null;
         }
@@ -1025,20 +1025,20 @@ export class InfoPageFormComponent
 
         if (_value === null && initValue != null && dataId === null) {
           _value = this.evalValue(
-            initValue[item.propertyItem?.code],
+            initValue[item.property?.code],
             item.controlType
           );
         }
         item.isRequired = this.hasRequire(item.expressionValidate);
         const controlName =
-          item.propertyItem?.code && item.propertyItem.code !== ''
-            ? item.propertyItem.code
+          item.property?.code && item.property.code !== ''
+            ? item.property.code
             : item.code;
         const control = this.fb.control(
           {
             value: this.formatData(
               _value,
-              item.propertyItem?.typeData,
+              item.property?.typeData,
               item.controlType
             ),
             disabled: item.readOnly === true,
@@ -1104,11 +1104,11 @@ export class InfoPageFormComponent
           result = await jsonata(_expression).evaluate(result);
         }
         const controlName =
-          item.propertyItem === undefined ||
-          item.propertyItem === null ||
-          item.propertyItem?.code === ''
+          item.property === undefined ||
+          item.property === null ||
+          item.property?.code === ''
             ? item.code
-            : item.propertyItem.code;
+            : item.property.code;
         const control = this.form.get(controlName);
         if (control) {
           control.setValue(result);
@@ -1131,11 +1131,11 @@ export class InfoPageFormComponent
       ) {
         const value = this.value[item.defaultValue.replace('copyfrom:', '')];
         const controlName =
-          item.propertyItem === undefined ||
-          item.propertyItem === null ||
-          item.propertyItem?.code === ''
+          item.property === undefined ||
+          item.property === null ||
+          item.property?.code === ''
             ? item.code
-            : item.propertyItem.code;
+            : item.property.code;
         const curValue = this.value[controlName];
         const control = this.form.get(controlName);
         if (control && curValue == null) {
@@ -1146,11 +1146,11 @@ export class InfoPageFormComponent
       if (item.controlType === 'numberAuto' && dataId == null) {
         const value = await this.autoIncrease(item);
         const controlName =
-          item.propertyItem === undefined ||
-          item.propertyItem === null ||
-          item.propertyItem?.code === ''
+          item.property === undefined ||
+          item.property === null ||
+          item.property?.code === ''
             ? item.code
-            : item.propertyItem.code;
+            : item.property.code;
         const control = this.form.get(controlName);
         if (control) {
           control.setValue(value);
@@ -1585,8 +1585,8 @@ export class InfoPageFormComponent
         .forEach((i: any) => {
           const item = this.forms.find(
             (v) =>
-              v.propertyItem.code === i.target ||
-              (v.propertyItem.code === '' && v.code === i.target)
+              v.property.code === i.target ||
+              (v.property.code === '' && v.code === i.target)
           );
           properties[i.target] =
             i.event === 'MAP_FIELD_TO'
@@ -1875,7 +1875,7 @@ export class InfoPageFormComponent
       this.filterConditions.push(_conditions);
     }
     const filterParams: any = {
-      groupId: item.layoutItem?.groupId,
+      groupId: item.layout?.groupId,
       parentId: this.parentId,
       conditions: this.filterConditions,
       createdBy: this.parentId ? null : this.identifyId,
@@ -2030,7 +2030,7 @@ export class InfoPageFormComponent
   setValueControl(dataAction: any) {
     if (this.form.controls[dataAction.action.data] !== undefined) {
       var item = this.forms.find(
-        (t) => t.propertyItem.code == dataAction.action.data
+        (t) => t.property.code == dataAction.action.data
       );
       if (
         dataAction.action.rules !== null &&
@@ -2049,13 +2049,13 @@ export class InfoPageFormComponent
         this.setFieldValue(
           dataAction.action.data,
           value,
-          item?.propertyItem.typeData
+          item?.property.typeData
         );
       } else {
         this.setFieldValue(
           dataAction.action.data,
           dataAction.value,
-          item?.propertyItem.typeData
+          item?.property.typeData
         );
       }
     }
@@ -2066,11 +2066,11 @@ export class InfoPageFormComponent
       dataAction.value = {};
 
     for (const rule of dataAction.action.rules) {
-      var item = this.forms.find((t) => t.propertyItem.code == rule.data);
+      var item = this.forms.find((t) => t.property.code == rule.data);
       this.setFieldValue(
         rule.data,
         dataAction.value[rule.target],
-        item?.propertyItem.typeData
+        item?.property.typeData
       );
     }
   }
@@ -2283,7 +2283,7 @@ export class InfoPageFormComponent
       this.buildConditionFilter(jexpression.data, this.value);
       // const all = await firstValueFrom(
       //   this.infoDataService.getCount({
-      //     groupId: dataAction.control.layoutItem?.groupId,
+      //     groupId: dataAction.control.layout?.groupId,
       //     conditions: JSON.stringify([jexpression.data]),
       //   })
       // );
@@ -2302,7 +2302,7 @@ export class InfoPageFormComponent
       }
       const res = await firstValueFrom(
         this.infoDataService.approveAll({
-          groupId: dataAction.control.layoutItem?.groupId,
+          groupId: dataAction.control.layout?.groupId,
           conditions: [jexpression.data],
           groupChildCode: dataAction.action.data,
         })
@@ -2328,7 +2328,7 @@ export class InfoPageFormComponent
       // });
       // const khdudkduyet = await firstValueFrom(
       //   this.infoDataService.getCount({
-      //     groupId: dataAction.control.layoutItem?.groupId,
+      //     groupId: dataAction.control.layout?.groupId,
       //     conditions: JSON.stringify([jexpression.data]),
       //   })
       // );

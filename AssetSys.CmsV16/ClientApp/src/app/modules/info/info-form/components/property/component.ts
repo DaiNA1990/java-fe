@@ -40,7 +40,7 @@ export class InfoFormPropertyComponent implements OnInit {
     }
 
     get groupId() {
-        return this.propertyItem?.layoutItem?.groupId || this.parent.groupId;
+        return this.propertyItem?.layout?.groupId || this.parent.groupId;
     }
 
     propertyDS = () => this.propertyService.autocomplete({

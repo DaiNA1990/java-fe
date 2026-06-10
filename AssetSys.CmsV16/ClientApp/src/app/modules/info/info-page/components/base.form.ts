@@ -37,7 +37,7 @@ export class BaseFormPage{
     }
 
     public initPath(formItem: any,module: any = null) {
-      const mod = module ?? formItem?.layoutItem?.module;
+      const mod = module ?? formItem?.layout?.module;
       let path = 'api';
       switch (mod) {
         case 'TKKH':

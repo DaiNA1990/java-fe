@@ -57,7 +57,7 @@ export class InfoPageFileUploadComponent
     const formData = new FormData();
     formData.append('file', file, file.name);
     formData.append('isECM', this.isECM ? 'true' : 'false');
-    formData.append('groupCode', this.formItem?.layoutItem?.group?.code);
+    formData.append('groupCode', this.formItem?.layout?.group?.code);
     this.fileService.upload(formData).subscribe({
       next: (res: any) => {
         if (res.statusCode === ResponseCode.ZERO) {
@@ -103,7 +103,7 @@ export class InfoPageFileUploadComponent
     const filekey = file.length > 1 && file[1] != 'null' ? file[1] : filename;
     this.fileService
       .download({
-        permission: this.formItem.layoutItem.group.code,
+        permission: this.formItem.layout.group.code,
         filename: filekey,
         isECM: this.isECM,
         iskeyFile: file.length > 1,

@@ -25,7 +25,7 @@
       <th
         scope="col"
         *ngFor="let col of cols"
-        [pSortableColumn]="col.propertyItem.code !== '' ? col.propertyItem.code : undefined"
+        [pSortableColumn]="col.property.code !== '' ? col.property.code : undefined"
         [ngStyle]="{'min-width': (col.size || getTextWidth(col.name)) + 'px'}"
         alignFrozen="right"
         pFrozenColumn
@@ -33,8 +33,8 @@
       >
         {{col.name}}
         <p-sortIcon
-          [field]="col.propertyItem.code"
-          *ngIf="col.propertyItem.code !== ''"
+          [field]="col.property.code"
+          *ngIf="col.property.code !== ''"
         ></p-sortIcon>
       </th>
     </tr>
@@ -62,7 +62,7 @@
           <!-- SELECT -->
           <ng-container *ngSwitchCase="'select'">
             <ng-container *ngIf="col.optionLst?.length > 0">
-              {{ getValueReadOnly(item[col.propertyItem.code], col.optionLst) }}
+              {{ getValueReadOnly(item[col.property.code], col.optionLst) }}
             </ng-container>
           </ng-container>
           <!-- CHECKBOX -->
@@ -70,18 +70,18 @@
             <p-checkbox
               [binary]="true"
               [disabled]="true"
-              [ngModel]="item[col.propertyItem.code] === true ||
-                 item[col.propertyItem.code] === 'True' ||
-                 item[col.propertyItem.code] === 'true'"
+              [ngModel]="item[col.property.code] === true ||
+                 item[col.property.code] === 'True' ||
+                 item[col.property.code] === 'true'"
             >
             </p-checkbox>
           </ng-container>
           <!-- DEFAULT -->
           <ng-container *ngSwitchDefault>
             <span [ngClass]="col.cssClass" [style]="col.cssStyle">
-              {{ col.controlType === 'year' ? item[col.propertyItem.code] :
-              item[col.propertyItem.code] | formatText :
-              col.propertyItem.typeData }}
+              {{ col.controlType === 'year' ? item[col.property.code] :
+              item[col.property.code] | formatText :
+              col.property.typeData }}
             </span>
           </ng-container>
         </ng-container>
@@ -89,8 +89,8 @@
           <ng-container *ngIf="checkIsDisplay(tp, item)">
             <ng-container [ngSwitch]="tp.controlType">
               <ng-container *ngSwitchCase="'select'">
-                {{ item[col.propertyItem.code] |
-                formatText:col.propertyItem.typeData }}
+                {{ item[col.property.code] |
+                formatText:col.property.typeData }}
               </ng-container>
               <ng-container *ngSwitchCase="'file-download'">
                 <span
@@ -98,14 +98,14 @@
                   [style]="tp.cssStyle"
                   [title]="tp.name"
                 >
-                  {{ item[tp.propertyItem.code] ? item[tp.propertyItem.code].split('|')[0] : item[tp.propertyItem.code] }}
+                  {{ item[tp.property.code] ? item[tp.property.code].split('|')[0] : item[tp.property.code] }}
                 </span>
                 <a
                   href="javascript:;"
                   class="mx-1"
                   (click)="rowClick($event, item, tp)"
                   title="Tải về"
-                  *ngIf="item[tp.propertyItem.code] !== null && item[tp.propertyItem.code] !== '' && !item.isDownload"
+                  *ngIf="item[tp.property.code] !== null && item[tp.property.code] !== '' && !item.isDownload"
                 >
                   <i class="ki-duotone ki-file-down fs-3 text-primary">
                     <span class="path1"></span>
@@ -128,14 +128,14 @@
                   [style]="tp.cssStyle"
                   [title]="tp.name"
                 >
-                  {{ item[tp.propertyItem.code] ? item[tp.propertyItem.code].split('|')[0] : item[tp.propertyItem.code] }}
+                  {{ item[tp.property.code] ? item[tp.property.code].split('|')[0] : item[tp.property.code] }}
                 </span>
                 <a
                   href="javascript:;"
                   class="mx-1"
                   (click)="rowClick($event, item, tp)"
                   title="Tải về"
-                  *ngIf="item[tp.propertyItem.code] !== null && item[tp.propertyItem.code] !== '' && !item.isDownload"
+                  *ngIf="item[tp.property.code] !== null && item[tp.property.code] !== '' && !item.isDownload"
                 >
                   <i class="ki-duotone ki-file-down fs-3 text-primary">
                     <span class="path1"></span>
@@ -170,8 +170,8 @@
               </ng-container>
               <ng-container *ngSwitchDefault>
                 <span [ngClass]="tp.cssClass" [style]="tp.cssStyle"
-                  >{{ item[tp.propertyItem.code] |
-                  formatText:tp.propertyItem.typeData }}</span
+                  >{{ item[tp.property.code] |
+                  formatText:tp.property.typeData }}</span
                 >
               </ng-container>
             </ng-container>

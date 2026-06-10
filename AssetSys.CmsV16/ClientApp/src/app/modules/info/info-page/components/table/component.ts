@@ -177,7 +177,7 @@ export class InfoPageTableComponent
     const columnData = [
       ...new Set(
         this.items
-          .map((item) => item[col.propertyItem?.code])
+          .map((item) => item[col.property?.code])
           .filter((x) => x !== null && x !== undefined),
       ),
     ];
@@ -262,7 +262,7 @@ export class InfoPageTableComponent
     const columnData = [
       ...new Set(
         this.items
-          .map((item) => item[col.propertyItem?.code])
+          .map((item) => item[col.property?.code])
           .filter((x) => x !== null && x !== undefined),
       ),
     ];
@@ -479,7 +479,7 @@ export class InfoPageTableComponent
     }
 
     const filterParams = {
-      groupId: this.formItem.layoutItem.groupId,
+      groupId: this.formItem.layout.groupId,
       createdBy:
         this.parentId === null &&
         !(this.formItem.controlType === 'table-filter')
@@ -837,12 +837,12 @@ export class InfoPageTableComponent
       item.controlType === 'file-download-ecm'
     ) {
       data.isDownload = true;
-      let file = data[item.propertyItem.code]?.split('|');
+      let file = data[item.property.code]?.split('|');
       const filename = file[0];
       const filekey = file.length > 1 && file[1] != "null" ? file[1] : filename;
       this.fileService
         .download({
-          permission: this.formItem.layoutItem.group.code,
+          permission: this.formItem.layout.group.code,
           filename: filekey,
           isECM: item.controlType === 'file-download-ecm',
           iskeyFile: file.length > 1,
@@ -880,7 +880,7 @@ export class InfoPageTableComponent
           },
         });
       // this.fileService
-      //   .download({ filename: data[item.propertyItem.code] })
+      //   .download({ filename: data[item.property.code] })
       //   .subscribe((res: any) => {
       //     if (res.statusCode === ResponseCode.ZERO) {
       //       this.downloadFileTrigger(res.data, `${data.file}`);
@@ -945,7 +945,7 @@ export class InfoPageTableComponent
           return;
         }
         this.toggleLoading(true);
-        await this.deleteRowSubmit(data.dataId, this.formItem.layoutItem.code, data);
+        await this.deleteRowSubmit(data.dataId, this.formItem.layout.code, data);
         this.cdr.detectChanges();
         this.getDataTable();
         this.toggleLoading(false);
@@ -1013,7 +1013,7 @@ export class InfoPageTableComponent
 
           await Promise.all(
             batch.map(item =>
-              this.deleteRowSubmit(item.id, this.formItem.layoutItem.code)
+              this.deleteRowSubmit(item.id, this.formItem.layout.code)
             )
           );
         }
@@ -1198,7 +1198,7 @@ export class InfoPageTableComponent
           id: null,
           parentId: this.parentId,
           identifyId: this.parentId ? null : this.identifyId,
-          layoutCode: this.formItem.layoutItem.code,
+          layoutCode: this.formItem.layout.code,
           properties,
           control: dataAction.control,
         }),
@@ -1301,7 +1301,7 @@ export class InfoPageTableComponent
     const res = await firstValueFrom(
       this.infoDataService.saveData({
         id: item.id,
-        layoutCode: this.formItem.layoutItem.code,
+        layoutCode: this.formItem.layout.code,
         control: dataAction.control,
         properties: properties,
       }),

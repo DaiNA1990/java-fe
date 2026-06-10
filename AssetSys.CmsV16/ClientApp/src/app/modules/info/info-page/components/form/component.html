@@ -195,7 +195,7 @@
 
 <!-- <ng-template #layoutControlTmpl let-item="item" let-formCtrl="formCtrl" let-parentData="parentData">
   <app-info-page-form [layoutCode]="item.referenceCode" [identifyId]="identifyId || null" [readOnly]="item.readOnly"
-    [groupId]="item.layoutItem.groupId" [parentId]="parentId || dataId" [currentUser]="currentUser" [parentData]="parentData || value"
+    [groupId]="item.layout.groupId" [parentId]="parentId || dataId" [currentUser]="currentUser" [parentData]="parentData || value"
     *ngIf="(loadFormSubject | async) === false" />
 </ng-template> -->
 
@@ -205,7 +205,7 @@
   let-formCtrl="formCtrl"
   let-parentData="parentData"
 >
-  <!-- parentId:{{parentId}} {{item.layoutItem | json}} {{item.layoutItem.groupParentId | json}} -->
+  <!-- parentId:{{parentId}} {{item.layout | json}} {{item.layout.groupParentId | json}} -->
   <app-info-page-form
     [layoutCode]="item.referenceCode"
     [identifyId]="identifyId || null"
@@ -229,7 +229,7 @@
     [formItem]="item"
     [funcGetChild]="funcGetChild"
     [formCtrl]="formCtrl"
-    [parentGroupId]="item.layoutItem.groupParentId"
+    [parentGroupId]="item.layout.groupParentId"
     [identifyId]="identifyId || null"
     [parentId]="parentId"
     [currentUser]="currentUser"
@@ -350,7 +350,7 @@
 
 <ng-template #valueControlTmpl let-item="item" let-formCtrl="formCtrl">
   <span [class]="item.cssClass" [style]="item.cssStyle"
-    >{{formCtrl.value | formatText:item.propertyItem.typeData}}</span
+    >{{formCtrl.value | formatText:item.property.typeData}}</span
   >
 </ng-template>
 
@@ -633,7 +633,7 @@
     <span
       class="ms-1"
       (click)="op1.toggle($event)"
-      *ngIf="currentUser?.roleCodes?.includes('DEVELOP') && item?.propertyItem?.code"
+      *ngIf="currentUser?.roleCodes?.includes('DEVELOP') && item?.property?.code"
     >
       <i class="ki-duotone ki-information fs-7">
         <span class="path1"></span>
@@ -643,7 +643,7 @@
     </span>
     <p-overlayPanel #op1 [dismissable]="true" [showCloseIcon]="true">
       <div>
-        <pre>{{item?.propertyItem?.code}} ({{item?.propertyItem?.typeData}}) ({{item?.propertyId}})</pre>
+        <pre>{{item?.property?.code}} ({{item?.property?.typeData}}) ({{item?.propertyId}})</pre>
       </div>
     </p-overlayPanel>
   </label>
