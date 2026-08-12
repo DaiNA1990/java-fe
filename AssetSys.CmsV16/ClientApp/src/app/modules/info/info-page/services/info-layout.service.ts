@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '@appkkkh/core/base/base.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class InfoGroupService extends BaseService {
+export class InfoLayoutService extends BaseService {
   constructor() {
     super();
-    this.setModule('InfoGroup');
-    this.setPath('configapi');
+    this.setModule('InfoLayout');
   }
 
 }

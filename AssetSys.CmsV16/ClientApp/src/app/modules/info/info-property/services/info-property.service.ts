@@ -8,6 +8,7 @@ export class InfoPropertyService extends BaseService {
   constructor() {
     super();
     this.setModule('InfoProperty');
+    this.setPath('configapi');
   }
 
 }

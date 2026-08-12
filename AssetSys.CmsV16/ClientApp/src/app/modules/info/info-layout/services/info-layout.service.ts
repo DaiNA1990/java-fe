@@ -9,6 +9,7 @@ export class InfoLayoutService extends BaseService {
   constructor() {
     super();
     this.setModule('InfoLayout');
+    this.setPath('configapi');
   }
 
   editing = (data: any): Observable<any> => this.post('Editing', data);

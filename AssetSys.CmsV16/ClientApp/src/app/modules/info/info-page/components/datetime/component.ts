@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { InfoFormService } from '../../services/service';
+import { InfoFormService } from '../../services/info-form.service';
 import { FormControl } from '@angular/forms';
 import { dateUtil } from '../../components/date-util';
 import dayjs from 'dayjs';

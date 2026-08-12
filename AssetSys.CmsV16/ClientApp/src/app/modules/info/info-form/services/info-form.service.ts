@@ -8,6 +8,7 @@ export class InfoFormService extends BaseService {
   constructor() {
     super();
     this.setModule('InfoForm');
+    this.setPath('configapi');
   }
 
 }

@@ -22,7 +22,7 @@ import {
 } from '@angular/forms';
 import { firstValueFrom, Subscription, BehaviorSubject } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { InfoFormService } from '../../services/service';
+import { InfoFormService } from '../../services/info-form.service';
 import { InfoDataService } from '../../services/info-data-service';
 import { EventDataService } from '../../services/event-service';
 import controlTypes from '@appkkkh/modules/info/info-form/components/property/controls.json';

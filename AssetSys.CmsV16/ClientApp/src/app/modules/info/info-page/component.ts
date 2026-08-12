@@ -1,6 +1,7 @@
 import { filter } from 'rxjs/operators';
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { InfoLayoutService } from '../info-layout/services/info-layout.service';
+import { InfoLayoutService } from '../info-page/services/info-layout.service';
+import { BaseFormPage } from '../info-page/components/base.form';
 import {
   ActivatedRoute,
   NavigationEnd,
@@ -33,8 +34,11 @@ import { AuthService } from '@appkkkh/modules/user/auth';
     </div>
     <p-confirmDialog appendTo="body"></p-confirmDialog>
   `,
+  providers: [
+    InfoLayoutService
+  ]
 })
-export class InfoPageComponent implements OnInit, OnDestroy {
+export class InfoPageComponent extends BaseFormPage implements OnInit, OnDestroy {
   layout: any = null;
   layoutId: any;
   subscriptions: Subscription[] = [];
@@ -47,7 +51,9 @@ export class InfoPageComponent implements OnInit, OnDestroy {
     public service: InfoLayoutService,
     private cdr: ChangeDetectorRef,
     private auth: AuthService
-  ) {}
+  ) {
+    super();
+  }
 
   async getData() {
     this.layoutId = this.route.snapshot.params['layoutId'];
@@ -105,6 +111,7 @@ export class InfoPageComponent implements OnInit, OnDestroy {
   //   }));
   // }
   async ngOnInit(): Promise<void> {
+    //this.service.setPath(this.initPath(formItem));
     await this.getData();
     await this.getUserInfo();
     if (this.currentUser == null || this.layout == null)

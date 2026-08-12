@@ -1,7 +1,7 @@
 [
   {
     "icon": "element-11",
-    "name": "MENU.DASHBOARD",
+    "name": "Trang chủ",
     "link": "/dashboard"
   },
   {
@@ -9,7 +9,7 @@
   },
   {
     "icon": "graph-up",
-    "name": "Xây dựng thông tin",
+    "name": "Xây dựng chức năng",
     "link": "/info/info-group",
     "permission": "USER_ADMIN"
   },
@@ -19,226 +19,130 @@
     "link": "/info/info-report",
     "permission": "USER_ADMIN"
   },
-  {
-    "name": "Kế hoạch"
+   {
+    "name": "Kế hoạch DTQG"
   },
   {
-    "icon": "devices",
-    "name": "Đăng ký kế hoạch tại phòng ban",
-    "link": "/info/info-page/2212",
-    "permission": "ACCESSKH1"
-  },
-  {
-    "icon": "devices",
-    "name": "Tổng hợp kế hoạch phòng ban",
-    "link": "/info/info-page/2640",
-    "permission": "ACCESSTHKHPB"
-  },
-  {
-    "icon": "devices",
-    "name": "Kế hoạch mua sắm tài sản",
-    "link": "/info/info-page/2195",
-    "permission": "ACCESSKH2"
-  },
-  {
-    "icon": "devices",
-    "name": "Điều chỉnh phân bổ kế hoạch",
-    "link": "/info/info-page/2234",
-    "permission": "ACCESSKH3"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập/duyệt kế hoạch Xây dựng cơ bản",
-    "link": "/info/info-page/2173",
-    "permission": "ACCESSKH4"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập/duyệt kế hoạch mua bất động sản",
-    "link": "/info/info-page/2245",
-    "permission": "ACCESSKH5"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập/duyệt kế hoạch CNTT (Ban/TT TSC đăng ký)",
-    "link": "/info/info-page/2466",
-    "permission": "ACCESSKH6",
+    "icon": "bank",
+    "name": "Chức năng dùng chung",
     "subs": [
       {
-        "icon": "devices",
-        "name": "Kế hoạch CNTT",
-        "link": "/info/info-page/2466",
-        "permission": "ACCESSKH7"
+        "name": "Danh mục dùng chung",
+        "link": "/common/common-category"
       },
       {
-        "icon": "devices",
-        "name": "Kế hoạch PTPM",
-        "link": "/info/info-page/2498",
-        "permission": "ACCESSKH7"
+        "name": "Khai báo mẫu báo cáo",
+        "link": "/common/report-template"
       }
     ]
   },
   {
     "icon": "devices",
-    "name": "Lập/duyệt KH TSCNTT (Mua và thuê TS CNTT)",
-    "link": "/info/info-page/2356",
-    "permission": "ACCESSKH7"
+    "name": "Lập và giao kế hoạch, dự toán",
+    "subs": [
+      {
+        "name": "Kế hoạch hàng DTQG đầu năm - Các bộ/ngành",
+        "link": "/info/info-page/5315"
+      },
+      {
+        "name": "Điều chỉnh KH hàng DTQG trong năm - Các bộ/ngành",
+        "link": "/plan-budget/kh-dt-02"
+      },
+      {
+        "name": "KH hàng DTQG bổ sung trong năm - Các bộ/ngành",
+        "link": "/plan-budget/kh-dt-03"
+      },
+      {
+        "name": "Giao kế hoạch và vốn đầu năm",
+        "link": "/info/info-page/5317"
+      },
+      {
+        "name": "Giao kế hoạch vốn mua bù, mua bổ sung",
+        "link": "/plan-budget/kh-dt-05"
+      },
+      {
+        "name": "Giao kế hoạch xuất giảm, xuất bán, xuất luân phiên đổi hàng",
+        "link": "/plan-budget/kh-dt-06"
+      },
+      {
+        "name": "Kế hoạch hàng DTQG đầu năm (tại Cục DTNN)",
+        "link": "/plan-budget/kh-dt-07"
+      },
+      {
+        "name": "Điều chỉnh KH hàng DTQG trong năm (tại Cục DTNN)",
+        "link": "/plan-budget/kh-dt-08"
+      },
+      {
+        "name": "KH hàng DTQG bổ sung trong năm (tại Cục DTNN)",
+        "link": "/plan-budget/kh-dt-09"
+      },
+      {
+        "name": "Thẩm định xuất cấp",
+        "link": "/plan-budget/kh-dt-10"
+      },
+      {
+        "name": "Xây dựng phương án giá mua, bán lương thực, muối ăn DTQG",
+        "link": "/plan-budget/kh-dt-11"
+      },
+      {
+        "name": "Xây dựng phương án giá mua, bán vật tư thiết bị DTQG",
+        "link": "/plan-budget/kh-dt-12"
+      },
+      {
+        "name": "Giao chỉ tiêu kế hoạch năm",
+        "link": "/plan-budget/kh-dt-13"
+      },
+      {
+        "name": "Điều chỉnh chỉ tiêu kế hoạch năm",
+        "link": "/plan-budget/kh-dt-14"
+      },
+      {
+        "name": "Lập kế hoạch tài chính 05 năm và dự toán NSNN hàng năm (Nội bộ DTNN)",
+        "link": "/plan-budget/kh-dt-15"
+      },
+      {
+        "name": "Tiếp nhận, rà soát và phản hồi số kiểm tra dự toán",
+        "link": "/plan-budget/kh-dt-16"
+      },
+      {
+        "name": "Thẩm định dự toán chi ngân sách nhà nước tại Cục DTNN",
+        "link": "/plan-budget/kh-dt-17"
+      },
+      {
+        "name": "Giao dự toán chi ngân sách nhà nước",
+        "link": "/plan-budget/kh-dt-18"
+      },
+      {
+        "name": "Điều chỉnh dự toán chi NSNN trong năm",
+        "link": "/plan-budget/kh-dt-19"
+      }
+    ]
   },
   {
     "icon": "devices",
-    "name": "Lập/duyệt kế hoạch thuê hoạt động trụ sở",
-    "link": "/info/info-page/2353",
-    "permission": "ACCESSKH8"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập/duyệt kế hoạch thuê hoạt động ô tô",
-    "link": "/info/info-page/2374",
-    "permission": "ACCESSKH9"
-  },
-  {
-    "icon": "devices",
-    "name": "Đăng ký KH thuê hoạt động QSD đất",
-    "link": "/info/info-page/2793",
-    "permission": "ACCESSKH10"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập duyệt kế hoạch thanh lý",
-    "link": "/info/info-page/2621",
-    "permission": "ACCESSKH11"
-  },
-  {
-    "name": "Phương án mua sắm"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập/duyệt phương án mua BĐS",
-    "link": "/info/info-page/2271",
-    "permission": "ACCESSPA1"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập/duyệt phương án mua sắm tài sản",
-    "link": "/info/info-page/2244",
-    "permission": "ACCESSPA2"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập duyệt phương án thanh lý",
-    "link": "/info/info-page/2363",
-    "permission": "ACCESSPA3"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập duyệt phương án thuê ô tô",
-    "link": "/info/info-page/2346",
-    "permission": "ACCESSPA4"
-  },
-  {
-    "icon": "devices",
-    "name": "Lập duyệt phương án thuê trụ sở",
-    "link": "/info/info-page/2372",
-    "permission": "ACCESSPA5"
-  },
-  {
-    "name": "Tài sản"
-  },
-  {
-    "icon": "graph",
-    "name": "QL đợt kiểm kê",
-    "link": "/info/info-page/2552",
-    "permission": "ACCESSTS2"
-  },
-  {
-    "icon": "devices",
-    "name": "Chức năng thanh lý",
-    "link": "/info/info-page/2341",
-    "permission": "ACCESSTS1"
-  },
-  {
-    "name": "Thực hiện kế hoạch"
-  },
-  {
-    "icon": "devices",
-    "name": "Quản lý hợp đồng thuê hoạt động (trụ sở, ô tô, QSD đất, CNTT)",
-    "link": "/info/info-page/2400",
-    "permission": "ACCESSTK1"
-  },
-  {
-    "icon": "devices",
-    "name": "Quản lý thanh toán, tăng tài sản THĐ (trụ sở, ô tô, QSD đất, CNTT)",
-    "link": "/info/info-page/2342",
-    "permission": "ACCESSTK2"
-  },
-  {
-    "icon": "devices",
-    "name": "Khai báo hợp đồng mua sắm, đầu tư XDCB",
-    "link": "/info/info-page/2242",
-    "permission": "ACCESSTK3"
-  },
-  {
-    "icon": "devices",
-    "name": "Giao dịch ứng trước cho nhà thầu/NCC",
-    "link": "/info/info-page/2355",
-    "permission": "ACCESSTK4"
-  },
-  {
-    "icon": "devices",
-    "name": "Tạm quyết toán/Quyết toán tăng tài sản",
-    "link": "/info/info-page/2671",
-    "permission": "ACCESSTK5"
-  },
-  {
-    "name": "Danh mục kế hoạch"
-  },
-  {
-    "icon": "bank",
-    "name": "Quản lý danh mục phương án mua sắm",
-    "link": "/info/info-page/2202",
-    "permission": "ACCESSDM1"
-  },
-  {
-    "icon": "bank",
-    "name": "Quản lý vốn dự phòng của các kế hoạch",
-    "link": "/info/info-page/2204",
-    "permission": "ACCESSVON"
-  },
-  {
-    "icon": "bank",
-    "name": "Khóa kỳ kế hoạch đầu năm",
-    "link": "/info/info-page/2210",
-    "permission": "ACCESSKY"
-  },
-  {
-    "icon": "bank",
-    "name": "Quản lý danh mục địa điểm",
-    "link": "/info/info-page/2217",
-    "permission": "ACCESSDM2"
-  },
-  {
-    "icon": "bank",
-    "name": "danh mục hệ thống",
-    "link": "/info/info-page/1147",
-    "permission": "USER_ADMIN"
-  },
-  {
-    "name": "Báo cáo"
-  },
-  {
-    "icon": "bank",
-    "name": "Báo cáo kiểm kê chi tiết tài sản, công cụ",
-    "link": "/info/info-page/3933"
-  },
-  {
-    "icon": "bank",
-    "name": "Báo cáo danh sách tài sản, công cụ đã thực hiện kiểm kê",
-    "link": "/info/info-page/3974"
-  },
-  {
-    "icon": "bank",
-    "name": "Báo cáo kế hoạch mua sắm tài sản",
-    "link": "/info/info-page/3912"
+    "name": "Thực hiện dự toán",
+    "subs": [
+      {
+        "name": "Cấp phát vốn mua hàng DTQG tại các Bộ/ngành quản lý DTQG",
+        "link": "/budget-execution/th-dt-01"
+      },
+      {
+        "name": "Cấp nguồn vốn chi DTQG tại Cục DTNN",
+        "link": "/budget-execution/th-dt-02"
+      },
+      {
+        "name": "Cấp vốn mua, bán, thanh toán tiền hàng DTQG (bằng ủy nhiệm chi)",
+        "link": "/budget-execution/th-dt-03"
+      },
+      {
+        "name": "Chuyển KH và dự toán sang năm sau Bộ/Ngành",
+        "link": "/budget-execution/th-dt-04"
+      },
+      {
+        "name": "Chuyển KH và dự toán sang năm sau của Cục DTNN",
+        "link": "/budget-execution/th-dt-05"
+      }
+    ]
   },
   {
     "name": "Hệ thống"
@@ -280,17 +184,5 @@
         "permission": "USER_ADMIN"
       }
     ]
-  },
-  {
-    "icon": "menu",
-    "name": "Danh mục menu",
-    "link": "/resource/menu",
-    "permission": "USER_ADMIN"
-  },
-  {
-    "icon": "job",
-    "name": "Quản lý Job Schedule",
-    "link": "/job-schedule",
-    "permission": "USER_ADMIN"
   }
 ]

@@ -10,7 +10,7 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { InfoFormService } from '../../services/service';
+import { InfoFormService } from '../../services/info-form.service';
 import { InfoDataService } from '../../services/info-data-service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';

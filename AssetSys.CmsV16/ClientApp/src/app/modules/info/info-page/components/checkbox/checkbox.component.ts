@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { InfoFormService } from '../../services/service';
+import { InfoFormService } from '../../services/info-form.service';
 import { CategoryService } from '../../services/category-service';
 import { EventDataService } from '../../services/event-service';
 import { Subscription } from 'rxjs';
