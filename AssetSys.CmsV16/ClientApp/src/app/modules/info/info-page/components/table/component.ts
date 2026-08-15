@@ -34,11 +34,19 @@ import { saveAs } from 'file-saver';
     CategoryService,
     InfoFormService,
   ],
+  styles: [
+    `
+    :host ::ng-deep th.dynamic-header {
+      text-align: center !important;
+      vertical-align: middle !important;
+      white-space: normal;
+    }
+    `
+  ]
 })
 export class InfoPageTableComponent
   extends BaseFormPage
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   @Input() parentId: number | null;
   @Input() identifyId: string | null | undefined;
   @Input() formCtrl: FormControl;
@@ -61,6 +69,9 @@ export class InfoPageTableComponent
   skip: number = 0;
   take: number = 10;
   cols: any;
+  headerRows: any[][] = [];
+  headerDepth = 1;
+
   isOnSubmit: any = false;
 
   itemSelection: any[] = [];
@@ -362,46 +373,41 @@ export class InfoPageTableComponent
           if ('@userName' === rule.field) {
             query +=
               (query !== '' ? ` ${condition} ` : '') +
-              ` ${
-                rule.operator == '=='
-                  ? this.checkUserRole(rule.value.replace(/"/g, ''))
-                  : !this.checkUserRole(rule.value.replace(/"/g, ''))
+              ` ${rule.operator == '=='
+                ? this.checkUserRole(rule.value.replace(/"/g, ''))
+                : !this.checkUserRole(rule.value.replace(/"/g, ''))
               } `;
           }
           if (rule.field.indexOf('@parentData') > -1)
             if (rule.operator == 'is null') {
               query +=
                 (query !== '' ? ` ${condition} ` : '') +
-                ` ${
-                  this.parentData[rule.field.replace('@parentData.', '')] ==
-                  null
+                ` ${this.parentData[rule.field.replace('@parentData.', '')] ==
+                null
                 } `;
             } else if (rule.operator == 'is not null') {
               query +=
                 (query !== '' ? ` ${condition} ` : '') +
-                `${
-                  this.parentData[rule.field.replace('@parentData.', '')] !=
-                  null
+                `${this.parentData[rule.field.replace('@parentData.', '')] !=
+                null
                 }`;
             } else if (rule.operator == 'in' || rule.operator == 'not in') {
               query +=
                 (query !== '' ? ` ${condition} ` : '') +
-                ` ${
-                  rule.operator == 'in'
-                    ? this.checkValueInArr(
-                        this.parentData[rule.field.replace('@parentData.', '')],
-                        rule.value,
-                      )
-                    : !this.checkValueInArr(
-                        this.parentData[rule.field.replace('@parentData.', '')],
-                        rule.value,
-                      )
+                ` ${rule.operator == 'in'
+                  ? this.checkValueInArr(
+                    this.parentData[rule.field.replace('@parentData.', '')],
+                    rule.value,
+                  )
+                  : !this.checkValueInArr(
+                    this.parentData[rule.field.replace('@parentData.', '')],
+                    rule.value,
+                  )
                 } `;
             } else
               query +=
                 (query !== '' ? ` ${condition} ` : '') +
-                `"${this.parentData[rule.field.replace('@parentData.', '')]}" ${
-                  rule.operator
+                `"${this.parentData[rule.field.replace('@parentData.', '')]}" ${rule.operator
                 } ${rule.value}`;
           if ('@dataId' === rule.field)
             query +=
@@ -410,10 +416,9 @@ export class InfoPageTableComponent
         } else if (rule.operator == 'in' || rule.operator == 'not in') {
           query +=
             (query !== '' ? ` ${condition} ` : '') +
-            ` ${
-              rule.operator == 'in'
-                ? this.checkValueInArr(item[rule.field], rule.value)
-                : !this.checkValueInArr(item[rule.field], rule.value)
+            ` ${rule.operator == 'in'
+              ? this.checkValueInArr(item[rule.field], rule.value)
+              : !this.checkValueInArr(item[rule.field], rule.value)
             } `;
         } else if (rule.operator == 'is null') {
           query +=
@@ -478,16 +483,12 @@ export class InfoPageTableComponent
         });
     }
 
+    const isTableFilter = (this.formItem.controlType === 'table-filter');
+
     const filterParams = {
       groupId: this.formItem.layout.groupId,
-      createdBy:
-        this.parentId === null &&
-        !(this.formItem.controlType === 'table-filter')
-          ? this.identifyId
-          : null,
-      parentId: !(this.formItem.controlType === 'table-filter')
-          ? this.parentId
-          : null,
+      identifyId: this.parentId == null && !isTableFilter ? this.identifyId : null,
+      parentId: !isTableFilter ? this.parentId : null,
       conditions: this.filterConditions,
       skip: this.skip,
       take: this.take,
@@ -584,13 +585,13 @@ export class InfoPageTableComponent
         let item: any = {};
         obj.data.list.forEach(
           (map: any) =>
-            (item[map.name] =
-              map.name != 'name'
-                ? elm[map.value]
-                : map.value
-                    .split('+')
-                    .map((s: any) => elm[s])
-                    .join(' - ') || '...'),
+          (item[map.name] =
+            map.name != 'name'
+              ? elm[map.value]
+              : map.value
+                .split('+')
+                .map((s: any) => elm[s])
+                .join(' - ') || '...'),
         );
         lst.push(item);
       });
@@ -609,7 +610,7 @@ export class InfoPageTableComponent
     try {
       obj =
         this.formItem.lookupData !== undefined &&
-        this.formItem.lookupData !== null
+          this.formItem.lookupData !== null
           ? JSON.parse(this.formItem.lookupData)
           : null;
     } catch (e) {
@@ -619,6 +620,7 @@ export class InfoPageTableComponent
     if (obj && obj.typeData === 'API') {
       await this.getAPIDatatable(obj);
       this.cols = await this.loadCols();
+      this.buildHeaderRows();
       this.cdr.detectChanges();
       return;
     }
@@ -630,6 +632,7 @@ export class InfoPageTableComponent
     this.items = res.data.list;
     this.itemTotal = res.data.total;
     this.cols = await this.loadCols();
+    this.buildHeaderRows();
     this.cdr.detectChanges();
 
     if (
@@ -747,7 +750,7 @@ export class InfoPageTableComponent
           );
           const value =
             this.currentUser.companyCodeExt != null &&
-            this.currentUser.companyCodeExt.length > 0
+              this.currentUser.companyCodeExt.length > 0
               ? this.currentUser.companyCodeExt
               : [this.currentUser.companyCode];
           evaluatedFormula = hasCommon ? null : JSON.stringify(value);
@@ -792,9 +795,9 @@ export class InfoPageTableComponent
         try {
           c.value =
             this.hasOperatorChars(evaluatedFormula) ||
-            evaluatedFormula == 'null' ||
-            evaluatedFormula == 'undefined' ||
-            evaluatedFormula.contains('new Date()')
+              evaluatedFormula == 'null' ||
+              evaluatedFormula == 'undefined' ||
+              evaluatedFormula.contains('new Date()')
               ? evaluateExpression(evaluatedFormula)
               : evaluatedFormula;
         } catch (ex) {
@@ -1032,9 +1035,8 @@ export class InfoPageTableComponent
     const res = await firstValueFrom(
       this.infoDataService.delete({ id: dataId, layoutCode: layoutCode }),
     );
-    if(res.statusCode != 0)
-    {
-        this.messageService.add({
+    if (res.statusCode != 0) {
+      this.messageService.add({
         severity: 'error',
         summary: 'Thông báo',
         detail: res.message,
@@ -1211,8 +1213,7 @@ export class InfoPageTableComponent
           life: 3000,
         });
       }
-      else
-      {
+      else {
         this.messageService.add({
           severity: 'success',
           summary: 'Thông báo',
@@ -1608,6 +1609,92 @@ export class InfoPageTableComponent
     } catch (e) {
       return 100;
     }
+  }
+
+  buildHeaderRows() {
+    if (!this.cols || this.cols.length === 0) {
+      this.headerRows = [];
+      this.headerDepth = 1;
+      return;
+    }
+
+    const paths = this.cols.map((col: any) => {
+      const name = String(col.name ?? '').trim();
+
+      return name
+        .split('|')
+        .map((x: string) => x.trim())
+        .filter((x: string) => x !== '');
+    });
+
+    this.headerDepth = Math.max(
+      1,
+      ...paths.map((x: string[]) => x.length)
+    );
+
+    this.headerRows = Array.from(
+      { length: this.headerDepth },
+      () => []
+    );
+
+    for (let level = 0; level < this.headerDepth; level++) {
+      let i = 0;
+
+      while (i < paths.length) {
+
+        // Cột này đã được rowspan từ tầng trước
+        if (!paths[i][level]) {
+          i++;
+          continue;
+        }
+
+        const label = paths[i][level];
+
+        let j = i + 1;
+
+        while (
+          j < paths.length &&
+          paths[j][level] === label &&
+          this.sameHeaderParent(paths[i], paths[j], level)
+        ) {
+          j++;
+        }
+
+        const colspan = j - i;
+
+        const rowspan =
+          paths[i].length === level + 1
+            ? this.headerDepth - level
+            : 1;
+
+        this.headerRows[level].push({
+          label,
+          colspan,
+          rowspan,
+
+          // Lưu vị trí column để lấy col tương ứng
+          startIndex: i,
+          endIndex: j
+        });
+
+        i = j;
+      }
+    }
+  }
+
+  private sameHeaderParent(
+    a: string[],
+    b: string[],
+    level: number
+  ): boolean {
+
+    for (let i = 0; i < level; i++) {
+      if (a[i] !== b[i]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   ngOnDestroy(): void {

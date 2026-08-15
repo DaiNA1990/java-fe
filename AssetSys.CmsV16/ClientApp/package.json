@@ -59,6 +59,7 @@
     "socicon": "3.0.5",
     "sweetalert2": "^11.7.31",
     "tslib": "^2.3.0",
+    "ulid": "^3.0.2",
     "zone.js": "~0.13.0"
   },
   "devDependencies": {

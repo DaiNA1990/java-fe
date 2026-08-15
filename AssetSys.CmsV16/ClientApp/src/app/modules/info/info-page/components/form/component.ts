@@ -40,6 +40,7 @@ import { saveAs } from 'file-saver';
 import { dateUtil } from '../../components/date-util';
 import duration from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
+import { ulid } from 'ulid';
 dayjs.extend(duration);
 @Component({
   selector: 'app-info-page-form',
@@ -922,7 +923,7 @@ export class InfoPageFormComponent
     this.loadFormSubject.next(true);
     this.validationRules = [];
     this.dataId = dataId;
-    if (this.identifyId === null) this.identifyId = `${new Date().getTime()}`;
+    if (this.identifyId === null) this.identifyId = ulid();
 
     const resValue =
       dataId !== undefined && dataId !== null

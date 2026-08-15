@@ -9,7 +9,7 @@ export const environment = {
   USERDATA_KEY: 'authf649fc9a5f55',
   isMockEnabled: true,
   apiUrl: document.location.hostname.indexOf('localhost') > -1
-    ? 'http://localhost:5012/'
+    ? 'http://10.15.24.231:8686/'
     : 'https://asset-sys.thebdev.com/',
   appThemeName: 'FPT',
   appHost: 'http://localhost:4205',
