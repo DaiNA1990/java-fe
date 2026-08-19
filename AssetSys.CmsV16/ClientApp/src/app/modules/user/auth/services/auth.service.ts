@@ -12,6 +12,9 @@ export class AuthService extends BaseService {
   currentUserSubject: BehaviorSubject<any>;
   actionsCodeSubject: BehaviorSubject<[]>;
 
+  // bản gốc từ GetInfo, chưa cộng role theo layout
+  private baseUser: any = null;
+
   constructor() {
     super();
     this.setModule('Auth');
@@ -36,12 +39,36 @@ export class AuthService extends BaseService {
 
   getInfo = (): Observable<any> => this.get('GetInfo').pipe(tap((res: any) => {
     if (res.statusCode === ResponseCode.ZERO) {
+      this.baseUser = res.data;
       this.currentUserSubject.next(res.data);
     }
   }));
 
   loadPermissions = (codes: []): void => {
     this.actionsCodeSubject.next(codes);
+  }
+
+  /**
+   * Cộng thêm subFunction của layout đang mở vào roleCodes.
+   *
+   * Luôn tính lại từ baseUser (bản gốc từ GetInfo) chứ không cộng dồn lên giá
+   * trị hiện tại, để role của layout trước không đọng lại khi chuyển layout.
+   */
+  applyLayoutRoles = (pathCode: string): void => {
+    const user = this.baseUser;
+
+    if (user === null || user === undefined) return;
+
+    const roles: string[] = [];
+
+    user.functionRoles
+      .filter((c: any) => c.functionCode === pathCode)
+      .forEach((c: any) => roles.push(...c.subFunction.split(';')));
+
+    this.currentUserSubject.next({
+      ...user,
+      roleCodes: Array.from(new Set([...user.roleCodes, ...roles]))
+    });
   }
 
   hasPermission = (permissions: string | string[]): boolean => {

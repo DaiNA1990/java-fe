@@ -41,6 +41,8 @@ import { dateUtil } from '../../components/date-util';
 import duration from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
 import { ulid } from 'ulid';
+import { FormConfig, keepConfig } from '../../services/form-config';
+import { environment } from '@srckkkh/environments/environment';
 dayjs.extend(duration);
 @Component({
   selector: 'app-info-page-form',
@@ -103,16 +105,38 @@ export class InfoPageFormComponent
   extends BaseFormPage
   implements OnDestroy, OnInit, AfterViewInit, OnChanges
 {
-  @Input() layoutModule: string | null;
-  @Input() layoutCode: string | null;
-  @Input() layoutId: number | null;
-  @Input() passGroupId: number | null;
-  @Input() passDataId: number | null;
-  @Input() parentId: number | null;
-  @Input() identifyId: string | null | undefined;
-  @Input() currentUser: any;
+  layoutModule: string | null;
+  layoutCode: string | null;
+  layoutId: number | null;
+  groupId: number | null;
+  dataId: number | null;
+  parentId: number | null;
+  identifyId: string | null | undefined;
+  readOnly: any;
+
+  // dữ liệu thô của form cha, dùng trong buildControls sau khi biết group của mình
+  passGroupId: number | null;
+  passDataId: number | null;
+  passParentId: number | null;
+
+  // gom các @Input trên vào 1 object; xem form-config.ts về lý do phải memo hoá
+  @Input() set config(v: FormConfig) {
+    if (!v) return;
+    this.layoutModule = v.layoutModule;
+    this.layoutCode = v.layoutCode;
+    this.layoutId = v.layoutId;
+    this.dataId = v.dataId;
+    this.passGroupId = v.passGroupId;
+    this.passDataId = v.passDataId;
+    this.passParentId = v.passParentId;
+    this.identifyId = v.identifyId;
+    this.readOnly = v.readOnly;
+    // `??` để config không xoá formType mà FORM_REFRESH đã gán trước đó
+    this.formType = v.formType ?? this.formType;
+  }
+
+  // để riêng vì getter `value` sinh object mới mỗi chu kỳ change detection
   @Input() parentData: any;
-  @Input() readOnly: any;
 
   loadFormSubject = new BehaviorSubject<boolean>(true);
 
@@ -126,10 +150,7 @@ export class InfoPageFormComponent
 
   isOnSubmit: boolean = false;
 
-  dataId = null;
-  groupId = null;
   groupCode = null;
-  parentGroupId = null;
 
   formType: any = null;
 
@@ -235,6 +256,16 @@ export class InfoPageFormComponent
         this.prevValue = { ...this.value };
       })
     );
+  }
+
+  /**
+   * Chế độ chỉ xem. `formType` được gán đồng bộ trong refreshForm trước khi
+   * loadForm chạy, nên template đọc thẳng getter này sẽ khoá toàn bộ control
+   * trong cùng một chu kỳ change detection — không còn cảnh enable rồi mới
+   * disable dần theo từng item.
+   */
+  get isViewMode(): boolean {
+    return this.formType === 'VIEW' || this.readOnly === true;
   }
 
   get value() {
@@ -863,15 +894,46 @@ export class InfoPageFormComponent
         code: this.layoutCode
       })
     );
-    const formItem = res?.data[0];
+    // Với control table/layout thì item.layout là layout ĐƯỢC THAM CHIẾU, không
+    // phải layout sở hữu. Lấy res.data[0] nên groupId/groupCode phụ thuộc phần
+    // tử nào đứng đầu mảng — nếu đó là table thì lấy nhầm group của bảng con.
+    // Chọn đúng item có layout.code trùng layoutCode của chính form này.
+    const formItem =
+      res?.data?.find((c: any) => c.layout?.code === this.layoutCode) ??
+      res?.data[0];
+
+    if (!environment.production && formItem?.layout?.code !== this.layoutCode)
+      console.warn(
+        `[InfoPageForm] không tìm thấy control nào có layout.code = "${this.layoutCode}", đang lấy tạm res.data[0]`
+      );
+
     this.infoDataService.setPath(this.initPath(formItem));
     this.service.setPath(this.initPath(formItem));
     this.categoryService.setPath(this.initPath(formItem));
+    this.groupId = formItem.layout.groupId;
+    this.groupCode = formItem.layout.group.code;
+
+    // Đến đây mới biết group thật của form này, nên bây giờ mới xác định được
+    // quan hệ với form cha.
+    const isSameGroup =
+      this.passGroupId != null && this.passGroupId === this.groupId;
+    const isChildOfParent =
+      formItem.layout.groupParentId != null &&
+      formItem.layout.groupParentId === this.passGroupId;
+
+    // cùng group với cha → dùng chung bản ghi và chung cha
+    // là con của cha    → bản ghi mới, gắn vào bản ghi của cha
+    // không liên quan   → không kế thừa gì
+    this.parentId = isChildOfParent
+      ? this.passDataId
+      : isSameGroup
+      ? this.passParentId
+      : null;
+
+    // dataId chắc chắn (modal edit) luôn thắng; chỉ kế thừa của cha khi cùng group
+    const dataId = this.dataId ?? (isSameGroup ? this.passDataId : null);
 
     res.data.forEach((item: any) => {
-      this.groupId = item.layout.groupId;
-      this.groupCode = item.layout.group.code;
-      this.parentGroupId = item.layout.groupParentId;
       if (
         item.controlType == 'button' &&
         item.expressionDisplay != null &&
@@ -912,10 +974,30 @@ export class InfoPageFormComponent
 
     MenuComponent.reinitialization();
 
-    await this.loadForm();
+    await this.loadForm(dataId);
   }
 
+  /**
+   * Chỉ hé lộ form sau khi toàn bộ expression đã chạy xong, để control không
+   * xuất hiện dần từng đợt. `finally` để một expression lỗi cũng không làm form
+   * kẹt vĩnh viễn ở spinner.
+   */
   async loadForm(
+    dataId: any = null,
+    initValue: any = null,
+    cloneValue: any = null
+  ) {
+    try {
+      await this.buildForm(dataId, initValue, cloneValue);
+    } finally {
+      this.loadFormSubject.next(false);
+      this.cdr.detectChanges();
+      // menu dropdown của Metronic cần DOM đã render mới gắn được handler
+      MenuComponent.reinitialization();
+    }
+  }
+
+  private async buildForm(
     dataId: any = null,
     initValue: any = null,
     cloneValue: any = null
@@ -1052,8 +1134,13 @@ export class InfoPageFormComponent
     );
 
     this.forms.push(...arrControls);
+
+    // khoá cả FormGroup một lần thay vì disable từng control trong vòng lặp
+    if (this.isViewMode) this.form.disable({ emitEvent: false });
+
+    // next(false) nằm ở finally của loadForm, sau khi các vòng expression bên
+    // dưới chạy xong — không hé lộ form ở đây.
     this.cdr.detectChanges();
-    this.loadFormSubject.next(false);
 
     for (let item of this.forms.filter(
       (f: any) =>
@@ -1264,7 +1351,7 @@ export class InfoPageFormComponent
               forms: this.forms,
               value: this.value,
               parentData: this.parentData,
-              groupId: this.passGroupId,
+              groupId: this.groupId,
             });
         },
       });
@@ -1278,7 +1365,7 @@ export class InfoPageFormComponent
           forms: this.forms,
           value: this.valueTransform,
           parentData: this.parentData,
-          groupId: this.passGroupId,
+          groupId: this.groupId,
         });
   }
 
@@ -1428,7 +1515,7 @@ export class InfoPageFormComponent
       this.infoDataService.saveData({
         id: this.dataId,
         parentId: this.parentId,
-        identifyId: this.parentId ? null : this.identifyId,
+        identifyId: this.identifyId,
         layoutCode: this.layoutCode,
         properties: properties,
         control: actionData.control,
@@ -2524,6 +2611,85 @@ export class InfoPageFormComponent
 
   trackByFn(index: number, item: any): any {
     return item.id;
+  }
+
+  private formConfigCache = new Map<number, FormConfig>();
+  private tableConfigCache = new Map<number, FormConfig>();
+
+  /**
+   * Layout được tham chiếu là CON của form này: groupParentId của nó trùng
+   * groupId của form này → bản ghi bên trong gắn vào dataId của form này.
+   */
+  isChildGroup(item: any): boolean {
+    const groupParentId = item?.layout?.groupParentId;
+    return groupParentId != null && groupParentId === this.groupId;
+  }
+
+  /**
+   * Layout được tham chiếu CÙNG group với form này → cùng một bản ghi, chỉ là
+   * tách field ra nhiều layout. Phải kế thừa cả dataId lẫn parentId.
+   */
+  isSameGroup(item: any): boolean {
+    const groupId = item?.layout?.groupId;
+    return groupId != null && groupId === this.groupId;
+  }
+
+  /**
+   * Config cho app-info-page-form lồng bên trong.
+   *
+   * Chỉ truyền dữ liệu thô: với control loại `layout`, `item.layout` là layout
+   * SỞ HỮU chứ không phải layout được tham chiếu, nên ở đây chưa biết group thật
+   * của form con. Form con tự quyết định trong buildControls.
+   */
+  getFormConfig(item: any, modal: any = null): FormConfig {
+    const config = keepConfig(this.formConfigCache.get(item.id), {
+      layoutModule: null,
+      layoutCode: item.referenceCode,
+      layoutId: null,
+      dataId: modal?.dataId ?? null,
+      parentId: null,
+      passGroupId: this.groupId,
+      passDataId: this.dataId,
+      passParentId: this.parentId,
+      // modal biết formType trước khi open(); ngoài modal thì kế thừa của cha
+      formType: modal?.formType ?? this.formType,
+      identifyId: this.identifyId || null,
+      readOnly: item.readOnly,
+    });
+    this.formConfigCache.set(item.id, config);
+    return config;
+  }
+
+  /**
+   * Config cho app-info-page-table.
+   *
+   * Ở đây quyết định được ngay, vì với control loại `table` thì `item.layout`
+   * là layout được tham chiếu — biết luôn group của dữ liệu trong bảng.
+   */
+  getTableConfig(item: any, modal: any = null): FormConfig {
+    const isChild = this.isChildGroup(item);
+    const isSame = this.isSameGroup(item);
+    const formType = modal?.formType ?? this.formType;
+    const config = keepConfig(this.tableConfigCache.get(item.id), {
+      layoutModule: null,
+      layoutCode: null,
+      layoutId: null,
+      dataId: null,
+      parentId: isChild
+        ? modal?.dataId ?? this.dataId
+        : isSame
+        ? this.parentId
+        : null,
+      passGroupId: null,
+      passDataId: null,
+      passParentId: null,
+      formType: formType,
+      identifyId: this.identifyId || null,
+      // để table ẩn nút thao tác trong row khi form đang ở chế độ chỉ xem
+      readOnly: formType === 'VIEW' || this.isViewMode,
+    });
+    this.tableConfigCache.set(item.id, config);
+    return config;
   }
 
   ngAfterViewInit() {

@@ -149,7 +149,6 @@ export class InfoPageSelectComponent
   @Input() readOnly: any = false;
   @Input() parentData: any;
   @Input() formData: any;
-  @Input() currentUser: any;
 
   items: any[] = [];
 

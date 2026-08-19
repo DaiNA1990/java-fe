@@ -24,6 +24,7 @@ import { CategoryService } from '../../services/category-service';
 import { evaluateExpression } from '../expression-utils';
 import jsonata from 'jsonata';
 import { saveAs } from 'file-saver';
+import { FormConfig } from '../../services/form-config';
 
 @Component({
   selector: 'app-info-page-table',
@@ -47,15 +48,27 @@ import { saveAs } from 'file-saver';
 export class InfoPageTableComponent
   extends BaseFormPage
   implements OnInit, OnDestroy {
-  @Input() parentId: number | null;
-  @Input() identifyId: string | null | undefined;
+  parentId: number | null;
+  identifyId: string | null | undefined;
+
+  // form cha đang ở chế độ chỉ xem
+  isViewMode = false;
+
+  // gom 3 @Input trên; xem form-config.ts về lý do phải memo hoá
+  @Input() set config(v: FormConfig) {
+    if (!v) return;
+    this.parentId = v.parentId;
+    this.identifyId = v.identifyId;
+    this.isViewMode = v.readOnly === true;
+  }
+
   @Input() formCtrl: FormControl;
   @Input() formItem: any;
   @Input() funcGetChild: Function;
-  @Input() currentUser: any;
   @Input() parentData: any;
   @Input() formData: any;
-  @Input() parentGroupId: number | null;
+
+  parentGroupId: number | null
 
   columns: any[] = [];
   items: any[] = [];
@@ -1706,6 +1719,7 @@ export class InfoPageTableComponent
     this.service.setPath(this.initPath(this.formItem));
     this.categoryService.setPath(this.initPath(this.formItem));
     this.fileService.setPath(this.initPath(this.formItem));
+    this.parentGroupId = this.formItem.layout.groupParentId;
     this.columns = this.funcGetChild(this.formItem.id).filter(
       (x: any) => x.isShow === true && this.checkIsDisplay(x, x),
     );

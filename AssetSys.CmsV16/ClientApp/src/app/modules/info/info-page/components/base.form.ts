@@ -3,9 +3,14 @@ import { AuthService } from '@appkkkh/modules/user/auth/services/auth.service';
 
 export class BaseFormPage{
 
-    private authService = inject(AuthService);
+    protected authService = inject(AuthService);
 
     constructor() {}
+
+    // lấy thẳng từ auth, không truyền qua @Input nữa
+    public get currentUser(): any {
+        return this.authService.currentUserSubject.value;
+    }
 
     public checkPermission(permission: string): boolean {
         return this.authService.hasPermission(permission);

@@ -19,21 +19,40 @@
     </pre>
   </div>
 </p-overlayPanel>
-<ng-container *ngFor="let item of filterByParent(); trackBy: trackByFn">
-  <ng-container
-    *ngTemplateOutlet="showControlTmpl;context: {item: item, formCtrl: getControl(item)}"
-  ></ng-container>
+<!--
+  Chỉ render khi form đã dựng xong FormControl. Nếu không, buildControls sẽ
+  render một lượt "giả" với getControl() trả về new FormControl() rỗng, rồi
+  loadForm mới dựng lại — nhìn thành nháy control trắng rồi mới có dữ liệu.
+  Dùng ng-container để không thêm DOM node, tránh phá flex layout của .modal-content.
+-->
+<ng-container
+  *ngIf="(loadFormSubject | async) === false; else formLoadingTmpl"
+>
+  <ng-container *ngFor="let item of filterByParent(); trackBy: trackByFn">
+    <ng-container
+      *ngTemplateOutlet="showControlTmpl;context: {item: item, formCtrl: getControl(item)}"
+    ></ng-container>
+  </ng-container>
 </ng-container>
+
+<ng-template #formLoadingTmpl>
+  <div class="d-flex justify-content-center align-items-center py-10">
+    <span class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </span>
+  </div>
+</ng-template>
 
 <ng-template
   #showControlTmpl
   let-item="item"
   let-formCtrl="formCtrl"
   let-parentData="parentData"
+  let-modal="modal"
 >
   <ng-container *ngIf="getTemplate(item.controlType) as template">
     <ng-container
-      *ngTemplateOutlet="template; context: { item: item, formCtrl: formCtrl, parentData: parentData }"
+      *ngTemplateOutlet="template; context: { item: item, formCtrl: formCtrl, parentData: parentData, modal: modal }"
     >
     </ng-container>
   </ng-container>
@@ -42,88 +61,88 @@
   </ng-container>
 </ng-template>
 
-<ng-template #cardControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #cardControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="card">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control)}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #cardHeaderControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #cardHeaderControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="card-header" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control)}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #cardBodyControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #cardBodyControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="card-body" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control)}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #cardFooterControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #cardFooterControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="card-footer" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control)}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #containerControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #containerControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control)}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #gridControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #gridControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="row" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control)}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #gridColControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #gridColControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div
     [class]="'col-' + item.size"
     [ngClass]="item.cssClass"
     [style]="item.cssStyle"
   >
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control)}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #tabControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #tabControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <p-scrollPanel class="w-full mx-2" *ngIf="(loadFormSubject | async) === false">
     <p-tabView>
-      <ng-container *ngFor="let control of filterByParent(item)">
+      <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
         <p-tabPanel [header]="control.name">
-          <ng-container *ngFor="let tp of filterByParent(control)">
+          <ng-container *ngFor="let tp of filterByParent(control); trackBy: trackByFn">
             <ng-container
-              *ngTemplateOutlet="showControlTmpl;context: {item: tp, formCtrl: getControl(tp)}"
+              *ngTemplateOutlet="showControlTmpl;context: {item: tp, formCtrl: getControl(tp), modal: modal}"
             ></ng-container>
           </ng-container>
         </p-tabPanel>
@@ -138,6 +157,7 @@
     [class]="item.cssClass"
     [style]="item.cssStyle"
     (click)="btnClick(item)"
+    *ngIf="!isViewMode || item.referenceCode === 'SHOW_ON_VIEW'"
   >
     <ng-container *ngIf="item.icon !== null && item.icon !== ''">
       <app-keenicon [name]="item.icon" [class]="item.iconClass"></app-keenicon>
@@ -151,6 +171,7 @@
 </ng-template>
 
 <ng-template #menuControlTmpl let-item="item" let-formCtrl="formCtrl">
+  <ng-container *ngIf="!isViewMode || item.referenceCode === 'SHOW_ON_VIEW'">
   <button
     class="btn btn-icon btn-color-gray-500 btn-active-color-primary"
     data-kt-menu-trigger="click"
@@ -171,12 +192,13 @@
       </div>
     </div>
     <div class="separator mb-3 opacity-75"></div>
-    <div class="menu-item px-3" *ngFor="let child of filterByParent(item)">
+    <div class="menu-item px-3" *ngFor="let child of filterByParent(item); trackBy: trackByFn">
       <a class="menu-link px-3 cursor-pointer" (click)="btnClick(child)">
         {{child.name}}
       </a>
     </div>
   </div>
+  </ng-container>
 </ng-template>
 
 <ng-template
@@ -193,29 +215,18 @@
   />
 </ng-template>
 
-<!-- <ng-template #layoutControlTmpl let-item="item" let-formCtrl="formCtrl" let-parentData="parentData">
-  <app-info-page-form [layoutCode]="item.referenceCode" [identifyId]="identifyId || null" [readOnly]="item.readOnly"
-    [groupId]="item.layout.groupId" [parentId]="parentId || dataId" [currentUser]="currentUser" [parentData]="parentData || value"
-    *ngIf="(loadFormSubject | async) === false" />
-</ng-template> -->
-
 <ng-template
   #layoutControlTmpl
   let-item="item"
   let-formCtrl="formCtrl"
   let-parentData="parentData"
+  let-modal="modal"
 >
-  <!-- parentId:{{parentId}} {{item.layout | json}} {{item.layout.groupParentId | json}} -->
+  <!-- form:dataId:{{dataId}} | parentId:{{parentId}} | groupCode:{{groupCode}} | form.groupId:{{groupId}} | passGroupId:{{passGroupId}} | passDataId:{{passDataId}} | modal:{{modal}} -->
   <app-info-page-form
-    [layoutCode]="item.referenceCode"
-    [identifyId]="identifyId || null"
-    [readOnly]="item.readOnly"
-    [parentId]="parentGroupId === passGroupId ? parentId : dataId"
-    [passDataId]="dataId"
-    [currentUser]="currentUser"
+    [config]="getFormConfig(item, modal)"
     [parentData]="parentData || value"
     *ngIf="(loadFormSubject | async) === false"
-    [passGroupId]="groupId"
   />
 </ng-template>
 
@@ -224,15 +235,13 @@
   let-item="item"
   let-formCtrl="formCtrl"
   let-parentData="parentData"
+  let-modal="modal"
 >
   <app-info-page-table
+    [config]="getTableConfig(item, modal)"
     [formItem]="item"
-    [funcGetChild]="funcGetChild"
     [formCtrl]="formCtrl"
-    [parentGroupId]="item.layout.groupParentId"
-    [identifyId]="identifyId || null"
-    [parentId]="parentId"
-    [currentUser]="currentUser"
+    [funcGetChild]="funcGetChild"
     [formData]="value"
     [parentData]="parentData || valueTransform.parentData || value"
     *ngIf="(loadFormSubject | async) === false"
@@ -249,56 +258,58 @@
 
 <ng-template #modalControlTmpl let-item="item" let-formCtrl="formCtrl">
   <app-info-page-modal
+    #modalRef
     [formItem]="item"
     [formCtrl]="formCtrl"
     [body]="modalBodyTmpl"
     [parentData]="parentData || value"
   >
+    <!-- modalRef.dataId/formType được gán trước khi modal open() nên form bên trong nhận ngay ở ngOnInit -->
     <ng-template #modalBodyTmpl>
-      <ng-container *ngFor="let control of filterByParent(item)">
+      <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
         <ng-container
-          *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData}"
+          *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modalRef}"
         />
       </ng-container>
     </ng-template>
   </app-info-page-modal>
 </ng-template>
 
-<ng-template #modalContentControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #modalContentControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="modal-content" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
       />
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #modalHeaderControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #modalHeaderControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="modal-header" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
       />
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #modalBodyControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #modalBodyControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="modal-body" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
       />
     </ng-container>
   </div>
 </ng-template>
 
-<ng-template #modalFooterControlTmpl let-item="item" let-formCtrl="formCtrl">
+<ng-template #modalFooterControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="modal-footer" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item)">
+    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
       <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData}"
+        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
       />
     </ng-container>
   </div>
@@ -406,7 +417,7 @@
       <app-info-page-number
         [formCtrl]="formCtrl"
         [formItem]="item"
-        [readOnly]="item.readOnly"
+        [readOnly]="item.readOnly || isViewMode"
       />
     </div>
     <ng-container
@@ -427,7 +438,7 @@
       <app-info-page-number
         [formCtrl]="formCtrl"
         [formItem]="item"
-        [readOnly]="item.readOnly"
+        [readOnly]="item.readOnly || isViewMode"
         [isCurrency]="false"
       />
     </div>
@@ -450,7 +461,7 @@
         [formCtrl]="formCtrl"
         [formItem]="item"
         [isDecimal]="true"
-        [readOnly]="item.readOnly"
+        [readOnly]="item.readOnly || isViewMode"
       />
     </div>
     <ng-container
@@ -473,7 +484,7 @@
         [formItem]="item"
         [isDecimal]="true"
         [isCurrency]="true"
-        [readOnly]="item.readOnly"
+        [readOnly]="item.readOnly || isViewMode"
       />
     </div>
     <ng-container
@@ -494,10 +505,9 @@
       <app-info-page-select
         [formCtrl]="formCtrl"
         [formItem]="item"
-        [readOnly]="item.readOnly"
+        [readOnly]="item.readOnly || isViewMode"
         [parentData]="parentData"
         [formData]="value"
-        [currentUser]="currentUser"
       />
     </div>
     <ng-container
@@ -518,7 +528,7 @@
       <app-info-page-radio
         [formCtrl]="formCtrl"
         [formItem]="item"
-        [readOnly]="item.readOnly"
+        [readOnly]="item.readOnly || isViewMode"
       />
     </div>
     <ng-container
@@ -539,7 +549,7 @@
       <app-info-page-fileupload
         [formCtrl]="formCtrl"
         [formItem]="item"
-        [readOnly]="item.readOnly"
+        [readOnly]="item.readOnly || isViewMode"
         [attr.identify]="item.code"
       />
     </div>
@@ -561,7 +571,7 @@
       <app-info-page-datetime
         [formCtrl]="formCtrl"
         [formItem]="item"
-        [readOnly]="item.readOnly"
+        [readOnly]="item.readOnly || isViewMode"
       />
     </div>
     <ng-container
@@ -597,7 +607,7 @@
       <app-checkbox
         [formCtrl]="formCtrl"
         [formItem]="item"
-        [readOnly]="item.readOnly"
+        [readOnly]="item.readOnly || isViewMode"
       ></app-checkbox>
       <!-- End -->
       <label class="form-check-label">{{item.placeholder || ''}}</label>

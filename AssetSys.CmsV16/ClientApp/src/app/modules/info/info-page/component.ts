@@ -10,6 +10,7 @@ import {
 } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { AuthService } from '@appkkkh/modules/user/auth';
+import { FormConfig, keepConfig } from './services/form-config';
 @Component({
   selector: 'app-info-page',
   template: `
@@ -17,10 +18,7 @@ import { AuthService } from '@appkkkh/modules/user/auth';
     <app-breadcrumb [module]="layout?.group.name || ''" group="Thông tin" name="Quản lý"></app-breadcrumb>
   </div> -->
     <app-info-page-form
-      [layoutModule]="layout.module"
-      [layoutId]="layoutId"
-      [layoutCode]="layout.code"
-      [currentUser]="currentUser"
+      [config]="getFormConfig()"
       *ngIf="layout !== null && layout !== undefined"
     />
     <div
@@ -43,7 +41,25 @@ export class InfoPageComponent extends BaseFormPage implements OnInit, OnDestroy
   layoutId: any;
   subscriptions: Subscription[] = [];
 
-  currentUser: any;
+  private formConfig: FormConfig | null = null;
+
+  // phải qua keepConfig, không bind object literal thẳng trên template
+  getFormConfig(): FormConfig {
+    this.formConfig = keepConfig(this.formConfig, {
+      layoutModule: this.layout?.module ?? null,
+      layoutCode: this.layout?.code ?? null,
+      layoutId: this.layoutId,
+      dataId: null,
+      parentId: null,
+      passGroupId: null,
+      passDataId: null,
+      passParentId: null,
+      formType: null,
+      identifyId: null,
+      readOnly: null,
+    });
+    return this.formConfig;
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -67,15 +83,7 @@ export class InfoPageComponent extends BaseFormPage implements OnInit, OnDestroy
   }
 
   async getUserInfo() {
-    if (this.currentUser !== null) this.currentUser = null;
-    const user = await firstValueFrom(this.auth.currentUserSubject);
-    user.functionRoles
-      .filter((c: any) => c.functionCode == this.layout.group.pathCode)
-      .forEach((item: any) => {
-        const roles = item.subFunction.split(';');
-        user.roleCodes = Array.from(new Set([...user.roleCodes, ...roles]));
-      });
-    this.currentUser = user;
+    this.auth.applyLayoutRoles(this.layout.group.pathCode);
     this.cdr.detectChanges();
   }
 

@@ -1,3 +1,5 @@
+<!-- <br> -->
+<!-- table: parentId:{{parentId}} | groupId: {{formItem.layout.groupId | json}} | groupParentId: {{formItem.layout.groupParentId | json}} -->
 <p-table [value]="items" [lazy]="true" [autoLayout]="true" [scrollable]="true" [totalRecords]="itemTotal"
   [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
   [currentPageReportTemplate]="itemTotal === null ? '' : 'Hiển thị từ {first} đến {last} của {totalRecords} bản ghi'"
@@ -127,6 +129,7 @@
               </ng-container>
               <ng-container *ngSwitchCase="'button'">
                 <a href="javascript:;" class="btn w-30px h-30px mx-2" [class]="tp.cssClass" [style]="tp.cssStyle"
+                  *ngIf="!isViewMode || tp.referenceCode === 'SHOW_ON_VIEW'"
                   (click)="rowClick($event, item, tp)" [title]="tp.name">
                   <app-keenicon [name]="tp.icon" [class]="tp.iconClass" [cssStyle]="tp.cssStyle"></app-keenicon>
                 </a>
