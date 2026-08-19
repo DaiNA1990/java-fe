@@ -19,11 +19,11 @@ export class InfoReportListComponent implements OnInit {
     buildReportModal: InfoReportBuildReportComponent;
 
   constructor(
-    public service: InfoReportService,
+    public infoReportService: InfoReportService,
     public messageService: MessageService,
     public confirmationService: ConfirmationService,
-    private auth: AuthService,
-    private fb: FormBuilder
+    private authService: AuthService,
+    private formBuilder: FormBuilder
   ) {}
 
   openBuildReport(item: any) {
@@ -31,11 +31,11 @@ export class InfoReportListComponent implements OnInit {
   }
 
   init() {
-    this.formFilter = this.fb.group({});
+    this.formFilter = this.formBuilder.group({});
   }
   async ngOnInit(): Promise<void> {
     this.init();
     if (this.currentUser !== null) this.currentUser = null;
-    this.currentUser = await firstValueFrom(this.auth.currentUserSubject);
+    this.currentUser = await firstValueFrom(this.authService.currentUserSubject);
   }
 }

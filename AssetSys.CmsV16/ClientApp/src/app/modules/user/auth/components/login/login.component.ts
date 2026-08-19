@@ -41,11 +41,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private authService: AuthService,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.isLoading$ = this.isLoadingSubject.asObservable();
@@ -53,7 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initForm();
-    this.returnUrl = this.route.snapshot.queryParams['url'.toString()] || '/';
+    this.returnUrl = this.activatedRoute.snapshot.queryParams['url'.toString()] || '/';
   }
 
   get f() {
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    this.loginForm = this.fb.group({
+    this.loginForm = this.formBuilder.group({
       email: [
         this.defaultAuth.email,
         Validators.compose([
@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         }
         this.hasError = res.statusCode !== ResponseCode.ZERO;
         this.message = res.message;
-        this.cdr.markForCheck();
+        this.changeDetectorRef.markForCheck();
       });
     this.unsubscribe.push(loginSubscr);
   }

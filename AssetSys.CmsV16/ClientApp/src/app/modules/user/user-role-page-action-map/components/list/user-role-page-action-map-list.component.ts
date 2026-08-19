@@ -10,11 +10,11 @@ export class UserRolePageActionMapListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: UserRolePageActionMapService,
-        private fb: FormBuilder) { }
+    constructor(public userRolePageActionMapService: UserRolePageActionMapService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-info-page-fileupload',
-  templateUrl: `./component.html`,
+  templateUrl: `./fileupload.component.html`,
   providers: [ConfirmationService, MessageService, FileService],
 })
 export class InfoPageFileUploadComponent
@@ -25,7 +25,7 @@ export class InfoPageFileUploadComponent
   constructor(
     private messageService: MessageService,
     private fileService: FileService,
-    private cdr: ChangeDetectorRef,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {
     super();
   }
@@ -78,7 +78,7 @@ export class InfoPageFileUploadComponent
             life: 3000,
           });
         }
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
       },
       error: (err) => {
         const message = err?.error?.message || 'Upload thất bại';
@@ -88,7 +88,7 @@ export class InfoPageFileUploadComponent
           detail: message,
           life: 3000,
         });
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
       },
     });
   }
@@ -126,7 +126,7 @@ export class InfoPageFileUploadComponent
               life: 3000,
             });
           }
-          this.cdr.detectChanges();
+          this.changeDetectorRef.detectChanges();
         },
         error: (err) => {
           const backendMsg = err.error?.message || 'Có lỗi xảy ra khi tải file';
@@ -136,7 +136,7 @@ export class InfoPageFileUploadComponent
             detail: backendMsg,
             life: 3000,
           });
-          this.cdr.detectChanges();
+          this.changeDetectorRef.detectChanges();
         },
       });
   }

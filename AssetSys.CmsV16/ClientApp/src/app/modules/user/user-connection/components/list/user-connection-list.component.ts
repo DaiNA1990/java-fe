@@ -10,11 +10,11 @@ export class UserConnectionListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: UserConnectionService,
-        private fb: FormBuilder) { }
+    constructor(public userConnectionService: UserConnectionService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

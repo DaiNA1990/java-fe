@@ -68,11 +68,11 @@ export class InfoReportDesignComponent implements OnInit {
   }
 
   constructor(
-    public service: InfoReportSetupService,
+    public infoReportSetupService: InfoReportSetupService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private changeDetectorRef: ChangeDetectorRef,
+    private formBuilder: FormBuilder
   ) {}
 
   ngOnInit(): void {}

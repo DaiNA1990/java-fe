@@ -13,15 +13,15 @@ export class UserRoleListComponent implements OnInit {
 
     @ViewChild(UserRoleActionMapAssignComponent) assignActionModal: UserRoleActionMapAssignComponent;
 
-    constructor(public service: UserRoleService,
-        private fb: FormBuilder) { }
+    constructor(public userRoleService: UserRoleService,
+        private formBuilder: FormBuilder) { }
 
     assignAction(roleId: number) {
         this.assignActionModal.open(roleId);
     }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

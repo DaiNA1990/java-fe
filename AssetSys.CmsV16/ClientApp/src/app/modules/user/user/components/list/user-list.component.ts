@@ -14,14 +14,14 @@ export class UserListComponent implements OnInit {
     @ViewChild(UserRoleMapAssignComponent) assignRoleModal: UserRoleMapAssignComponent;
 
     constructor(public userService: UserService,
-        private fb: FormBuilder) { }
+        private formBuilder: FormBuilder) { }
 
     assignRole(userId: number) {
         this.assignRoleModal.open(userId);
     }
 
     init() {
-        this.formFilter = this.fb.group({
+        this.formFilter = this.formBuilder.group({
             name: [null, [Validators.nullValidator]],
             dateFrom: [null, [Validators.nullValidator]],
             dateTo: [null, [Validators.nullValidator]],

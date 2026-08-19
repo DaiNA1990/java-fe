@@ -23,7 +23,7 @@ export class InfoReportFileUploadComponent
   constructor(
     private messageService: MessageService,
     private infoReportService: InfoReportService,
-    private cdr: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     super();
   }
@@ -67,7 +67,7 @@ export class InfoReportFileUploadComponent
           life: 3000,
         });
       }
-      this.cdr.detectChanges();
+      this.changeDetectorRef.detectChanges();
     });
   }
 

@@ -13,13 +13,13 @@ export class InfoFormListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: InfoFormService,        
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+    constructor(public infoFormService: InfoFormService,        
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     init() {
-        this.formFilter = this.fb.group({
+        this.formFilter = this.formBuilder.group({
             layoutId: [this.layoutId, [Validators.nullValidator]],
         });
     }

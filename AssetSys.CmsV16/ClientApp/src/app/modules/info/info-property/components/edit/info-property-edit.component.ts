@@ -53,13 +53,13 @@ export class InfoPropertyEditComponent extends NbDialogBaseComponent {
         }
     ]
 
-    constructor(public service: InfoPropertyService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public infoPropertyService: InfoPropertyService,
+        private formBuilder: FormBuilder) {
+        super(infoPropertyService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
             id: [null, [Validators.nullValidator]],
             groupId: [this.groupId, [Validators.nullValidator]],
             typeData: [null, [Validators.required]],

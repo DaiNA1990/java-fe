@@ -9,7 +9,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { EventDataService } from '../../services/event-service';
+import { EventDataService } from '../../services/event-data.service';
 import { Subscription } from 'rxjs';
 import { ConfirmationService } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
@@ -17,8 +17,8 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-info-page-modal',
-  templateUrl: './component.html',
-  styleUrls: ['./component.scss'],
+  templateUrl: './modal.component.html',
+  styleUrls: ['./modal.component.scss'],
 })
 export class InfoPageModalComponent implements OnInit, OnDestroy {
   @Input() formCtrl: FormControl;
@@ -41,15 +41,15 @@ export class InfoPageModalComponent implements OnInit, OnDestroy {
 
   constructor(
     private confirmationService: ConfirmationService,
-    private events: EventDataService,
-    private cdr: ChangeDetectorRef,
-    private modalService: NgbModal
+    private eventDataService: EventDataService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private ngbModal: NgbModal
   ) {}
 
   onShow(e: any) {
     try {
       if (this.formItem.action !== undefined && this.formItem.action !== null)
-        this.events.emit({
+        this.eventDataService.emit({
           action: JSON.parse(this.formItem.action).rules.find(
             (c: any) => c.action === 'MODAL_ON_OPEN'
           ),
@@ -68,7 +68,7 @@ export class InfoPageModalComponent implements OnInit, OnDestroy {
     this.dataId = null;
 
     try {
-      this.events.emit({
+      this.eventDataService.emit({
         action: JSON.parse(this.formItem.action).rules.find(
           (c: any) => c.action === 'MODAL_ON_CLOSE'
         ),
@@ -92,7 +92,7 @@ export class InfoPageModalComponent implements OnInit, OnDestroy {
 
   open(): Promise<boolean> {
     return new Promise<boolean>((resolve) => {
-      this.modalRef = this.modalService.open(this.modalContent, {
+      this.modalRef = this.ngbModal.open(this.modalContent, {
         scrollable: true,
         centered: true,
         backdrop: 'static',
@@ -127,12 +127,12 @@ export class InfoPageModalComponent implements OnInit, OnDestroy {
 
       this.modalRef.shown.subscribe(() => {
         this.onShow(this.modalRef);
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
       });
 
       this.modalRef.hidden.subscribe(() => {
         this.onHide(this.modalRef);
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
       });
 
       this.modalRef.result.then(resolve, resolve);
@@ -165,7 +165,7 @@ export class InfoPageModalComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.push(
-      this.events.event.subscribe((data: any) => {
+      this.eventDataService.event.subscribe((data: any) => {
         if (
           data === undefined ||
           data === null ||

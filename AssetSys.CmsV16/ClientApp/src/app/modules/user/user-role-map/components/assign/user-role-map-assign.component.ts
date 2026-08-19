@@ -21,10 +21,10 @@ export class UserRoleMapAssignComponent {
     source: any[];
     target: any[];
 
-    constructor(public service: UserRoleMapService,
+    constructor(public userRoleMapService: UserRoleMapService,
         public userRoleService: UserRoleService,
-        private fb: FormBuilder,
-        private cdr: ChangeDetectorRef) {
+        private formBuilder: FormBuilder,
+        private changeDetectorRef: ChangeDetectorRef) {
     }
 
     open(userId: number) {
@@ -47,20 +47,20 @@ export class UserRoleMapAssignComponent {
 
         this.messageService.add({ severity: 'info', summary: 'Success', detail: res.message });
         this.close();
-        this.cdr.markForCheck();
+        this.changeDetectorRef.markForCheck();
     }
 
     getData() {
         this.userRoleService.getList({ pageSize: Number.MAX_SAFE_INTEGER }).subscribe(res => {
             this.source = res.data.list;
-            this.cdr.markForCheck();
+            this.changeDetectorRef.markForCheck();
         })
     }
 
     getRoleAssign(userId: number) {
         this.userRoleService.getRolesByUser({userId: userId}).subscribe(res => {
             this.target = res.data.list;
-            this.cdr.markForCheck();
+            this.changeDetectorRef.markForCheck();
         })
     }
 

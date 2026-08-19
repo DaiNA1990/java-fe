@@ -17,8 +17,8 @@ export class UserPageActionListComponent implements OnInit {
     @ViewChild(NbPageListComponent) pageList: NbPageListComponent;
     @ViewChild(UserPageActionEditComponent) formEdit: UserPageActionEditComponent;
 
-    constructor(public service: UserPageActionService,
-        private fb: FormBuilder) { }
+    constructor(public userPageActionService: UserPageActionService,
+        private formBuilder: FormBuilder) { }
 
     open(pageId: number) {
         this.formFilter.patchValue({
@@ -34,7 +34,7 @@ export class UserPageActionListComponent implements OnInit {
     }
 
     init() {
-        this.formFilter = this.fb.group({
+        this.formFilter = this.formBuilder.group({
             pageId: [null, [Validators.nullValidator]],
         });
     }

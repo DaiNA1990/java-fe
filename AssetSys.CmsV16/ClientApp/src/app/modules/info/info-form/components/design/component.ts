@@ -55,13 +55,13 @@ export class InfoFormDesignComponent implements OnInit {
 
     layoutItem: any = null;
 
-    constructor(public service: InfoFormService,
-        public propertyService: InfoPropertyService,
-        public infolayoutService: InfoLayoutService,
+    constructor(public infoFormService: InfoFormService,
+        public infoPropertyService: InfoPropertyService,
+        public infoLayoutService: InfoLayoutService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     filterByParent(parent: any = null) {
@@ -70,12 +70,12 @@ export class InfoFormDesignComponent implements OnInit {
 
     async getList(layoutId: any) {
         this.layoutId = layoutId;
-        const resLayout = await firstValueFrom(this.infolayoutService.getById({ id: layoutId }));
+        const resLayout = await firstValueFrom(this.infoLayoutService.getById({ id: layoutId }));
         this.layoutItem = resLayout.data;
-        const res = await firstValueFrom(this.service.getList({ layoutId: layoutId, pageSize: Number.MAX_SAFE_INTEGER }));
+        const res = await firstValueFrom(this.infoFormService.getList({ layoutId: layoutId, pageSize: Number.MAX_SAFE_INTEGER }));
         this.controls = res.data.list;
         this.controls.forEach((item: any) => item.ddid = `${item.id}`);
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     getConnectedDropListsIds(id: any) {
@@ -132,13 +132,13 @@ export class InfoFormDesignComponent implements OnInit {
         this.controls.splice(index, 1);
 
         if (item.id > 0) {
-            const res = await firstValueFrom(this.service.delete({ id: item.id }));
+            const res = await firstValueFrom(this.infoFormService.delete({ id: item.id }));
             this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: res.message, life: 3000 });
         } else {
             this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: 'Xoá thông tin thành công.', life: 3000 });
         }
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     itemAdd(item?: any) {
@@ -251,7 +251,7 @@ export class InfoFormDesignComponent implements OnInit {
 
         const lines = content?.split(/\r?\n/).filter(line => line.trim() !== '');
 
-        const dataProperty = await firstValueFrom(this.propertyService.getList({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER }));
+        const dataProperty = await firstValueFrom(this.infoPropertyService.getList({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER }));
 
         let _index = 1;
 
@@ -300,7 +300,7 @@ export class InfoFormDesignComponent implements OnInit {
 
     async itemPateChild(item: any, parentId: any) {
 
-        const res = await firstValueFrom(this.service.addOrEdit({
+        const res = await firstValueFrom(this.infoFormService.addOrEdit({
             layoutId: this.layoutId,
             propertyId: item.propertyId || null,
             parentId: parentId || null,

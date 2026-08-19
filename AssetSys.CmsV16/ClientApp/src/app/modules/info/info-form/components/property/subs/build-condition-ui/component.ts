@@ -24,8 +24,8 @@ export class InfoFormPropertyBuildConditionUIComponent implements OnInit {
 
     formControl: FormGroup;
 
-    //propertyDS = () => this.propertyService.autocomplete({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER });
-    //formDS = () => this.service.autocomplete({ layoutId: this.layoutId, pageSize: Number.MAX_SAFE_INTEGER });
+    //propertyDS = () => this.infoPropertyService.autocomplete({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER });
+    //formDS = () => this.infoFormService.autocomplete({ layoutId: this.layoutId, pageSize: Number.MAX_SAFE_INTEGER });
 
     visible: boolean = false;
 
@@ -110,12 +110,12 @@ export class InfoFormPropertyBuildConditionUIComponent implements OnInit {
         return this.conditions.condition !== '';
     }
 
-    constructor(public service: InfoFormService,
-        public propertyService: InfoPropertyService,
+    constructor(public infoFormService: InfoFormService,
+        public infoPropertyService: InfoPropertyService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     addCondition(item: any) {
@@ -151,7 +151,7 @@ export class InfoFormPropertyBuildConditionUIComponent implements OnInit {
 
         this.lstAutoFields = this.lstFields.map((item: any) => `${item.name}(${item.code})`).filter((c: any) => c.indexOf(event.query) > -1);
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     select(event: any, item: any) {
@@ -160,7 +160,7 @@ export class InfoFormPropertyBuildConditionUIComponent implements OnInit {
 
     open() {
         this.visible = true;
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     save() {
@@ -177,7 +177,7 @@ export class InfoFormPropertyBuildConditionUIComponent implements OnInit {
 
     async init() {
 
-        this.formControl = this.fb.group({
+        this.formControl = this.formBuilder.group({
             typeData: [null, [Validators.required]],
             data: [null, [Validators.required]]
         });
@@ -189,11 +189,11 @@ export class InfoFormPropertyBuildConditionUIComponent implements OnInit {
             console.log(ex + '\n' + this.formCtrl.value);
         }
 
-        const res = await firstValueFrom(this.propertyService.getList({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER }));
+        const res = await firstValueFrom(this.infoPropertyService.getList({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER }));
 
         this.lstFields = res.data.list;
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     ngOnInit(): void {

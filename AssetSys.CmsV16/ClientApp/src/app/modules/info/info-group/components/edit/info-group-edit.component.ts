@@ -15,8 +15,8 @@ import { InfoGroupService } from '../../services/info-group.service';
   ],
 })
 export class InfoGroupEditComponent extends NbDialogBaseComponent {
-  constructor(public service: InfoGroupService, private fb: FormBuilder) {
-    super(service);
+  constructor(public infoGroupService: InfoGroupService, private formBuilder: FormBuilder) {
+    super(infoGroupService);
   }
   modules = [
         {
@@ -37,7 +37,7 @@ export class InfoGroupEditComponent extends NbDialogBaseComponent {
         }
     ]
   buildForm() {
-    this.form = this.fb.group({
+    this.form = this.formBuilder.group({
       id: [null, [Validators.nullValidator]],
       name: [null, [Validators.required]],
       code: [null, [Validators.required]],

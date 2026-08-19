@@ -13,15 +13,15 @@ export class InfoLayoutListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: InfoLayoutService,
-        private fb: FormBuilder) { }
+    constructor(public infoLayoutService: InfoLayoutService,
+        private formBuilder: FormBuilder) { }
 
     loadForm(item: any){
         this.onChange.emit(item);
     }
 
     init() {
-        this.formFilter = this.fb.group({
+        this.formFilter = this.formBuilder.group({
             groupId: [this.groupId, [Validators.nullValidator]],
         });
     }

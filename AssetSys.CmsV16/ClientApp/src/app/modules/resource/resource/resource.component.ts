@@ -14,8 +14,8 @@ export class ResourceInfoComponent {
 
   parentCode: string;
 
-  constructor(private route: ActivatedRoute) {
-    this.parentCode = route.snapshot.data['parentCode'];
+  constructor(private activatedRoute: ActivatedRoute) {
+    this.parentCode = activatedRoute.snapshot.data['parentCode'];
   }
 
 }

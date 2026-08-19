@@ -26,12 +26,12 @@ export class InfoFormPropertyBuildDataComponent implements OnInit {
 
     lstReference: any[] = [];
 
-    constructor(public service: InfoFormService,
-        public propertyService: InfoPropertyService,
+    constructor(public infoFormService: InfoFormService,
+        public infoPropertyService: InfoPropertyService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     addItem() {
@@ -58,7 +58,7 @@ export class InfoFormPropertyBuildDataComponent implements OnInit {
 
     open() {
         this.visible = true;
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     save() {
@@ -100,24 +100,24 @@ export class InfoFormPropertyBuildDataComponent implements OnInit {
         if (obj !== null && (obj.typeData === 'REFERENCE' || obj.typeData === 'API'))
             this.lstReference = obj.data.list || [];
 
-        this.formControl = this.fb.group({
+        this.formControl = this.formBuilder.group({
             typeData: [obj?.typeData || null, [Validators.required]],
             data: [obj?.data || null, [Validators.required]]
         });
 
-        this.formItemControl = this.fb.group({
+        this.formItemControl = this.formBuilder.group({
             name: [null, [Validators.required]],
             value: [null, [Validators.required]]
         });
 
-        this.formReferenceControl = this.fb.group({
+        this.formReferenceControl = this.formBuilder.group({
             code: [obj !== null && (obj.typeData === 'REFERENCE' || obj.typeData === 'API') ? obj.data?.code : null, [Validators.required]],
             sortField: [obj !== null && (obj.typeData === 'REFERENCE' || obj.typeData === 'API') ? obj.data?.sortField : null],
             name: [null, [Validators.required]],
             value: [null, [Validators.required]]
         });
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     ngOnInit(): void {

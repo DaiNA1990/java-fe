@@ -20,8 +20,8 @@ export class InfoFormEditComponent extends NbDialogBaseComponent {
     @Input() layoutId: number | null;
     @Input() groupId: number | null;
 
-    propertyDS = () => this.propertyService.autocomplete({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER });
-    formDS = () => this.service.autocomplete({ layoutId: this.layoutId, pageSize: Number.MAX_SAFE_INTEGER });
+    propertyDS = () => this.infoPropertyService.autocomplete({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER });
+    formDS = () => this.infoFormService.autocomplete({ layoutId: this.layoutId, pageSize: Number.MAX_SAFE_INTEGER });
 
     controlTypes = [
         {
@@ -70,14 +70,14 @@ export class InfoFormEditComponent extends NbDialogBaseComponent {
         }
     ]
 
-    constructor(public service: InfoFormService,
-        public propertyService: InfoPropertyService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public infoFormService: InfoFormService,
+        public infoPropertyService: InfoPropertyService,
+        private formBuilder: FormBuilder) {
+        super(infoFormService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
             id: [null, [Validators.nullValidator]],
             layoutId: [this.layoutId, [Validators.nullValidator]],
             propertyId: [null, [Validators.nullValidator]],

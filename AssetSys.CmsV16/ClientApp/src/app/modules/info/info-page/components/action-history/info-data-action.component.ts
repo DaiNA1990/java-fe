@@ -6,9 +6,9 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
-import { InfoDataActionService } from '../../services/info-data-action-service';
-import { InfoDataService } from '../../services/info-data-service';
-import { CategoryService } from '../../services/category-service';
+import { InfoDataActionService } from '../../services/info-data-action.service';
+import { InfoDataService } from '../../services/info-data.service';
+import { CategoryService } from '../../services/category.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { BaseFormPage } from '../base.form';
@@ -37,12 +37,12 @@ export class InfoDataActionComponent
   subscriptions: Subscription[] = [];
 
   constructor(
-    private route: ActivatedRoute,
-    private service: InfoDataActionService,
+    private activatedRoute: ActivatedRoute,
+    private infoDataActionService: InfoDataActionService,
     private infoDataService: InfoDataService,
     private categoryService: CategoryService,
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef,
+    private formBuilder: FormBuilder,
+    private changeDetectorRef: ChangeDetectorRef,
   ) {
     super();
   }
@@ -64,7 +64,7 @@ export class InfoDataActionComponent
   REJ:   { icon: 'pi pi-times',  color: '#ef5350' }
 };
   async getData(dataId: number) {
-    const res = await firstValueFrom(this.service.getList({ dataId: dataId }));
+    const res = await firstValueFrom(this.infoDataActionService.getList({ dataId: dataId }));
     let conditions = {
       condition: 'and',
       rules: [{ field: 'loai_danh_muc', operator: '==', value: 'ACTION_HIS' }],
@@ -119,11 +119,11 @@ export class InfoDataActionComponent
       };
     });
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   init() {
-    this.formFilter = this.fb.group({});
+    this.formFilter = this.formBuilder.group({});
   }
 
   ngOnDestroy(): void {
@@ -131,7 +131,7 @@ export class InfoDataActionComponent
   }
 
   ngOnInit(): void {
-    this.service.setPath(this.initPath(this.formItem));
+    this.infoDataActionService.setPath(this.initPath(this.formItem));
     this.infoDataService.setPath(this.initPath(this.formItem));
     this.categoryService.setPath(this.initPath(this.formItem));
     this.init();

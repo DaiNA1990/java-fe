@@ -43,22 +43,22 @@ export class InfoFormPropertyComponent implements OnInit {
         return this.propertyItem?.layout?.groupId || this.parent.groupId;
     }
 
-    propertyDS = () => this.propertyService.autocomplete({
+    propertyDS = () => this.infoPropertyService.autocomplete({
         groupId: this.groupId,
         pageSize: Number.MAX_SAFE_INTEGER
     });
 
-    formDS = () => this.service.autocomplete({
+    formDS = () => this.infoFormService.autocomplete({
         layoutId: this.layoutId,
         pageSize: Number.MAX_SAFE_INTEGER
     });
 
-    constructor(public service: InfoFormService,
-        public propertyService: InfoPropertyService,
+    constructor(public infoFormService: InfoFormService,
+        public infoPropertyService: InfoPropertyService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     saveLastValue() {
@@ -89,7 +89,7 @@ export class InfoFormPropertyComponent implements OnInit {
 
             this.isLoadProperty = true;
 
-            this.cdr.detectChanges();
+            this.changeDetectorRef.detectChanges();
 
         }, 0);
     }
@@ -109,7 +109,7 @@ export class InfoFormPropertyComponent implements OnInit {
         if (this.formControl.controls['id'].value !== null && this.formControl.controls['id'].value < 1)
             this.formControl.controls['id'].setValue(null);
 
-        const res = await firstValueFrom(this.service.addOrEdit(this.formControl.value));
+        const res = await firstValueFrom(this.infoFormService.addOrEdit(this.formControl.value));
 
         if (res.statusCode !== ResponseCode.ZERO)
         {
@@ -122,13 +122,13 @@ export class InfoFormPropertyComponent implements OnInit {
 
         this.saveLastValue();
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
 
         this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: 'Cập nhật thông tin thành công', life: 3000 });
     }
 
     init() {
-        this.formControl = this.fb.group({
+        this.formControl = this.formBuilder.group({
             id: [null, [Validators.nullValidator]],
             layoutId: [null, [Validators.nullValidator]],
             propertyId: [null, [Validators.nullValidator]],

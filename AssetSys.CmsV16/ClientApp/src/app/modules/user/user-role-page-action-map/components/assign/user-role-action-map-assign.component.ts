@@ -21,10 +21,10 @@ export class UserRoleActionMapAssignComponent {
     source: any[];
     target: any[];
 
-    constructor(public service: UserRoleService,
+    constructor(public userRoleService: UserRoleService,
         public userPageActionService: UserPageActionService,
-        private fb: FormBuilder,
-        private cdr: ChangeDetectorRef) {
+        private formBuilder: FormBuilder,
+        private changeDetectorRef: ChangeDetectorRef) {
     }
 
     open(roleId: number) {
@@ -40,14 +40,14 @@ export class UserRoleActionMapAssignComponent {
 
     async submit() {
 
-        const res = await firstValueFrom(this.service.addActionForRole({ 
+        const res = await firstValueFrom(this.userRoleService.addActionForRole({ 
             roleId: this.roleId,
             actionIds: this.target.map(action => action.id)
         }));
 
         this.messageService.add({ severity: 'info', summary: 'Success', detail: res.message });
         this.close();
-        this.cdr.markForCheck();
+        this.changeDetectorRef.markForCheck();
     }
 
     getData() {
@@ -59,7 +59,7 @@ export class UserRoleActionMapAssignComponent {
 
             this.source.sort((a, b) => a.name.localeCompare(b.name));
 
-            this.cdr.markForCheck();
+            this.changeDetectorRef.markForCheck();
         })
     }
 
@@ -71,7 +71,7 @@ export class UserRoleActionMapAssignComponent {
             });
 
             this.target.sort((a, b) => a.name.localeCompare(b.name));
-            this.cdr.markForCheck();
+            this.changeDetectorRef.markForCheck();
         })
     }
 

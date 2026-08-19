@@ -12,11 +12,11 @@ export class InfoPropertyListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: InfoPropertyService,
-        private fb: FormBuilder) { }
+    constructor(public infoPropertyService: InfoPropertyService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({
+        this.formFilter = this.formBuilder.group({
             groupId: [this.groupId, [Validators.nullValidator]],
         });
     }

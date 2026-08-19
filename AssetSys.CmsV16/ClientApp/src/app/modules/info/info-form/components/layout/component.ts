@@ -42,18 +42,18 @@ export class InfoFormLayoutComponent implements OnInit {
 
     currentItem: any;
 
-    constructor(public service: InfoLayoutService,
+    constructor(public infoLayoutService: InfoLayoutService,
         public infoFormService: InfoFormService,
         public infoGroupService: InfoGroupService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     search(event: AutoCompleteCompleteEvent) {
         this.autoGroups = this.groups.filter((c: any) => c.name.indexOf(event.query) > -1 || c.code.indexOf(event.query) > -1);
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     showCopyDialog(item: any) {
@@ -65,13 +65,13 @@ export class InfoFormLayoutComponent implements OnInit {
     async getListGroups() {
         const res = await firstValueFrom(this.infoGroupService.getList({ pageSize: Number.MAX_SAFE_INTEGER }));
         this.groups = res.data.list;
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     async getList() {
-        const res = await firstValueFrom(this.service.getList({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER }));
+        const res = await firstValueFrom(this.infoLayoutService.getList({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER }));
         this.layouts = res.data.list;
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
         if (res.data.list.length > 0)
             this.builder(res.data.list[0]);
     }
@@ -84,7 +84,7 @@ export class InfoFormLayoutComponent implements OnInit {
 
         this.currentItem = item;
 
-        const res = await firstValueFrom(this.service.editing({ id: item.id }));
+        const res = await firstValueFrom(this.infoLayoutService.editing({ id: item.id }));
 
         this.messageService.add({
             severity: res.statusCode === ResponseCode.ZERO ? 'success' : 'warn',
@@ -101,7 +101,7 @@ export class InfoFormLayoutComponent implements OnInit {
 
     async unlock(item: any) {
 
-        const res = await firstValueFrom(this.service.editing({ id: item.id, isEnd: true }));
+        const res = await firstValueFrom(this.infoLayoutService.editing({ id: item.id, isEnd: true }));
 
         this.messageService.add({
             severity: res.statusCode === ResponseCode.ZERO ? 'success' : 'warn',
@@ -113,7 +113,7 @@ export class InfoFormLayoutComponent implements OnInit {
         if (res.statusCode === ResponseCode.ZERO)
             item.isEditing = false;
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     copyItem(event: any) {
@@ -152,7 +152,7 @@ export class InfoFormLayoutComponent implements OnInit {
 
         const res = await firstValueFrom(this.infoFormService.getList({ layoutId: item.id, pageSize: Number.MAX_SAFE_INTEGER }));
 
-        const resLayout = await firstValueFrom(this.service.addOrEdit({
+        const resLayout = await firstValueFrom(this.infoLayoutService.addOrEdit({
             "groupId": this.formCopyControl.value["to"] === 'CLONE'
                 ? item.groupId
                 : this.formCopyControl.value['group'].id,
@@ -223,7 +223,7 @@ export class InfoFormLayoutComponent implements OnInit {
 
     async init() {
 
-        this.formCopyControl = this.fb.group({
+        this.formCopyControl = this.formBuilder.group({
             to: ['CLONE', [Validators.required]],
             group: [null, [Validators.required]]
         });
@@ -255,7 +255,7 @@ export class InfoFormLayoutComponent implements OnInit {
 
     async deleteItemSubmit(item: any = null) {
 
-        const res = await firstValueFrom(this.service.delete({ id: item.id }));
+        const res = await firstValueFrom(this.infoLayoutService.delete({ id: item.id }));
 
         this.messageService.add({
             severity: 'warn',
@@ -264,7 +264,7 @@ export class InfoFormLayoutComponent implements OnInit {
             life: 3000
         });
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
 
         this.getList();
     }

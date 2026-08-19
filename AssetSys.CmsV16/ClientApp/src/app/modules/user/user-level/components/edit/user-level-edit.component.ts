@@ -16,13 +16,13 @@ import { UserLevelService } from '../../services/user-level.service';
 })
 export class UserLevelEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserLevelService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userLevelService: UserLevelService,
+        private formBuilder: FormBuilder) {
+        super(userLevelService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    name: [null, [Validators.nullValidator]],
 		    code: [null, [Validators.nullValidator]],

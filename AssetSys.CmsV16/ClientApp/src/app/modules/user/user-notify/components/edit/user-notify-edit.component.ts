@@ -19,14 +19,14 @@ export class UserNotifyEditComponent extends NbDialogBaseComponent {
 
     userDS = (keyword: any) => this.userService.autocomplete({ keyword: keyword });
 
-    constructor(public service: UserNotifyService,
+    constructor(public userNotifyService: UserNotifyService,
         public userService: UserService,
-        private fb: FormBuilder) {
-        super(service);
+        private formBuilder: FormBuilder) {
+        super(userNotifyService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
             id: [null, [Validators.nullValidator]],
             userId: [null, [Validators.nullValidator]],
             typeId: [null, [Validators.nullValidator]],

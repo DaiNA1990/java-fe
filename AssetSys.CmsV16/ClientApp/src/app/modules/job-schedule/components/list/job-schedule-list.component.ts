@@ -85,16 +85,16 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
-    private jobSvc: JobScheduleService,
-    private reportSvc: JobReportService,
-    private fileSvc: FileService,
-    private confirmation: ConfirmationService,
-    private messageSvc: MessageService,
-    private cdr: ChangeDetectorRef
+    private jobScheduleService: JobScheduleService,
+    private jobReportService: JobReportService,
+    private fileService: FileService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.fileSvc.setPath('jobapi');
+    this.fileService.setPath('jobapi');
     // initial loads
     this.loadStats();
     this.loadQueues();
@@ -115,9 +115,9 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
   // ---------------------------
   private trackError(tag: string, err: any) {
     console.error(`[JobSchedule] ${tag} error:`, err);
-    this.messageSvc.add({ severity: 'error', summary: 'Lỗi', detail: 'Có lỗi xảy ra' });
+    this.messageService.add({ severity: 'error', summary: 'Lỗi', detail: 'Có lỗi xảy ra' });
     // ensure update
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   trackByJobId(index: number, item: any) {
@@ -158,7 +158,7 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
       res.totalRecords ??
       (Array.isArray(target.data) ? target.data.length : 0);
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   } catch (err) {
     this.trackError('loadPaged', err);
   }
@@ -196,10 +196,10 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
   // ---------------------------
   async loadStats() {
     try {
-      const res = await firstValueFrom(this.jobSvc.stats({}).pipe(catchError((e) => { throw e; })));
+      const res = await firstValueFrom(this.jobScheduleService.stats({}).pipe(catchError((e) => { throw e; })));
       this.stats = res ?? {};
       this.jobStatuses = this.jobStatuses.map((s) => ({ ...s, count: this.stats[s.key] ?? 0 }));
-      this.cdr.detectChanges();
+      this.changeDetectorRef.detectChanges();
     } catch (err) {
       this.trackError('loadStats', err);
     }
@@ -207,62 +207,62 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
 
   async loadQueues() {
     try {
-      const res = await firstValueFrom(this.jobSvc.queues({}).pipe(catchError((e) => { throw e; })));
+      const res = await firstValueFrom(this.jobScheduleService.queues({}).pipe(catchError((e) => { throw e; })));
       this.queues = Array.isArray(res) ? res : (res?.data ?? []);
       // sort by length/fetched (same logic as before)
       this.queues.sort((a: any, b: any) => {
         if (b.length !== a.length) return b.length - a.length;
         return b.fetched - a.fetched;
       });
-      this.cdr.markForCheck();
+      this.changeDetectorRef.markForCheck();
     } catch (err) {
       this.trackError('loadQueues', err);
     }
   }
 
   loadRetries(event?: any) {
-    return this.loadPaged(this.jobSvc.retries.bind(this.jobSvc), this.retries, event);
+    return this.loadPaged(this.jobScheduleService.retries.bind(this.jobScheduleService), this.retries, event);
   }
 
   loadEnqueued(event?: any) {
-    return this.loadPaged(this.jobSvc.enqueued.bind(this.jobSvc), this.enqueued, event);
+    return this.loadPaged(this.jobScheduleService.enqueued.bind(this.jobScheduleService), this.enqueued, event);
   }
 
   loadDeleted(event?: any) {
-    return this.loadPaged(this.jobSvc.deleted.bind(this.jobSvc), this.deleted, event);
+    return this.loadPaged(this.jobScheduleService.deleted.bind(this.jobScheduleService), this.deleted, event);
   }
 
   loadAwaiting(event?: any) {
-    return this.loadPaged(this.jobSvc.awaiting.bind(this.jobSvc), this.awaiting, event);
+    return this.loadPaged(this.jobScheduleService.awaiting.bind(this.jobScheduleService), this.awaiting, event);
   }
 
   loadProcessing(event?: any) {
-    return this.loadPaged(this.jobSvc.processing.bind(this.jobSvc), this.processing, event);
+    return this.loadPaged(this.jobScheduleService.processing.bind(this.jobScheduleService), this.processing, event);
   }
 
   loadScheduled(event?: any) {
-    return this.loadPaged(this.jobSvc.scheduled.bind(this.jobSvc), this.scheduled, event);
+    return this.loadPaged(this.jobScheduleService.scheduled.bind(this.jobScheduleService), this.scheduled, event);
   }
 
   loadSucceeded(event?: any) {
-    return this.loadPaged(this.jobSvc.succeeded.bind(this.jobSvc), this.succeeded, event);
+    return this.loadPaged(this.jobScheduleService.succeeded.bind(this.jobScheduleService), this.succeeded, event);
   }
 
   loadFailed(event?: any) {
-    return this.loadPaged(this.jobSvc.failed.bind(this.jobSvc), this.failed, event);
+    return this.loadPaged(this.jobScheduleService.failed.bind(this.jobScheduleService), this.failed, event);
   }
 
   loadRecurring(event?: any) {
-    return this.loadPaged(this.jobSvc.recurring.bind(this.jobSvc), this.recurring, event);
+    return this.loadPaged(this.jobScheduleService.recurring.bind(this.jobScheduleService), this.recurring, event);
   }
 
   async loadServers(event?: any) {
     try {
       const page = event ? event.first / event.rows + 1 : 1;
       const pageSize = event ? event.rows : 20;
-      const res = await firstValueFrom(this.jobSvc.servers({ page, pageSize }).pipe(catchError((e) => { throw e; })));
+      const res = await firstValueFrom(this.jobScheduleService.servers({ page, pageSize }).pipe(catchError((e) => { throw e; })));
       this.servers = res ?? [];
-      this.cdr.markForCheck();
+      this.changeDetectorRef.markForCheck();
     } catch (err) {
       this.trackError('loadServers', err);
     }
@@ -318,11 +318,11 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
 
   triggerNow() {
     if (!this.selectedRecurringJobs?.length) {
-      this.messageSvc.add({ severity: 'warn', summary: 'Thông báo', detail: 'Vui lòng lựa chọn bản ghi', life: 3000 });
+      this.messageService.add({ severity: 'warn', summary: 'Thông báo', detail: 'Vui lòng lựa chọn bản ghi', life: 3000 });
       return;
     }
 
-    this.confirmation.confirm({
+    this.confirmationService.confirm({
       message: 'Bạn muốn thực hiện các lựa chọn?',
       header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
@@ -333,7 +333,7 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
         this.loading = true;
         try {
           // Promise.allSettled to avoid stop on error
-          const promises = this.selectedRecurringJobs.map(item => firstValueFrom(this.jobSvc.run({ id: item.id })));
+          const promises = this.selectedRecurringJobs.map(item => firstValueFrom(this.jobScheduleService.run({ id: item.id })));
           await Promise.all(promises.map(p => p.catch(e => e)));
           this.selectedRecurringJobs = [];
           await this.loadStats();
@@ -341,7 +341,7 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
           this.trackError('triggerNow', err);
         } finally {
           this.loading = false;
-          this.cdr.markForCheck();
+          this.changeDetectorRef.markForCheck();
         }
       }
     });
@@ -349,11 +349,11 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
 
   deleteSelected() {
     if (!this.selectedJobs?.length) {
-      this.messageSvc.add({ severity: 'warn', summary: 'Thông báo', detail: 'Vui lòng lựa chọn bản ghi', life: 3000 });
+      this.messageService.add({ severity: 'warn', summary: 'Thông báo', detail: 'Vui lòng lựa chọn bản ghi', life: 3000 });
       return;
     }
 
-    this.confirmation.confirm({
+    this.confirmationService.confirm({
       message: 'Bạn muốn thực hiện các lựa chọn?',
       header: 'Xác nhận',
       icon: 'pi pi-exclamation-triangle',
@@ -364,7 +364,7 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
         this.loading = true;
         try {
           const promises = this.selectedJobs.map((item) => {
-            const api = item.tenant === 'REPORT' ? this.reportSvc.delete.bind(this.reportSvc) : this.jobSvc.delete.bind(this.jobSvc);
+            const api = item.tenant === 'REPORT' ? this.jobReportService.delete.bind(this.jobReportService) : this.jobScheduleService.delete.bind(this.jobScheduleService);
             return firstValueFrom(api({ id: item.jobId }));
           });
           await Promise.all(promises.map(p => p.catch(e => e)));
@@ -377,7 +377,7 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
           this.trackError('deleteSelected', err);
         } finally {
           this.loading = false;
-          this.cdr.markForCheck();
+          this.changeDetectorRef.markForCheck();
         }
       }
     });
@@ -431,14 +431,14 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
     fd.append('isReplace', 'true');
     fd.append('isTransfer', 'true');
 
-    this.fileSvc.uploadTemp(fd).pipe(takeUntil(this.destroy$)).subscribe({
+    this.fileService.uploadTemp(fd).pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         if (res?.statusCode === ResponseCode.ZERO) {
-          this.messageSvc.add({ severity: 'success', summary: 'Thông báo', detail: res.message, life: 3000 });
+          this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: res.message, life: 3000 });
         } else {
-          this.messageSvc.add({ severity: 'error', summary: 'Thông báo', detail: res.message, life: 3000 });
+          this.messageService.add({ severity: 'error', summary: 'Thông báo', detail: res.message, life: 3000 });
         }
-        this.cdr.markForCheck();
+        this.changeDetectorRef.markForCheck();
       },
       error: (err) => this.trackError('uploadFile', err)
     });

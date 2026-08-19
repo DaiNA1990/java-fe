@@ -24,31 +24,21 @@
       <th *ngFor="let cell of row" 
         class="dynamic-header"
         scope="col" [attr.colspan]="cell.colspan > 1 ? cell.colspan : null"
-        [attr.rowspan]="cell.rowspan > 1 ? cell.rowspan : null" [pSortableColumn]="
-        cell.rowspan > 1 || cell.colspan > 1
-          ? undefined
-          : cols[cell.startIndex].property.code !== ''
-            ? cols[cell.startIndex].property.code
-            : undefined
-      " [ngStyle]="{
+        [attr.rowspan]="cell.rowspan > 1 ? cell.rowspan : null"
+        [pSortableColumn]="cell.sortField"
+        [pSortableColumnDisabled]="!cell.sortField" [ngStyle]="{
         'min-width':
           (
             cols[cell.startIndex].size ||
             getTextWidth(cell.label)
           ) + 'px'
       }" alignFrozen="right" pFrozenColumn [frozen]="
-        cell.rowspan > 1 || cell.colspan > 1
-          ? false
-          : cols[cell.startIndex].isFrozen
+        cell.isLeaf ? cols[cell.startIndex].isFrozen : false
       ">
 
         {{ cell.label }}
 
-        <p-sortIcon *ngIf="
-          cell.rowspan === headerDepth &&
-          cell.colspan === 1 &&
-          cols[cell.startIndex].property.code !== ''
-        " [field]="cols[cell.startIndex].property.code"></p-sortIcon>
+        <p-sortIcon *ngIf="cell.sortField" [field]="cell.sortField"></p-sortIcon>
 
       </th>
 

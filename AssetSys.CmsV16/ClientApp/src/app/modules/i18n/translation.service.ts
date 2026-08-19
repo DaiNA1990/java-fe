@@ -18,12 +18,12 @@ export class TranslationService {
   // Private properties
   private langIds: any = [];
 
-  constructor(private translate: TranslateService) {
+  constructor(private translateService: TranslateService) {
     // add new langIds to the list
-    this.translate.addLangs(['en']);
+    this.translateService.addLangs(['en']);
 
     // this language will be used as a fallback when a translation isn't found in the current language
-    this.translate.setDefaultLang('en');
+    this.translateService.setDefaultLang('en');
   }
 
   loadTranslations(...args: Locale[]): void {
@@ -32,19 +32,19 @@ export class TranslationService {
     locales.forEach((locale) => {
       // use setTranslation() with the third argument set to true
       // to append translations instead of replacing them
-      this.translate.setTranslation(locale.lang, locale.data, true);
+      this.translateService.setTranslation(locale.lang, locale.data, true);
       this.langIds.push(locale.lang);
     });
 
     // add new languages to the list
-    this.translate.addLangs(this.langIds);
-    this.translate.use(this.getSelectedLanguage());
+    this.translateService.addLangs(this.langIds);
+    this.translateService.use(this.getSelectedLanguage());
   }
 
   setLanguage(lang: string) {
     if (lang) {
-      this.translate.use(this.translate.getDefaultLang());
-      this.translate.use(lang);
+      this.translateService.use(this.translateService.getDefaultLang());
+      this.translateService.use(lang);
       localStorage.setItem(LOCALIZATION_LOCAL_STORAGE_KEY, lang);
     }
   }
@@ -55,7 +55,7 @@ export class TranslationService {
   getSelectedLanguage(): any {
     return (
       localStorage.getItem(LOCALIZATION_LOCAL_STORAGE_KEY) ||
-      this.translate.getDefaultLang()
+      this.translateService.getDefaultLang()
     );
   }
 }

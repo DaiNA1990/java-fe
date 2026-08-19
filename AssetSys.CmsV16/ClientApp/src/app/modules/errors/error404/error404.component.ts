@@ -19,10 +19,10 @@ import { ThemeModeService } from '../../../_metronic/partials/layout/theme-mode-
 export class Error404Component implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
-  constructor(private router: Router, private modeService: ThemeModeService) {}
+  constructor(private router: Router, private themeModeService: ThemeModeService) {}
 
   ngOnInit(): void {
-    const subscr = this.modeService.mode.asObservable().subscribe((mode) => {
+    const subscr = this.themeModeService.mode.asObservable().subscribe((mode) => {
       document.body.style.backgroundImage =
         mode === 'dark'
           ? 'url(./assets/media/auth/bg1-dark.jpg)'

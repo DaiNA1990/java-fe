@@ -36,16 +36,16 @@ export class InfoFormDataFieldComponent implements OnInit {
     autoGroups: any[] = [];
     isSubmiting: boolean = false;
 
-    constructor(public service: InfoPropertyService,
+    constructor(public infoPropertyService: InfoPropertyService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private removeUnicodePipe: RemoveUnicodePipe,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     async getList() {
-        const res = await firstValueFrom(this.service.getList({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER }));
+        const res = await firstValueFrom(this.infoPropertyService.getList({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER }));
         this.lstProperty = res.data.list;
         this.filter('');
     }
@@ -77,12 +77,12 @@ export class InfoFormDataFieldComponent implements OnInit {
 
     filter(keyword: any) {
         this.properties = this.lstProperty.filter(x => x.name.toLowerCase().includes(keyword.toLowerCase()) || x.code.toLowerCase().includes(keyword.toLowerCase()));
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     async deleteItemSubmit(item: any = null) {
 
-        const res = await firstValueFrom(this.service.delete({ id: item.id }));
+        const res = await firstValueFrom(this.infoPropertyService.delete({ id: item.id }));
 
         this.messageService.add({
             severity: 'warn',
@@ -91,7 +91,7 @@ export class InfoFormDataFieldComponent implements OnInit {
             life: 3000
         });
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
 
         this.getList();
     }
@@ -111,7 +111,7 @@ export class InfoFormDataFieldComponent implements OnInit {
         for (const line of this.formAddGroupControl.value.fields.split('\n')) {
             const arr = line.split('|');
 
-            await firstValueFrom(this.service.addOrEdit({
+            await firstValueFrom(this.infoPropertyService.addOrEdit({
                 name: arr[0],
                 code: this.removeUnicodePipe.transform(arr[0]),
                 typeData: this.removeUnicodePipe.transform(arr[1]),
@@ -136,7 +136,7 @@ export class InfoFormDataFieldComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.formAddGroupControl = this.fb.group({
+        this.formAddGroupControl = this.formBuilder.group({
             fields: [null, [Validators.nullValidator]],
         });
 

@@ -35,7 +35,7 @@ export class ForgotPasswordComponent implements OnInit {
   isLoadingSubject: BehaviorSubject<boolean>;
 
   private unsubscribe: Subscription[] = [];
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthService) {
     this.isLoadingSubject = new BehaviorSubject<boolean>(false);
     this.isLoading$ = this.isLoadingSubject.asObservable();
   }
@@ -49,7 +49,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   initForm() {
-    this.forgotPasswordForm = this.fb.group({
+    this.forgotPasswordForm = this.formBuilder.group({
       email: [
         'admin@demo.com',
         Validators.compose([

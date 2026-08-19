@@ -33,7 +33,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   private unsubscribe: Subscription[] = [];
 
   constructor(
-    private fb: FormBuilder,
+    private formBuilder: FormBuilder,
     private authService: AuthService,
     private router: Router
   ) {
@@ -53,7 +53,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
-    this.registrationForm = this.fb.group(
+    this.registrationForm = this.formBuilder.group(
       {
         fullname: [
           '',

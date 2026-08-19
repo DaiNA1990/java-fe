@@ -21,22 +21,22 @@ import { UserRoleService } from '@appkkkh/modules/user/user-role/services/user-r
 })
 export class UserEditComponent extends NbDialogBaseComponent {
 
-  departmentDataSource = () => this.departmentservice.autocomplete({});
-  levelDataSource = () => this.levelService.autocomplete({});
-  titleDataSource = () => this.titleService.autocomplete({});
-  roleDataSource = () => this.roleService.autocomplete({});
+  departmentDataSource = () => this.userDepartmentService.autocomplete({});
+  levelDataSource = () => this.userLevelService.autocomplete({});
+  titleDataSource = () => this.userTitleService.autocomplete({});
+  roleDataSource = () => this.userRoleService.autocomplete({});
 
-  constructor(public service: UserService,
-    public departmentservice: UserDepartmentService,
-    public levelService: UserLevelService,
-    public titleService: UserTitleService,
-    public roleService: UserRoleService,
-    private fb: FormBuilder) {
-    super(service);
+  constructor(public userService: UserService,
+    public userDepartmentService: UserDepartmentService,
+    public userLevelService: UserLevelService,
+    public userTitleService: UserTitleService,
+    public userRoleService: UserRoleService,
+    private formBuilder: FormBuilder) {
+    super(userService);
   }
 
   buildForm() {
-    this.form = this.fb.group({
+    this.form = this.formBuilder.group({
       id: [null, [Validators.nullValidator]],
       parentId: [null, [Validators.nullValidator]],
       departmentId: [null, [Validators.nullValidator]],

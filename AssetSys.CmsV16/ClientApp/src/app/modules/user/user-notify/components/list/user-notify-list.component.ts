@@ -10,11 +10,11 @@ export class UserNotifyListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: UserNotifyService,
-        private fb: FormBuilder) { }
+    constructor(public userNotifyService: UserNotifyService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

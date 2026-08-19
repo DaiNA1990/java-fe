@@ -13,9 +13,9 @@ export class InfoGroupBuildFormComponent {
 
     isVisible: boolean = false;
 
-    constructor(public service: InfoGroupService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+    constructor(public infoGroupService: InfoGroupService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     open(group: any) {
@@ -37,7 +37,7 @@ export class InfoGroupBuildFormComponent {
         this.layoutId = null;
         setTimeout(() => {
             this.layoutId = e.id;
-            this.cdr.detectChanges();
+            this.changeDetectorRef.detectChanges();
         }, 10);
     }
 

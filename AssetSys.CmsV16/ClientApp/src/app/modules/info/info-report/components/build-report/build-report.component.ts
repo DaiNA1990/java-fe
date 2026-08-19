@@ -12,9 +12,9 @@ export class InfoReportBuildReportComponent {
 
     isVisible: boolean = false;
 
-    constructor(public service: InfoReportService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+    constructor(public infoReportService: InfoReportService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     open(report: any) {

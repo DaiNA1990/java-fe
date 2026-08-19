@@ -10,11 +10,11 @@ export class UserTitleListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: UserTitleService,
-        private fb: FormBuilder) { }
+    constructor(public userTitleService: UserTitleService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

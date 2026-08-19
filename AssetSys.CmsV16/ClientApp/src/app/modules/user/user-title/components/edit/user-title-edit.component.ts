@@ -16,13 +16,13 @@ import { UserTitleService } from '../../services/user-title.service';
 })
 export class UserTitleEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserTitleService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userTitleService: UserTitleService,
+        private formBuilder: FormBuilder) {
+        super(userTitleService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    name: [null, [Validators.nullValidator]],
 		    code: [null, [Validators.nullValidator]],

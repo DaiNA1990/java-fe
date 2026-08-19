@@ -30,8 +30,8 @@ export class InfoPageDatetimeComponent implements OnDestroy, OnInit {
 
     subscriptions: Subscription[] = [];
 
-    constructor(public service: InfoFormService,
-        private cdr: ChangeDetectorRef) { }
+    constructor(public infoFormService: InfoFormService,
+        private changeDetectorRef: ChangeDetectorRef) { }
 
     onSelect(e: any) {
         this.formCtrl.setValue(dayjs(e).toISOString(), { emitEvent: false, emitModelToViewChange: false });

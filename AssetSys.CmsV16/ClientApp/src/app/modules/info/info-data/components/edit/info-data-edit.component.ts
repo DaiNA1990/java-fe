@@ -16,13 +16,13 @@ import { InfoDataService } from '../../services/info-data.service';
 })
 export class InfoDataEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: InfoDataService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public infoDataService: InfoDataService,
+        private formBuilder: FormBuilder) {
+        super(infoDataService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    groupId: [null, [Validators.nullValidator]],
 		    isShow: [null, [Validators.nullValidator]],

@@ -10,11 +10,11 @@ export class UserDepartmentListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: UserDepartmentService,
-        private fb: FormBuilder) { }
+    constructor(public userDepartmentService: UserDepartmentService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

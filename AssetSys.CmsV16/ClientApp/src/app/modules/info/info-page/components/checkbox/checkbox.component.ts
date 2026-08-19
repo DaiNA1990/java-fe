@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { InfoFormService } from '../../services/info-form.service';
-import { CategoryService } from '../../services/category-service';
-import { EventDataService } from '../../services/event-service';
+import { CategoryService } from '../../services/category.service';
+import { EventDataService } from '../../services/event-data.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -33,10 +33,10 @@ export class InfoPageCheckboxComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
 
   constructor(
-    public service: InfoFormService,
+    public infoFormService: InfoFormService,
     public categoryService: CategoryService,
-    private events: EventDataService,
-    private cdr: ChangeDetectorRef
+    private eventDataService: EventDataService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   onChange(e: any) {
@@ -60,7 +60,7 @@ export class InfoPageCheckboxComponent implements OnInit, OnDestroy {
         }
         setTimeout(
           () =>
-            this.events.emit({
+            this.eventDataService.emit({
               action: action,
               // value: _item,
               originalEvent: e.originalEvent,

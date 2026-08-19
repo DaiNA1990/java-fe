@@ -27,11 +27,11 @@ export class InfoFormControlComponent implements OnInit {
         return lst;
     }
 
-    constructor(public service: InfoPropertyService,
+    constructor(public infoPropertyService: InfoPropertyService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     ngOnInit(): void {

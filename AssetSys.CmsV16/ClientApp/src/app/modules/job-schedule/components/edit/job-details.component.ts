@@ -32,10 +32,10 @@ export class JobDetailsComponent implements OnInit {
   loading = false;
 
   constructor(
-    public service: JobScheduleService,
+    public jobScheduleService: JobScheduleService,
     public jobReportService: JobReportService,
-    private fb: FormBuilder,
-    private cdr: ChangeDetectorRef
+    private formBuilder: FormBuilder,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -45,9 +45,9 @@ export class JobDetailsComponent implements OnInit {
 
   async loadJobDetails(id: string,tenant: any = null) {
     this.loading = true;
-    const res = await firstValueFrom(tenant == 'REPORT' ? this.jobReportService.jobById({ id: id }) : this.service.jobById({ id: id }));
+    const res = await firstValueFrom(tenant == 'REPORT' ? this.jobReportService.jobById({ id: id }) : this.jobScheduleService.jobById({ id: id }));
     this.job = res;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
     this.loading = false;
   }
 }

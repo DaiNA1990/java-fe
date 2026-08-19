@@ -10,11 +10,11 @@ export class UserActivityListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: UserActivityService,
-        private fb: FormBuilder) { }
+    constructor(public userActivityService: UserActivityService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

@@ -38,8 +38,8 @@ export class InfoFormReportComponent implements OnInit {
     public infoReportSetupService: InfoReportSetupService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private changeDetectorRef: ChangeDetectorRef,
+    private formBuilder: FormBuilder
   ) {}
 
   async getList() {
@@ -50,7 +50,7 @@ export class InfoFormReportComponent implements OnInit {
       })
     );
     this.layouts = res.data.list;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
     if (res.data.list.length > 0) this.builder(res.data.list[0]);
   }
 
@@ -84,7 +84,7 @@ export class InfoFormReportComponent implements OnInit {
   //     if (res.statusCode === ResponseCode.ZERO)
   //         item.isEditing = false;
 
-  //     this.cdr.detectChanges();
+  //     this.changeDetectorRef.detectChanges();
   // }
 
   async init() {
@@ -124,7 +124,7 @@ export class InfoFormReportComponent implements OnInit {
       life: 3000,
     });
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
 
     this.getList();
   }

@@ -5,11 +5,11 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { InfoDataService } from '../../services/info-data-service';
+import { InfoDataService } from '../../services/info-data.service';
 import { FormControl } from '@angular/forms';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { EventDataService } from '../../services/event-service';
-import { CategoryService } from '../../services/category-service';
+import { EventDataService } from '../../services/event-data.service';
+import { CategoryService } from '../../services/category.service';
 import { BaseFormPage } from '../base.form';
 
 @Component({
@@ -34,8 +34,8 @@ export class InfoPageRadioComponent extends BaseFormPage implements OnInit, OnDe
   constructor(
     private infoDataService: InfoDataService,
     public categoryService: CategoryService,
-    private events: EventDataService,
-    private cdr: ChangeDetectorRef
+    private eventDataService: EventDataService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     super();
   }
@@ -125,7 +125,7 @@ export class InfoPageRadioComponent extends BaseFormPage implements OnInit, OnDe
 
     if (this.formItem.isReadOnly || this.readOnly) this.formCtrl.disable();
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   ngOnDestroy(): void {
@@ -136,7 +136,7 @@ export class InfoPageRadioComponent extends BaseFormPage implements OnInit, OnDe
     this.init();
 
     this.subscriptions.push(
-      this.events.event.subscribe((data: any) => {
+      this.eventDataService.event.subscribe((data: any) => {
         if (
           data === undefined ||
           data === null ||

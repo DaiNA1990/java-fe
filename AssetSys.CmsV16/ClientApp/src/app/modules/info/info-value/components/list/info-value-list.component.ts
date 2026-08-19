@@ -10,11 +10,11 @@ export class InfoValueListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: InfoValueService,
-        private fb: FormBuilder) { }
+    constructor(public infoValueService: InfoValueService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

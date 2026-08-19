@@ -18,13 +18,13 @@ export class ResourceInfoEditComponent extends NbDialogBaseComponent {
 
     @Input() parentCode: string;
 
-    constructor(public service: ResourceInfoService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public resourceInfoService: ResourceInfoService,
+        private formBuilder: FormBuilder) {
+        super(resourceInfoService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    parentCode: [this.parentCode, [Validators.nullValidator]],
 		    code: [null, [Validators.required]],

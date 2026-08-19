@@ -23,8 +23,8 @@ import {
 import { firstValueFrom, Subscription, BehaviorSubject } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { InfoFormService } from '../../services/info-form.service';
-import { InfoDataService } from '../../services/info-data-service';
-import { EventDataService } from '../../services/event-service';
+import { InfoDataService } from '../../services/info-data.service';
+import { EventDataService } from '../../services/event-data.service';
 import controlTypes from '@appkkkh/modules/info/info-form/components/property/controls.json';
 import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 import { cloneDeep, forEach } from 'lodash';
@@ -34,7 +34,7 @@ import jsonata from 'jsonata';
 import { MenuComponent } from '@appkkkh/_metronic/kt/components/MenuComponent';
 import { InfoReportService } from '../../../info-report/services/info-report.service';
 import { evaluateExpression } from '../expression-utils';
-import { CategoryService } from '../../services/category-service';
+import { CategoryService } from '../../services/category.service';
 import isEqual from 'lodash/isEqual';
 import { saveAs } from 'file-saver';
 import { dateUtil } from '../../components/date-util';
@@ -46,7 +46,7 @@ import { environment } from '@srckkkh/environments/environment';
 dayjs.extend(duration);
 @Component({
   selector: 'app-info-page-form',
-  templateUrl: `./component.html`,
+  templateUrl: `./form.component.html`,
   styles: [
     `
       ::ng-deep {
@@ -197,23 +197,23 @@ export class InfoPageFormComponent
   @ViewChild('dataActionControlTmpl') dataActionControlTmpl: TemplateRef<any>;
 
   constructor(
-    public service: InfoFormService,
+    public infoFormService: InfoFormService,
     private infoDataService: InfoDataService,
     public infoReportService: InfoReportService,
     private confirmationService: ConfirmationService,
-    public auth: AuthService,
+    public override authService: AuthService,
     private categoryService: CategoryService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef,
-    private events: EventDataService,
-    private fb: FormBuilder,
-    private el: ElementRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private eventDataService: EventDataService,
+    private formBuilder: FormBuilder,
+    private elementRef: ElementRef
   ) {
     super();
   }
 
   init() {
-    this.form = this.fb.group({});
+    this.form = this.formBuilder.group({});
     this.subscriptions.push(
       this.form.valueChanges.subscribe(async (formValue: any) => {
         if (this.loadFormSubject.value) {
@@ -890,7 +890,7 @@ export class InfoPageFormComponent
   }
   async buildControls() {
     const res = await firstValueFrom(
-      this.service.getByLayoutCode({
+      this.infoFormService.getByLayoutCode({
         code: this.layoutCode
       })
     );
@@ -908,7 +908,7 @@ export class InfoPageFormComponent
       );
 
     this.infoDataService.setPath(this.initPath(formItem));
-    this.service.setPath(this.initPath(formItem));
+    this.infoFormService.setPath(this.initPath(formItem));
     this.categoryService.setPath(this.initPath(formItem));
     this.groupId = formItem.layout.groupId;
     this.groupCode = formItem.layout.group.code;
@@ -954,20 +954,20 @@ export class InfoPageFormComponent
 
     this.forms.push(...res.data);
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
 
     if (
-      this.el.nativeElement.parentElement !== null &&
-      this.el.nativeElement.parentElement.classList !== null &&
-      this.el.nativeElement.parentElement.classList.value.indexOf(
+      this.elementRef.nativeElement.parentElement !== null &&
+      this.elementRef.nativeElement.parentElement.classList !== null &&
+      this.elementRef.nativeElement.parentElement.classList.value.indexOf(
         'modal-content'
       ) > -1
     ) {
       setTimeout(() => {
-        if (this.el.nativeElement.querySelector('.modal-body')) {
-          this.el.nativeElement.classList.add('modal-content');
+        if (this.elementRef.nativeElement.querySelector('.modal-body')) {
+          this.elementRef.nativeElement.classList.add('modal-content');
         } else {
-          this.el.nativeElement.classList.add('modal-body');
+          this.elementRef.nativeElement.classList.add('modal-body');
         }
       }, 300);
     }
@@ -991,7 +991,7 @@ export class InfoPageFormComponent
       await this.buildForm(dataId, initValue, cloneValue);
     } finally {
       this.loadFormSubject.next(false);
-      this.cdr.detectChanges();
+      this.changeDetectorRef.detectChanges();
       // menu dropdown của Metronic cần DOM đã render mới gắn được handler
       MenuComponent.reinitialization();
     }
@@ -1117,7 +1117,7 @@ export class InfoPageFormComponent
           item.property?.code && item.property.code !== ''
             ? item.property.code
             : item.code;
-        const control = this.fb.control(
+        const control = this.formBuilder.control(
           {
             value: this.formatData(
               _value,
@@ -1140,7 +1140,7 @@ export class InfoPageFormComponent
 
     // next(false) nằm ở finally của loadForm, sau khi các vòng expression bên
     // dưới chạy xong — không hé lộ form ở đây.
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
 
     for (let item of this.forms.filter(
       (f: any) =>
@@ -1345,7 +1345,7 @@ export class InfoPageFormComponent
           for (const action of JSON.parse(item.action).rules.filter(
             (c: any) => c.action != 'POST_ACTION'
           ))
-            this.events.emit({
+            this.eventDataService.emit({
               action: action,
               control: item,
               forms: this.forms,
@@ -1359,7 +1359,7 @@ export class InfoPageFormComponent
       for (const action of JSON.parse(item.action).rules.filter(
         (c: any) => c.action != 'POST_ACTION'
       ))
-        this.events.emit({
+        this.eventDataService.emit({
           action: action,
           control: item,
           forms: this.forms,
@@ -1458,7 +1458,7 @@ export class InfoPageFormComponent
   }
   showIsloading(isShow: boolean) {
     this.isOnSubmit = isShow;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
   async submitSend(actionData: any) {
     if (this.isOnSubmit) {
@@ -1607,7 +1607,7 @@ export class InfoPageFormComponent
     for (const action of actionData.action.rules.filter(
       (r: any) => r.action === 'FORM_ON_SUBMIT'
     ))
-      this.events.emit({
+      this.eventDataService.emit({
         action: action,
         dataId: this.dataId || res.data,
         value: action.event == 'FORM_SET_VALUE' ? this.valueTransform : null,
@@ -1703,7 +1703,7 @@ export class InfoPageFormComponent
             for (const action of dataAction.action.rules.filter(
               (c: any) => c.action != 'POST_ACTION'
             ))
-              this.events.emit({
+              this.eventDataService.emit({
                 action: action,
                 dataId: res.data.id,
               });
@@ -1735,7 +1735,7 @@ export class InfoPageFormComponent
       for (const action of dataAction.action.rules.filter(
         (c: any) => c.action != 'POST_ACTION'
       ))
-        this.events.emit({
+        this.eventDataService.emit({
           action: action,
           dataId: res.data.id,
         });
@@ -1774,7 +1774,7 @@ export class InfoPageFormComponent
     // for (const action of dataAction.action.rules.filter(
     //   (c: any) => c.action != 'POST_ACTION'
     // ))
-    //   this.events.emit({
+    //   this.eventDataService.emit({
     //     action: action,
     //     initValue: this.value,
     //     control: dataAction.control,
@@ -1871,7 +1871,7 @@ export class InfoPageFormComponent
         for (const action of dataAction.action.rules.filter(
           (c: any) => c.action != 'POST_ACTION'
         ))
-          this.events.emit({
+          this.eventDataService.emit({
             action: action,
             initValue: this.value,
             control: dataAction.control,
@@ -1900,7 +1900,7 @@ export class InfoPageFormComponent
                 for (const action of dataAction.action.rules.filter(
                   (c: any) => c.action != 'POST_ACTION'
                 ))
-                  this.events.emit({
+                  this.eventDataService.emit({
                     action: action,
                     initValue: this.value,
                     control: dataAction.control,
@@ -1928,7 +1928,7 @@ export class InfoPageFormComponent
         for (const action of dataAction.action.rules.filter(
           (c: any) => c.action != 'POST_ACTION'
         ))
-          this.events.emit({
+          this.eventDataService.emit({
             action: action,
             initValue: this.value,
             control: dataAction.control,
@@ -1941,7 +1941,7 @@ export class InfoPageFormComponent
     for (const action of dataAction.action.rules.filter(
       (c: any) => c.action != 'POST_ACTION'
     ))
-      this.events.emit({
+      this.eventDataService.emit({
         action: action,
         initValue: this.value,
         control: dataAction.control,
@@ -2106,7 +2106,7 @@ export class InfoPageFormComponent
     dataAction.action.rules
       .filter((i: any) => i.action === 'FORM_ON_SUBMIT')
       .forEach((i: any) =>
-        this.events.emit({
+        this.eventDataService.emit({
           action: i,
           dataId: this.dataId,
           value: i.event == 'FORM_SET_VALUE' ? this.valueTransform : null,
@@ -2169,7 +2169,7 @@ export class InfoPageFormComponent
 
   //     const _value: any = {};
   //     _value[dataAction.action.rules[0].rules[0].target] = this.form.value[dataAction.action.rules[0].rules[0].data];
-  //     this.events.emit({
+  //     this.eventDataService.emit({
   //         action: dataAction.action.rules[0],
   //         value: _value
   //     });
@@ -2280,7 +2280,7 @@ export class InfoPageFormComponent
     for (const action of dataAction.action.rules.filter(
       (c: any) => c.action != 'POST_ACTION'
     ))
-      this.events.emit({
+      this.eventDataService.emit({
         action: action,
         dataId: this.dataId || res.data,
       });
@@ -2305,7 +2305,7 @@ export class InfoPageFormComponent
         for (const action of dataAction.action.rules.filter(
           (c: any) => c.action !== 'POST_ACTION',
         )) {
-          this.events.emit({
+          this.eventDataService.emit({
             action: action,
             dataId: this.dataId,
           });
@@ -2405,7 +2405,7 @@ export class InfoPageFormComponent
         for (const action of dataAction.action.rules.filter(
           (c: any) => c.action != 'POST_ACTION'
         ))
-          this.events.emit({
+          this.eventDataService.emit({
             action: action,
             value: this.valueTransform,
           });
@@ -2467,7 +2467,7 @@ export class InfoPageFormComponent
       for (const action of dataAction.action.rules.filter(
         (c: any) => c.action != 'POST_ACTION'
       ))
-        this.events.emit({
+        this.eventDataService.emit({
           action: action,
           value: this.valueTransform,
           dataId: this.dataId || res.data,
@@ -2571,7 +2571,7 @@ export class InfoPageFormComponent
 
   async downloadFile(dataAction: any) {
     this.isOnSubmit = true;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
     this.infoReportService
       .downloadTemplate({ filename: dataAction.action.data })
       .subscribe({
@@ -2593,7 +2593,7 @@ export class InfoPageFormComponent
             });
           }
           this.isOnSubmit = false;
-          this.cdr.detectChanges();
+          this.changeDetectorRef.detectChanges();
         },
         error: (err) => {
           const backendMsg = err.error?.message || 'Có lỗi xảy ra khi tải file';
@@ -2604,7 +2604,7 @@ export class InfoPageFormComponent
             life: 3000,
           });
           this.isOnSubmit = false;
-          this.cdr.detectChanges();
+          this.changeDetectorRef.detectChanges();
         },
       });
   }
@@ -2777,7 +2777,7 @@ export class InfoPageFormComponent
     this.init();
     this.buildControls();
     this.subscriptions.push(
-      this.events.event.subscribe((data: any) => {
+      this.eventDataService.event.subscribe((data: any) => {
         if (
           data === undefined ||
           data === null ||

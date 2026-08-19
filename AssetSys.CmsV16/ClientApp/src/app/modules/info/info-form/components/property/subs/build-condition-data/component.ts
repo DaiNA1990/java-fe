@@ -47,8 +47,8 @@ export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
   formControl: FormGroup;
   formParamControl: FormGroup;
 
-  //propertyDS = () => this.propertyService.autocomplete({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER });
-  //formDS = () => this.service.autocomplete({ layoutId: this.layoutId, pageSize: Number.MAX_SAFE_INTEGER });
+  //propertyDS = () => this.infoPropertyService.autocomplete({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER });
+  //formDS = () => this.infoFormService.autocomplete({ layoutId: this.layoutId, pageSize: Number.MAX_SAFE_INTEGER });
 
   visible: boolean = false;
 
@@ -116,17 +116,17 @@ export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
   };
 
   constructor(
-    public service: InfoFormService,
-    public propertyService: InfoPropertyService,
+    public infoFormService: InfoFormService,
+    public infoPropertyService: InfoPropertyService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private changeDetectorRef: ChangeDetectorRef,
+    private formBuilder: FormBuilder
   ) {}
 
   open() {
     this.visible = true;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   search(event: AutoCompleteCompleteEvent) {
@@ -134,7 +134,7 @@ export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
       .map((item: any) => `${item.name}(${item.code})`)
       .filter((c: any) => c.indexOf(event.query) > -1);
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   select(event: any, item: any) {
@@ -279,18 +279,18 @@ export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
         this.codeGenerate = o.data;
     }
 
-    this.formControl = this.fb.group({
+    this.formControl = this.formBuilder.group({
       typeData: [obj[0]?.typeData || null, [Validators.required]],
       data: [obj[0]?.data || null, [Validators.required]],
     });
 
-    this.formParamControl = this.fb.group({
+    this.formParamControl = this.formBuilder.group({
       name: [null, [Validators.required]],
       value: [null, [Validators.required]],
     });
 
     const res = await firstValueFrom(
-      this.propertyService.getList({
+      this.infoPropertyService.getList({
         groupId: this.groupId,
         pageSize: Number.MAX_SAFE_INTEGER,
       })
@@ -298,7 +298,7 @@ export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
 
     this.lstFields = res.data.list;
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   addCondition(item: any) {

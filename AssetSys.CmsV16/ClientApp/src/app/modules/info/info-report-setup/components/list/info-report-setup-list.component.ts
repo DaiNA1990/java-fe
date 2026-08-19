@@ -11,10 +11,10 @@ import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 })
 export class InfoReportSetupListComponent implements OnInit {
   constructor(
-    public service: InfoReportSetupService,
+    public infoReportSetupService: InfoReportSetupService,
     public messageService: MessageService,
     public confirmationService: ConfirmationService,
-    private fb: FormBuilder
+    private formBuilder: FormBuilder
   ) {}
   ngOnInit(): void {
   }

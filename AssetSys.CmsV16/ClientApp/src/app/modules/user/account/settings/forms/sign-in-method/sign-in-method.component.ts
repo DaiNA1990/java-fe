@@ -12,7 +12,7 @@ export class SignInMethodComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     const loadingSubscr = this.isLoading$
       .asObservable()
       .subscribe((res) => (this.isLoading = res));
@@ -30,7 +30,7 @@ export class SignInMethodComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.isLoading$.next(false);
       this.showChangeEmailForm = false;
-      this.cdr.detectChanges();
+      this.changeDetectorRef.detectChanges();
     }, 1500);
   }
 
@@ -43,7 +43,7 @@ export class SignInMethodComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.isLoading$.next(false);
       this.showChangePasswordForm = false;
-      this.cdr.detectChanges();
+      this.changeDetectorRef.detectChanges();
     }, 1500);
   }
 

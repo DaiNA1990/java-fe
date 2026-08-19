@@ -10,7 +10,7 @@ export class ConnectedAccountsComponent implements OnInit, OnDestroy {
   isLoading: boolean;
   private unsubscribe: Subscription[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     const loadingSubscr = this.isLoading$
       .asObservable()
       .subscribe((res) => (this.isLoading = res));
@@ -23,7 +23,7 @@ export class ConnectedAccountsComponent implements OnInit, OnDestroy {
     this.isLoading$.next(true);
     setTimeout(() => {
       this.isLoading$.next(false);
-      this.cdr.detectChanges();
+      this.changeDetectorRef.detectChanges();
     }, 1500);
   }
 

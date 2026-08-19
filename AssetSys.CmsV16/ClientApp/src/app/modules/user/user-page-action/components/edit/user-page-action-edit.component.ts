@@ -18,13 +18,13 @@ export class UserPageActionEditComponent extends NbDialogBaseComponent {
 
     @Input() pageId: number;
 
-    constructor(public service: UserPageActionService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userPageActionService: UserPageActionService,
+        private formBuilder: FormBuilder) {
+        super(userPageActionService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    pageId: [null, [Validators.nullValidator]],
 		    name: [null, [Validators.nullValidator]],

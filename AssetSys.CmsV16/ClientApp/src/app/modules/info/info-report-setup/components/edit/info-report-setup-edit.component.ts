@@ -18,13 +18,13 @@ export class InfoReportSetupEditComponent extends NbDialogBaseComponent {
 
     @Input() reportId:any;
 
-    constructor(public service: InfoReportSetupService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public infoReportSetupService: InfoReportSetupService,
+        private formBuilder: FormBuilder) {
+        super(infoReportSetupService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
         reportId: [this.reportId, [Validators.nullValidator]],
 		    name: [null, [Validators.required]],

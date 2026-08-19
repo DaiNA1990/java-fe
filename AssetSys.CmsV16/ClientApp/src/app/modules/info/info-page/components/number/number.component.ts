@@ -28,7 +28,7 @@ export class InfoPageNumberComponent implements OnInit {
     min: number = 0;
     max: number = Number.MAX_SAFE_INTEGER;
 
-    constructor(private cdr: ChangeDetectorRef) { }
+    constructor(private changeDetectorRef: ChangeDetectorRef) { }
 
     init() {
 

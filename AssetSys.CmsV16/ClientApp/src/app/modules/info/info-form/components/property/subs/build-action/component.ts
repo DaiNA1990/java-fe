@@ -55,14 +55,13 @@ export class InfoFormPropertyBuildActionComponent implements OnInit {
         return this.dataActions.rules.filter((c: FCAction) => c.target !== '').length > 0;
     }
 
-    constructor(public service: InfoFormService,
-        public propertyService: InfoPropertyService,
-        public formService: InfoFormService,
-        public layoutService: InfoLayoutService,
+    constructor(public infoPropertyService: InfoPropertyService,
+        public infoFormService: InfoFormService,
+        public infoLayoutService: InfoLayoutService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     addCondition(item: FCAction) {
@@ -103,7 +102,7 @@ export class InfoFormPropertyBuildActionComponent implements OnInit {
 
     open() {
         this.visible = true;
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     save() {
@@ -117,7 +116,7 @@ export class InfoFormPropertyBuildActionComponent implements OnInit {
 
         this.targets.push(...this.lstLayouts.filter((c: any) => c.indexOf(event.query) > -1))
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     select(event: any, item: any) {
@@ -126,14 +125,14 @@ export class InfoFormPropertyBuildActionComponent implements OnInit {
 
     async init() {
 
-        const res = await firstValueFrom(this.formService.getList({
+        const res = await firstValueFrom(this.infoFormService.getList({
             groupId: this.groupId,
             pageSize: Number.MAX_SAFE_INTEGER
         }));
 
         this.lstForms = res.data.list.map((item: any) => `${item.controlType}: ${item.name}(${item.code})`);
 
-        const resLayout = await firstValueFrom(this.layoutService.getList({
+        const resLayout = await firstValueFrom(this.infoLayoutService.getList({
             groupId: this.groupId,
             pageSize: Number.MAX_SAFE_INTEGER
         }));
@@ -147,7 +146,7 @@ export class InfoFormPropertyBuildActionComponent implements OnInit {
 
         }
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     ngOnInit(): void {

@@ -10,11 +10,11 @@ export class UserCodeListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: UserCodeService,
-        private fb: FormBuilder) { }
+    constructor(public userCodeService: UserCodeService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

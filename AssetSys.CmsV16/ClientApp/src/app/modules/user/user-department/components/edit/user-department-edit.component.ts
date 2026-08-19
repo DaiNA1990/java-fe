@@ -16,13 +16,13 @@ import { UserDepartmentService } from '../../services/user-department.service';
 })
 export class UserDepartmentEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserDepartmentService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userDepartmentService: UserDepartmentService,
+        private formBuilder: FormBuilder) {
+        super(userDepartmentService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    typeId: [null, [Validators.nullValidator]],
 		    name: [null, [Validators.nullValidator]],

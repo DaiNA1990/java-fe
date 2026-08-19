@@ -37,9 +37,9 @@ export class ResourceInfoDetailComponent extends NbDialogBaseComponent {
     //     }];
 
     // userDS = () => this.userService.autocomplete({});
-    // //statusDS = () => this.service.getStatus();
+    // //statusDS = () => this.resourceInfoService.getStatus();
     // cateDS = () => this.cateService.autocomplete({ parentCode: this.cateCode || null });
-    // ticketDS = () => this.service.getList({ isNoStatus: true }).pipe(
+    // ticketDS = () => this.resourceInfoService.getList({ isNoStatus: true }).pipe(
     //     map(res => {
     //         return {
     //             data: {
@@ -56,14 +56,14 @@ export class ResourceInfoDetailComponent extends NbDialogBaseComponent {
     //     }),
     // );
 
-    constructor(public service: ResourceInfoService,
-        private confirmService: ConfirmationService,
-        private fb: FormBuilder) {
-        super(service, false);
+    constructor(public resourceInfoService: ResourceInfoService,
+        private confirmationService: ConfirmationService,
+        private formBuilder: FormBuilder) {
+        super(resourceInfoService, false);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
             id: [0, [Validators.nullValidator]],
             userId: [null, [Validators.nullValidator]],
             assignId: [null, [Validators.nullValidator]],

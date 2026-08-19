@@ -16,13 +16,13 @@ import { UserCodeService } from '../../services/user-code.service';
 })
 export class UserCodeEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserCodeService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userCodeService: UserCodeService,
+        private formBuilder: FormBuilder) {
+        super(userCodeService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    typeId: [null, [Validators.nullValidator]],
 		    userId: [null, [Validators.nullValidator]],

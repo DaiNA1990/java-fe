@@ -74,17 +74,17 @@ export class InfoFormPropertyBuildValidateComponent implements OnInit {
         return this.validateData.filter((c: any) => c.enable === true).length;
     }
 
-    constructor(public service: InfoFormService,
-        public propertyService: InfoPropertyService,
+    constructor(public infoFormService: InfoFormService,
+        public infoPropertyService: InfoPropertyService,
         private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private cdr: ChangeDetectorRef,
-        private fb: FormBuilder) {
+        private changeDetectorRef: ChangeDetectorRef,
+        private formBuilder: FormBuilder) {
     }
 
     open() {
         this.visible = true;
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     save() {

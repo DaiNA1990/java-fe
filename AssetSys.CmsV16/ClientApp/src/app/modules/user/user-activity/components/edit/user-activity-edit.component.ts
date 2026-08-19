@@ -16,13 +16,13 @@ import { UserActivityService } from '../../services/user-activity.service';
 })
 export class UserActivityEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserActivityService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userActivityService: UserActivityService,
+        private formBuilder: FormBuilder) {
+        super(userActivityService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    userId: [null, [Validators.nullValidator]],
 		    name: [null, [Validators.nullValidator]],

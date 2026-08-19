@@ -10,11 +10,11 @@ export class UserLevelListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: UserLevelService,
-        private fb: FormBuilder) { }
+    constructor(public userLevelService: UserLevelService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

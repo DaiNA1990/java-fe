@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { InfoDataService } from '../../services/info-data-service';
+import { InfoDataService } from '../../services/info-data.service';
 import { FormControl } from '@angular/forms';
 import {
   firstValueFrom,
@@ -15,9 +15,9 @@ import {
   Subject,
   takeUntil,
 } from 'rxjs';
-import { EventDataService } from '../../services/event-service';
+import { EventDataService } from '../../services/event-data.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { CategoryService } from '../../services/category-service';
+import { CategoryService } from '../../services/category.service';
 import { BaseFormPage } from '../base.form';
 
 @Component({
@@ -162,8 +162,8 @@ export class InfoPageSelectComponent
   constructor(
     private infoDataService: InfoDataService,
     public categoryService: CategoryService,
-    private events: EventDataService,
-    private cdr: ChangeDetectorRef
+    private eventDataService: EventDataService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     super();
   }
@@ -214,7 +214,7 @@ export class InfoPageSelectComponent
         }
         setTimeout(
           () =>
-            this.events.emit({
+            this.eventDataService.emit({
               action: action,
               value: result,
               originalEvent: e.originalEvent,
@@ -432,7 +432,7 @@ export class InfoPageSelectComponent
         item.value = String(item.value);
       }
     });
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   // Khi người dùng nhập vào filter
@@ -559,7 +559,7 @@ export class InfoPageSelectComponent
     });
     this.items = lst;
     this.items.forEach((item: any) => (item.value = String(item.value)));
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   async selectFirstAuto(dataAction: any = null) {
@@ -649,7 +649,7 @@ export class InfoPageSelectComponent
     this.isLoaded = true;
     this.onChange({ value: this.formCtrl.value });
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
   shouldShowTooltip(el: HTMLElement | null): boolean {
     if (!el) return false;
@@ -668,7 +668,7 @@ export class InfoPageSelectComponent
     this.categoryService.setPath(this.initPath(this.formItem));
     this.init();
     this.subscriptions.push(
-      this.events.event.subscribe((data: any) => {
+      this.eventDataService.event.subscribe((data: any) => {
         if (
           data === undefined ||
           data === null ||

@@ -21,11 +21,11 @@ export class InfoGroupListComponent implements OnInit {
   buildFormModal: InfoGroupBuildFormComponent;
 
   constructor(
-    public service: InfoGroupService,
+    public infoGroupService: InfoGroupService,
     public messageService: MessageService,
     public confirmationService: ConfirmationService,
-    private auth: AuthService,
-    private fb: FormBuilder
+    private authService: AuthService,
+    private formBuilder: FormBuilder
   ) {}
 
   openBuildForm(item: any) {
@@ -55,12 +55,12 @@ export class InfoGroupListComponent implements OnInit {
   }
 
   init() {
-    this.formFilter = this.fb.group({});
+    this.formFilter = this.formBuilder.group({});
   }
   async ngOnInit(): Promise<void> {
     this.init();
     if (this.currentUser !== null) this.currentUser = null;
-    const user = await firstValueFrom(this.auth.currentUserSubject);
+    const user = await firstValueFrom(this.authService.currentUserSubject);
     user.functionRoles
       .filter((c: any) => c.functionCode == 'INFOGROUP')
       .forEach((item: any) => {

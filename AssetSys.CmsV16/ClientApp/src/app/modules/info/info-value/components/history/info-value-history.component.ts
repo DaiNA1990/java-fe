@@ -18,10 +18,10 @@ export class InfoValueHistoryComponent implements OnInit {
 
     subscriptions: Subscription[] = [];
 
-    constructor(private route: ActivatedRoute,
-        public service: InfoValueHistoryService,
-        private fb: FormBuilder,
-        private cdr: ChangeDetectorRef) { }
+    constructor(private activatedRoute: ActivatedRoute,
+        public infoValueHistoryService: InfoValueHistoryService,
+        private formBuilder: FormBuilder,
+        private changeDetectorRef: ChangeDetectorRef) { }
 
     open(dataId: number) {
         this.isVisible = true;
@@ -33,13 +33,13 @@ export class InfoValueHistoryComponent implements OnInit {
     }
 
     async getData(dataId: number) {
-        const res = await firstValueFrom(this.service.getList({ dataId: dataId }));
+        const res = await firstValueFrom(this.infoValueHistoryService.getList({ dataId: dataId }));
         this.lstData = res.data;
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
     }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnDestroy(): void {
@@ -48,6 +48,6 @@ export class InfoValueHistoryComponent implements OnInit {
 
     ngOnInit(): void {
         this.init();
-        this.open(this.route.snapshot.params['dataId']);
+        this.open(this.activatedRoute.snapshot.params['dataId']);
     }
 }

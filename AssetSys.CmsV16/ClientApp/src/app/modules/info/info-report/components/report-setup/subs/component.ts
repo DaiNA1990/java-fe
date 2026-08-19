@@ -27,11 +27,11 @@ export class InfoFormReportSetupComponent implements OnInit {
   formControl: FormGroup;
 
   constructor(
-    public service: InfoReportSetupService,
+    public infoReportSetupService: InfoReportSetupService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private changeDetectorRef: ChangeDetectorRef,
+    private formBuilder: FormBuilder
   ) {}
 
   itemChosen(item: any) {
@@ -55,7 +55,7 @@ export class InfoFormReportSetupComponent implements OnInit {
       this.isLoadProperty = true;
       this.dataId = this.formControl.controls['id'].value;
       this.reportSetupName = this.formControl.controls['name'].value;
-      this.cdr.detectChanges();
+      this.changeDetectorRef.detectChanges();
     }, 0);
   }
 
@@ -78,7 +78,7 @@ export class InfoFormReportSetupComponent implements OnInit {
       this.formControl.controls['id'].setValue(null);
 
     const res = await firstValueFrom(
-      this.service.addOrEdit(this.formControl.getRawValue())
+      this.infoReportSetupService.addOrEdit(this.formControl.getRawValue())
     );
     this.messageService.add({
       severity: 'success',
@@ -90,7 +90,7 @@ export class InfoFormReportSetupComponent implements OnInit {
   }
 
   init() {
-    this.formControl = this.fb.group({
+    this.formControl = this.formBuilder.group({
       id: [null, [Validators.nullValidator]],
       name: [null, [Validators.required]],
       code: [null, [Validators.required]],

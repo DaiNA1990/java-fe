@@ -16,13 +16,13 @@ import { UserRoleService } from '../../services/user-role.service';
 })
 export class UserRoleEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserRoleService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userRoleService: UserRoleService,
+        private formBuilder: FormBuilder) {
+        super(userRoleService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    name: [null, [Validators.nullValidator]],
 		    code: [null, [Validators.nullValidator]],

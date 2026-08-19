@@ -13,15 +13,15 @@ export class UserPageListComponent implements OnInit {
 
     @ViewChild(UserPageActionListComponent) addAcionsModal: UserPageActionListComponent;
 
-    constructor(public service: UserPageService,
-        private fb: FormBuilder) { }
+    constructor(public userPageService: UserPageService,
+        private formBuilder: FormBuilder) { }
 
     addActions(pageId: number) {
         this.addAcionsModal.open(pageId);
     }
 
     init() {
-        this.formFilter = this.fb.group({});
+        this.formFilter = this.formBuilder.group({});
     }
 
     ngOnInit(): void {

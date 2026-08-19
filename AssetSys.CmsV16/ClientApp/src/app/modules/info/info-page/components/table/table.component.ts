@@ -11,16 +11,16 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { InfoFormService } from '../../services/info-form.service';
-import { InfoDataService } from '../../services/info-data-service';
+import { InfoDataService } from '../../services/info-data.service';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { FormControl } from '@angular/forms';
-import { EventDataService } from '../../services/event-service';
+import { EventDataService } from '../../services/event-data.service';
 import { cloneDeep } from 'lodash';
 import { BaseFormPage } from '../base.form';
 import { FileService } from '@appkkkh/modules/file/file/file.service';
 import { ResponseCode } from '@appkkkh/core/contants/app.enum';
-import { CategoryService } from '../../services/category-service';
+import { CategoryService } from '../../services/category.service';
 import { evaluateExpression } from '../expression-utils';
 import jsonata from 'jsonata';
 import { saveAs } from 'file-saver';
@@ -28,7 +28,7 @@ import { FormConfig } from '../../services/form-config';
 
 @Component({
   selector: 'app-info-page-table',
-  templateUrl: `./component.html`,
+  templateUrl: `./table.component.html`,
   providers: [
     InfoDataService,
     FileService,
@@ -94,16 +94,16 @@ export class InfoPageTableComponent
   filterConditions: any[] = [];
 
   constructor(
-    public service: InfoFormService,
+    public infoFormService: InfoFormService,
     public infoDataService: InfoDataService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     public categoryService: CategoryService,
     private fileService: FileService,
-    private events: EventDataService,
-    private cdr: ChangeDetectorRef,
-    private renderer: Renderer2,
-    private el: ElementRef,
+    private eventDataService: EventDataService,
+    private changeDetectorRef: ChangeDetectorRef,
+    private renderer2: Renderer2,
+    private elementRef: ElementRef,
   ) {
     super();
   }
@@ -634,7 +634,7 @@ export class InfoPageTableComponent
       await this.getAPIDatatable(obj);
       this.cols = await this.loadCols();
       this.buildHeaderRows();
-      this.cdr.detectChanges();
+      this.changeDetectorRef.detectChanges();
       return;
     }
 
@@ -646,7 +646,7 @@ export class InfoPageTableComponent
     this.itemTotal = res.data.total;
     this.cols = await this.loadCols();
     this.buildHeaderRows();
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
 
     if (
       this.formItem.action !== null &&
@@ -658,7 +658,7 @@ export class InfoPageTableComponent
         .forEach((c: any) => {
           c.rules.forEach((f: any) => {
             const sum = res?.data?.ext?.sum[f.data];
-            this.events.emit({
+            this.eventDataService.emit({
               action: f,
               value: sum,
             });
@@ -669,7 +669,7 @@ export class InfoPageTableComponent
         .forEach((c: any) => {
           c.rules.forEach((f: any) => {
             const max = res?.data?.ext?.max[f.data];
-            this.events.emit({
+            this.eventDataService.emit({
               action: f,
               value: max,
             });
@@ -680,7 +680,7 @@ export class InfoPageTableComponent
         .forEach((c: any) => {
           c.rules.forEach((f: any) => {
             const min = res?.data?.ext?.min[f.data];
-            this.events.emit({
+            this.eventDataService.emit({
               action: f,
               value: min,
             });
@@ -690,7 +690,7 @@ export class InfoPageTableComponent
         .filter((c: any) => c.event === 'TABLE_COUNT')
         .forEach((c: any) => {
           c.rules.forEach((f: any) => {
-            this.events.emit({
+            this.eventDataService.emit({
               action: f,
               value: this.itemTotal,
             });
@@ -701,7 +701,7 @@ export class InfoPageTableComponent
         .filter((c: any) => c.event === 'TABLE_LAST_ROW')
         .forEach((c: any) => {
           c.rules.forEach((f: any) => {
-            this.events.emit({
+            this.eventDataService.emit({
               action: f,
               value: res?.data?.ext?.lastRow,
             });
@@ -920,7 +920,7 @@ export class InfoPageTableComponent
       return;
     }
 
-    this.events.emit({
+    this.eventDataService.emit({
       action: JSON.parse(item.action).rules.find(
         (c: any) => c.action === 'CLICK',
       ),
@@ -962,7 +962,7 @@ export class InfoPageTableComponent
         }
         this.toggleLoading(true);
         await this.deleteRowSubmit(data.dataId, this.formItem.layout.code, data);
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
         this.getDataTable();
         this.toggleLoading(false);
       },
@@ -1033,7 +1033,7 @@ export class InfoPageTableComponent
             )
           );
         }
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
         this.getDataTable();
         this.toggleLoading(false);
       },
@@ -1081,7 +1081,7 @@ export class InfoPageTableComponent
         (r: any) =>
           r.action === 'POST_ACTION' && r.event !== 'FORM_UPDATE_FIELD',
       ))
-        this.events.emit({
+        this.eventDataService.emit({
           action: r,
           control: dataAction.control,
         });
@@ -1142,7 +1142,7 @@ export class InfoPageTableComponent
           }),
         );
 
-        this.cdr.detectChanges();
+        this.changeDetectorRef.detectChanges();
 
         this.getDataTable();
         this.toggleLoading(false);
@@ -1161,7 +1161,7 @@ export class InfoPageTableComponent
       return;
     }
     this.toggleLoading(true);
-    this.events.emit({
+    this.eventDataService.emit({
       action: dataAction.action.rules.find(
         (c: any) => c.action === 'TABLE_ON_RECEIVE',
       ),
@@ -1273,7 +1273,7 @@ export class InfoPageTableComponent
     for (const action of dataAction.action.rules.filter(
       (c: any) => c.action === 'TABLE_ON_RECEIVE',
     ))
-      this.events.emit({ action: action });
+      this.eventDataService.emit({ action: action });
 
     this.toggleLoading(false);
   }
@@ -1347,18 +1347,18 @@ export class InfoPageTableComponent
       life: 3000,
     });
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
 
     this.getDataTable();
   }
 
   async importExcel(dataAction: any) {
-    let fileInput = this.renderer.createElement('input');
-    this.renderer.setAttribute(fileInput, 'type', 'file');
-    this.renderer.setAttribute(fileInput, 'accept', '.xlsx,.xls'); // ✅ chỉ cho chọn Excel
-    this.renderer.setStyle(fileInput, 'display', 'none');
+    let fileInput = this.renderer2.createElement('input');
+    this.renderer2.setAttribute(fileInput, 'type', 'file');
+    this.renderer2.setAttribute(fileInput, 'accept', '.xlsx,.xls'); // ✅ chỉ cho chọn Excel
+    this.renderer2.setStyle(fileInput, 'display', 'none');
 
-    this.renderer.listen(fileInput, 'change', (event: any) => {
+    this.renderer2.listen(fileInput, 'change', (event: any) => {
       const file = event.target.files[0];
 
       if (!file) return;
@@ -1410,17 +1410,17 @@ export class InfoPageTableComponent
         }
       });
 
-      this.renderer.removeChild(this.el.nativeElement, fileInput);
+      this.renderer2.removeChild(this.elementRef.nativeElement, fileInput);
       fileInput = null;
     });
 
-    this.renderer.appendChild(this.el.nativeElement, fileInput);
+    this.renderer2.appendChild(this.elementRef.nativeElement, fileInput);
     fileInput.click();
   }
 
   toggleLoading(isLoading: boolean) {
     this.isOnSubmit = isLoading;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   async importExcelSubmit(filename: string, dataAction: any = null) {
@@ -1453,7 +1453,7 @@ export class InfoPageTableComponent
           for (const action of dataAction.action.rules.filter(
             (r: any) => r.action === 'FORM_ON_SUBMIT',
           ))
-            this.events.emit({
+            this.eventDataService.emit({
               action: action,
               dataId: this.parentData?.id,
               value: action.event == 'FORM_SET_VALUE' ? this.parentData : null,
@@ -1663,27 +1663,40 @@ export class InfoPageTableComponent
 
         const label = paths[i][level];
 
+        // Cell là cột thật (leaf) khi đây là đoạn cuối trong path, còn lại là
+        // group header. Group header luôn rowspan = 1, nên KHÔNG được suy
+        // "là group header" từ rowspan > 1 — leaf ở tầng trên cũng rowspan > 1.
+        const isLeaf = paths[i].length === level + 1;
+
         let j = i + 1;
 
-        while (
-          j < paths.length &&
-          paths[j][level] === label &&
-          this.sameHeaderParent(paths[i], paths[j], level)
-        ) {
-          j++;
+        // Chỉ group header mới gộp colspan. Hai cột lá trùng tên nhau là hai
+        // cột khác nhau, gộp lại sẽ mất một <th> và lệch cột so với body.
+        if (!isLeaf) {
+          while (
+            j < paths.length &&
+            paths[j].length > level + 1 &&
+            paths[j][level] === label &&
+            this.sameHeaderParent(paths[i], paths[j], level)
+          ) {
+            j++;
+          }
         }
 
         const colspan = j - i;
 
-        const rowspan =
-          paths[i].length === level + 1
-            ? this.headerDepth - level
-            : 1;
+        const rowspan = isLeaf ? this.headerDepth - level : 1;
 
         this.headerRows[level].push({
           label,
           colspan,
           rowspan,
+          isLeaf,
+
+          // chỉ leaf mới sort được; '' = không sort
+          sortField: isLeaf
+            ? String(this.cols[i].property?.code ?? '')
+            : '',
 
           // Lưu vị trí column để lấy col tương ứng
           startIndex: i,
@@ -1716,7 +1729,7 @@ export class InfoPageTableComponent
 
   ngOnInit(): void {
     this.infoDataService.setPath(this.initPath(this.formItem));
-    this.service.setPath(this.initPath(this.formItem));
+    this.infoFormService.setPath(this.initPath(this.formItem));
     this.categoryService.setPath(this.initPath(this.formItem));
     this.fileService.setPath(this.initPath(this.formItem));
     this.parentGroupId = this.formItem.layout.groupParentId;
@@ -1724,7 +1737,7 @@ export class InfoPageTableComponent
       (x: any) => x.isShow === true && this.checkIsDisplay(x, x),
     );
     this.subscriptions.push(
-      this.events.event.subscribe((data: any) => {
+      this.eventDataService.event.subscribe((data: any) => {
         this.parentData = data.parentData || this.parentData;
 
         if (
@@ -1788,7 +1801,7 @@ export class InfoPageTableComponent
       this.formItem.action.indexOf('TABLE_ON_INIT') > -1
     ) {
       const dataAction = JSON.parse(this.formItem.action);
-      this.events.emit({
+      this.eventDataService.emit({
         action: dataAction.rules.find((c: any) => c.action === 'TABLE_ON_INIT'),
         data: this.formItem.code,
         value: this.parentData,

@@ -16,13 +16,13 @@ import { UserRolePageActionMapService } from '../../services/user-role-page-acti
 })
 export class UserRolePageActionMapEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserRolePageActionMapService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userRolePageActionMapService: UserRolePageActionMapService,
+        private formBuilder: FormBuilder) {
+        super(userRolePageActionMapService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    roleId: [null, [Validators.nullValidator]],
 		    pageActionId: [null, [Validators.nullValidator]],

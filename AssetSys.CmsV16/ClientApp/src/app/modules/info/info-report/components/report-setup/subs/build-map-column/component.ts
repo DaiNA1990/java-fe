@@ -115,14 +115,13 @@ export class InfoFormReportBuildMapColumnComponent implements OnInit {
     },
   ];
   constructor(
-    public service: InfoFormService,
-    public propertyService: InfoPropertyService,
-    public formService: InfoFormService,
-    public layoutService: InfoLayoutService,
+    public infoPropertyService: InfoPropertyService,
+    public infoFormService: InfoFormService,
+    public infoLayoutService: InfoLayoutService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef,
-    private fb: FormBuilder
+    private changeDetectorRef: ChangeDetectorRef,
+    private formBuilder: FormBuilder
   ) {}
   //private parent: any = inject(InfoReportDesignComponent, { optional: true });
   addMapColumn(e: any) {
@@ -151,14 +150,14 @@ export class InfoFormReportBuildMapColumnComponent implements OnInit {
 
   open() {
     this.visible = true;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   save() {
     this.formCtrl.setValue(JSON.stringify(this.dataMapColumns));
     this.value = this.formCtrl.value;
     //this.parent.reload(JSON.stringify(this.dataMapColumns));
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
     this.visible = false;
   }
   valueChange(newVal: any) {
@@ -172,7 +171,7 @@ export class InfoFormReportBuildMapColumnComponent implements OnInit {
       }
     } catch (error) {}
 
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
   }
 
   ngOnInit(): void {

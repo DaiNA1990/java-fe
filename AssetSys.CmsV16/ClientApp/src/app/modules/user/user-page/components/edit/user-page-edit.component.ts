@@ -16,13 +16,13 @@ import { UserPageService } from '../../services/user-page.service';
 })
 export class UserPageEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserPageService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userPageService: UserPageService,
+        private formBuilder: FormBuilder) {
+        super(userPageService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    parentId: [null, [Validators.nullValidator]],
 		    name: [null, [Validators.required]],

@@ -16,13 +16,13 @@ import { UserConnectionService } from '../../services/user-connection.service';
 })
 export class UserConnectionEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserConnectionService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userConnectionService: UserConnectionService,
+        private formBuilder: FormBuilder) {
+        super(userConnectionService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    typeId: [null, [Validators.nullValidator]],
 		    userId: [null, [Validators.nullValidator]],

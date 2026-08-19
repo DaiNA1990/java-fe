@@ -12,11 +12,11 @@ export class ResourceInfoListComponent implements OnInit {
 
     formFilter: FormGroup;
 
-    constructor(public service: ResourceInfoService,
-        private fb: FormBuilder) { }
+    constructor(public resourceInfoService: ResourceInfoService,
+        private formBuilder: FormBuilder) { }
 
     init() {
-        this.formFilter = this.fb.group({
+        this.formFilter = this.formBuilder.group({
             parentCode: [this.parentCode, Validators.nullValidator]
         });
     }

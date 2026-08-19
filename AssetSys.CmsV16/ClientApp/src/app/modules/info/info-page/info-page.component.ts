@@ -62,29 +62,29 @@ export class InfoPageComponent extends BaseFormPage implements OnInit, OnDestroy
   }
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
-    public service: InfoLayoutService,
-    private cdr: ChangeDetectorRef,
-    private auth: AuthService
+    public infoLayoutService: InfoLayoutService,
+    private changeDetectorRef: ChangeDetectorRef,
+    protected override authService: AuthService
   ) {
     super();
   }
 
   async getData() {
-    this.layoutId = this.route.snapshot.params['layoutId'];
+    this.layoutId = this.activatedRoute.snapshot.params['layoutId'];
     const res = await firstValueFrom(
-      this.service.getById({ id: this.layoutId })
+      this.infoLayoutService.getById({ id: this.layoutId })
     );
     this.layout = res.data;
-    this.cdr.detectChanges();
+    this.changeDetectorRef.detectChanges();
     const el = document.querySelector('.app-main') as HTMLElement;
     el.style.position = '';
   }
 
   async getUserInfo() {
-    this.auth.applyLayoutRoles(this.layout.group.pathCode);
-    this.cdr.detectChanges();
+    this.authService.applyLayoutRoles(this.layout.group.pathCode);
+    this.changeDetectorRef.detectChanges();
   }
 
   showLoader() {
@@ -95,7 +95,7 @@ export class InfoPageComponent extends BaseFormPage implements OnInit, OnDestroy
 
     if (this.layout !== null) {
       this.layout = null;
-      this.cdr.detectChanges();
+      this.changeDetectorRef.detectChanges();
     }
   }
 
@@ -119,7 +119,7 @@ export class InfoPageComponent extends BaseFormPage implements OnInit, OnDestroy
   //   }));
   // }
   async ngOnInit(): Promise<void> {
-    //this.service.setPath(this.initPath(formItem));
+    //this.infoLayoutService.setPath(this.initPath(formItem));
     await this.getData();
     await this.getUserInfo();
     if (this.currentUser == null || this.layout == null)

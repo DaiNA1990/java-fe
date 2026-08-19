@@ -16,13 +16,13 @@ import { InfoValueService } from '../../services/info-value.service';
 })
 export class InfoValueEditComponent extends NbDialogBaseComponent {
 
-    constructor(public service: InfoValueService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public infoValueService: InfoValueService,
+        private formBuilder: FormBuilder) {
+        super(infoValueService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    dataId: [null, [Validators.nullValidator]],
 		    propertyId: [null, [Validators.nullValidator]],

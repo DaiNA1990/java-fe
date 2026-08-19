@@ -16,13 +16,13 @@ import { UserNotifyService } from '../../services/user-notify.service';
 })
 export class UserNotifyDetailComponent extends NbDialogBaseComponent {
 
-    constructor(public service: UserNotifyService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public userNotifyService: UserNotifyService,
+        private formBuilder: FormBuilder) {
+        super(userNotifyService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    userId: [null, [Validators.nullValidator]],
 		    typeId: [null, [Validators.nullValidator]],

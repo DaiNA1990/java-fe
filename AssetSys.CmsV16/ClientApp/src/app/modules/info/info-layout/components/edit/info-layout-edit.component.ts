@@ -29,13 +29,13 @@ export class InfoLayoutEditComponent extends NbDialogBaseComponent {
         }
     ]
 
-    constructor(public service: InfoLayoutService,
-        private fb: FormBuilder) {
-        super(service);
+    constructor(public infoLayoutService: InfoLayoutService,
+        private formBuilder: FormBuilder) {
+        super(infoLayoutService);
     }
 
     buildForm() {
-        this.form = this.fb.group({
+        this.form = this.formBuilder.group({
 		    id: [null, [Validators.nullValidator]],
 		    groupId: [this.groupId, [Validators.nullValidator]],
 		    typeId: [null, [Validators.nullValidator]],
