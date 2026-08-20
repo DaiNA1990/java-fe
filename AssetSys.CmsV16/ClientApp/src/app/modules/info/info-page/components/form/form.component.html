@@ -137,7 +137,10 @@
 
 <ng-template #tabControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <p-scrollPanel class="w-full mx-2" *ngIf="(loadFormSubject | async) === false">
-    <p-tabView>
+    <p-tabView
+      [activeIndex]="getTabActiveIndex(item)"
+      (activeIndexChange)="tabActiveIndex[item.id] = $event"
+    >
       <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
         <p-tabPanel [header]="control.name">
           <ng-container *ngFor="let tp of filterByParent(control); trackBy: trackByFn">

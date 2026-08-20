@@ -47,54 +47,7 @@ dayjs.extend(duration);
 @Component({
   selector: 'app-info-page-form',
   templateUrl: `./form.component.html`,
-  styles: [
-    `
-      ::ng-deep {
-        .p-tabview-nav-link {
-          color: rgb(0, 107, 104);
-          text-decoration: none !important;
-        }
-        .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
-          border-color: rgb(0, 107, 104);
-        }
-        .p-radiobutton
-          .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
-          border-color: rgb(0, 107, 104) !important;
-        }
-        .p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
-          border-color: rgb(0, 107, 104) !important;
-        }
-        .p-radiobutton .p-radiobutton-box.p-highlight {
-          border-color: rgb(0, 107, 104) !important;
-          background: rgb(0, 107, 104) !important;
-        }
-        .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
-          border-color: #004f4d !important;
-          background: #004f4d !important;
-        }
-        .p-checkbox .p-checkbox-box.p-highlight {
-          border-color: rgb(0, 107, 104) !important;
-          background: rgb(0, 107, 104) !important;
-        }
-        .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
-          border-color: rgb(0, 107, 104) !important;
-        }
-        .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
-          border-color: rgb(0, 107, 104) !important;
-        }
-        .p-checkbox:not(.p-checkbox-disabled)
-          .p-checkbox-box.p-highlight:hover {
-          border-color: #004f4d !important;
-          background: #004f4d !important;
-        }
-        input.p-inputtext[disabled],
-        .dropzone.dropzone-queue .dropzone-item,
-        textarea[disabled] {
-          background-color: #e8e8e8 !important;
-        }
-      }
-    `,
-  ],
+  styleUrls: ['./form.component.scss'],
   providers: [
     InfoDataService,
     CategoryService,
@@ -145,6 +98,9 @@ export class InfoPageFormComponent
   loadFormSubject = new BehaviorSubject<boolean>(true);
 
   funcGetChild: Function;
+
+  /** activeIndex của từng control loại `tab`, key theo id của control. */
+  tabActiveIndex: { [id: number]: number } = {};
 
   funcModalDirty: Function;
   funcModalSubmit: Function;
@@ -1509,12 +1465,16 @@ export class InfoPageFormComponent
           errors: control.errors,
         }));
       console.log('invalidControlNames', invalidControlNames);
+      const firstInvalid = this.findFirstInvalidControl();
       this.messageService.add({
         severity: 'warn',
         summary: 'Thông báo',
-        detail: 'Vui lòng nhập đúng các trường thông tin',
+        detail: firstInvalid?.name
+          ? `Vui lòng kiểm tra lại trường "${firstInvalid.name}"`
+          : 'Vui lòng nhập đúng các trường thông tin',
         life: 3000,
       });
+      this.focusControl(firstInvalid);
       return false;
     }
     if (
@@ -1549,6 +1509,70 @@ export class InfoPageFormComponent
 
     return true;
   }
+  /** activeIndex hiện tại của một control loại `tab` (mặc định tab đầu). */
+  getTabActiveIndex(item: any): number {
+    return this.tabActiveIndex[item.id] ?? 0;
+  }
+
+  /**
+   * Control invalid đầu tiên theo đúng thứ tự người dùng nhìn thấy: đi sâu theo
+   * cây control (filterByParent đã sort displayOrder và bỏ control đang ẩn), chứ
+   * không duyệt this.form.controls vì thứ tự trong FormGroup là thứ tự dựng
+   * control, không phải thứ tự hiển thị.
+   */
+  findFirstInvalidControl(parent: any = null): any {
+    for (const item of this.filterByParent(parent)) {
+      if (this.form.get(this.getControlName(item))?.invalid === true) return item;
+      const child = this.findFirstInvalidControl(item);
+      if (child) return child;
+    }
+    return null;
+  }
+
+  /**
+   * Mở các tab đang chứa control (kể cả tab lồng tab), rồi focus + cuộn tới nó.
+   *
+   * p-tabPanel không hoạt động thì nội dung vẫn render nhưng bị display:none nên
+   * focus() không có tác dụng — phải đổi activeIndex trước, chờ Angular render
+   * xong mới focus được.
+   */
+  focusControl(item: any) {
+    if (!item) return;
+
+    let current = item;
+    while (current) {
+      const parent = this.forms.find((f: any) => f.id === current.parentId);
+      if (!parent) break;
+      if (parent.controlType === 'tab') {
+        const index = this.filterByParent(parent).findIndex(
+          (p: any) => p.id === current.id
+        );
+        if (index >= 0) this.tabActiveIndex[parent.id] = index;
+      }
+      current = parent;
+    }
+
+    this.changeDetectorRef.detectChanges();
+
+    setTimeout(() => {
+      const host = this.elementRef.nativeElement as HTMLElement;
+      // Angular gắn class ng-invalid lên chính element/host component giữ control,
+      // nên cách này chạy được cho cả input thuần và component CVA tự viết
+      const invalid = Array.from(
+        host.querySelectorAll<HTMLElement>('.ng-invalid')
+      ).find((el) => el.offsetParent !== null);
+      if (!invalid) return;
+
+      const selector = 'input,textarea,select,button,[tabindex]';
+      const target = invalid.matches(selector)
+        ? invalid
+        : invalid.querySelector<HTMLElement>(selector) ?? invalid;
+
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.focus?.();
+    });
+  }
+
   showIsloading(isShow: boolean) {
     this.isOnSubmit = isShow;
     this.changeDetectorRef.detectChanges();

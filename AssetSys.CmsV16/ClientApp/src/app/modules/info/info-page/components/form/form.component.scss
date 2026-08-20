@@ -1,0 +1,105 @@
+/* Màu chủ đạo của theme BIDV, dùng ghi đè lại màu xanh mặc định của PrimeNG */
+$primary: rgb(0, 107, 104);
+$primary-dark: #004f4d;
+
+/* Đúng màu viền invalid mà theme lara-light-blue đang dùng, để control do ta ghi
+   đè trông giống các control theme tự tô */
+$invalid-border: #e24c4c;
+
+::ng-deep {
+  .p-tabview-nav-link {
+    color: $primary;
+    text-decoration: none !important;
+  }
+  .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+    border-color: $primary;
+  }
+  .p-radiobutton .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
+    border-color: $primary !important;
+  }
+  .p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
+    border-color: $primary !important;
+  }
+  .p-radiobutton .p-radiobutton-box.p-highlight {
+    border-color: $primary !important;
+    background: $primary !important;
+  }
+  .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
+    border-color: $primary-dark !important;
+    background: $primary-dark !important;
+  }
+  .p-checkbox .p-checkbox-box.p-highlight {
+    border-color: $primary !important;
+    background: $primary !important;
+  }
+  .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
+    border-color: $primary !important;
+  }
+  .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+    border-color: $primary !important;
+  }
+  .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
+    border-color: $primary-dark !important;
+    background: $primary-dark !important;
+  }
+  input.p-inputtext[disabled],
+  .dropzone.dropzone-queue .dropzone-item,
+  textarea[disabled] {
+    background-color: #e8e8e8 !important;
+  }
+}
+
+/**
+ * Viền đỏ cho control không hợp lệ.
+ *
+ * theme.css của PrimeNG chỉ tô viền khi control có ĐỦ `.ng-dirty.ng-invalid`
+ * (vd `p-calendar.ng-dirty.ng-invalid > .p-calendar > .p-inputtext`). Khi submit
+ * mà người dùng chưa gõ gì thì control là `ng-pristine.ng-touched` — không rule
+ * nào khớp nên trường bắt buộc chỉ hiện dòng chữ đỏ mà không có viền.
+ *
+ * Ở đây lặp lại đúng bộ selector của theme cho cả `.ng-touched`, kèm p-dropdown
+ * (theme bản này chỉ có `.p-dropdown.p-invalid.p-component`, tức là chờ app tự
+ * gắn class `p-invalid`, nên dropdown không bao giờ đỏ).
+ *
+ * `box-shadow: none` để control đang lỗi bỏ luôn quầng sáng xanh của trạng thái
+ * focus, chỉ còn một màu đỏ.
+ */
+$invalid-states: '.ng-invalid.ng-touched', '.ng-invalid.ng-dirty';
+
+:host ::ng-deep {
+  @each $state in $invalid-states {
+    input.p-inputtext#{$state},
+    textarea.p-inputtext#{$state},
+    textarea.form-control#{$state},
+    input.form-control#{$state} {
+      border-color: $invalid-border;
+      box-shadow: none;
+    }
+
+    p-dropdown#{$state} > .p-dropdown,
+    p-multiselect#{$state} > .p-multiselect,
+    p-cascadeselect#{$state} > .p-cascadeselect,
+    p-treeselect#{$state} > .p-treeselect,
+    p-listbox#{$state} > .p-listbox,
+    p-inputswitch#{$state} > .p-inputswitch {
+      border-color: $invalid-border;
+      box-shadow: none;
+    }
+
+    p-calendar#{$state} > .p-calendar > .p-inputtext,
+    p-inputnumber#{$state} > .p-inputnumber > .p-inputtext,
+    p-autocomplete#{$state} > .p-autocomplete > .p-inputtext,
+    p-chips#{$state} > .p-chips > .p-inputtext,
+    p-inputmask#{$state} > .p-inputtext,
+    p-password#{$state} > .p-password > .p-inputtext {
+      border-color: $invalid-border;
+      box-shadow: none;
+    }
+
+    p-checkbox#{$state} > .p-checkbox > .p-checkbox-box,
+    p-radiobutton#{$state} > .p-radiobutton > .p-radiobutton-box {
+      border-color: $invalid-border;
+      box-shadow: none;
+    }
+  }
+}
