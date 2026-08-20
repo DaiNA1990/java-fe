@@ -34,6 +34,13 @@ export interface FormConfig {
 
   identifyId: string | null;
   readOnly: any;
+
+  /**
+   * Modal (InfoPageModalComponent) đang chứa form này, kể cả lồng nhiều cấp.
+   * Form con dùng để tự đăng ký, nhờ đó modal biết được dữ liệu trong nó đã bị
+   * sửa hay chưa và tìm được nút submit — vì mỗi form là một FormGroup riêng.
+   */
+  ownerModal: any | null;
 }
 
 /**

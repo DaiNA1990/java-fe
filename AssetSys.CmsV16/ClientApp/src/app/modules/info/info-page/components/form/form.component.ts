@@ -41,7 +41,7 @@ import { dateUtil } from '../../components/date-util';
 import duration from 'dayjs/plugin/duration';
 import dayjs from 'dayjs';
 import { ulid } from 'ulid';
-import { FormConfig, keepConfig } from '../../services/form-config';
+import { FormConfig, keepConfig } from '../../services/form-config.service';
 import { environment } from '@srckkkh/environments/environment';
 dayjs.extend(duration);
 @Component({
@@ -114,12 +114,15 @@ export class InfoPageFormComponent
   identifyId: string | null | undefined;
   readOnly: any;
 
+  /** Modal đang chứa form này (nếu có) — xem FormConfig.ownerModal. */
+  ownerModal: any = null;
+
   // dữ liệu thô của form cha, dùng trong buildControls sau khi biết group của mình
   passGroupId: number | null;
   passDataId: number | null;
   passParentId: number | null;
 
-  // gom các @Input trên vào 1 object; xem form-config.ts về lý do phải memo hoá
+  // gom các @Input trên vào 1 object; xem form-config.service.ts về lý do phải memo hoá
   @Input() set config(v: FormConfig) {
     if (!v) return;
     this.layoutModule = v.layoutModule;
@@ -131,6 +134,7 @@ export class InfoPageFormComponent
     this.passParentId = v.passParentId;
     this.identifyId = v.identifyId;
     this.readOnly = v.readOnly;
+    this.ownerModal = v.ownerModal ?? null;
     // `??` để config không xoá formType mà FORM_REFRESH đã gán trước đó
     this.formType = v.formType ?? this.formType;
   }
@@ -141,6 +145,10 @@ export class InfoPageFormComponent
   loadFormSubject = new BehaviorSubject<boolean>(true);
 
   funcGetChild: Function;
+
+  funcModalDirty: Function;
+  funcModalSubmit: Function;
+  funcModalPristine: Function;
 
   form: FormGroup;
 
@@ -652,6 +660,84 @@ export class InfoPageFormComponent
     return child;
   }
 
+  /** Lấy toàn bộ control con (đệ quy) của một control, dùng cho modal. */
+  getDescendantControls(parent: any): any[] {
+    if (parent === undefined || parent === null) return [];
+    const result: any[] = [];
+    const stack = this.forms.filter((x) => x.parentId === parent.id);
+    while (stack.length > 0) {
+      const item = stack.pop();
+      result.push(item);
+      stack.push(...this.forms.filter((x) => x.parentId === item.id));
+    }
+    return result.sort((a, b) => a.displayOrder - b.displayOrder);
+  }
+
+  getControlName(item: any) {
+    return item.property === undefined ||
+      item.property === null ||
+      item.property?.code === ''
+      ? item.code
+      : item.property.code;
+  }
+
+  /** Người dùng đã sửa dữ liệu của control nào trong modal chưa. */
+  isModalDirty(modalItem: any): boolean {
+    return this.getDescendantControls(modalItem).some(
+      (item: any) => this.form.get(this.getControlName(item))?.dirty === true
+    );
+  }
+
+  /** Xoá cờ dirty của các control trong modal (gọi khi mở modal). */
+  markModalPristine(modalItem: any) {
+    this.getDescendantControls(modalItem).forEach((item: any) =>
+      this.form.get(this.getControlName(item))?.markAsPristine()
+    );
+  }
+
+  /** Nút được cấu hình FORM_SUBMIT đầu tiên trong danh sách control. */
+  findSubmitButton(items: any[]) {
+    return items.find((item: any) => {
+      if (item.controlType != 'button' || !item.action) return false;
+      try {
+        return JSON.parse(item.action).rules.some(
+          (r: any) => r.event === 'FORM_SUBMIT'
+        );
+      } catch (ex) {
+        return false;
+      }
+    });
+  }
+
+  /** Tìm nút submit cấu hình trong modal và bắn action như khi người dùng bấm nút. */
+  submitFromModal(modalItem: any): boolean {
+    const btn = this.findSubmitButton(this.getDescendantControls(modalItem));
+    if (!btn) return false;
+    this.emitControlActions(btn);
+    return true;
+  }
+
+  /**
+   * API cho modal chứa form này (form lồng có FormGroup riêng nên modal không tự
+   * kiểm tra được).
+   */
+  isFormDirty(): boolean {
+    return this.form.dirty;
+  }
+
+  markOwnPristine() {
+    this.form.markAsPristine();
+  }
+
+  submitOwnForm(): boolean {
+    const btn = this.findSubmitButton(
+      [...this.forms].sort((a, b) => a.displayOrder - b.displayOrder)
+    );
+    if (!btn) return false;
+    this.emitControlActions(btn);
+    return true;
+  }
+
   getControl(item: any): FormControl {
     return (
       (this.form.get(
@@ -990,6 +1076,9 @@ export class InfoPageFormComponent
     try {
       await this.buildForm(dataId, initValue, cloneValue);
     } finally {
+      // dữ liệu vừa nạp xong thì coi như chưa ai sửa: các giá trị do expression /
+      // defaultValue / control tự normalize gán vào không được tính là thay đổi
+      this.form.markAsPristine();
       this.loadFormSubject.next(false);
       this.changeDetectorRef.detectChanges();
       // menu dropdown của Metronic cần DOM đã render mới gắn được handler
@@ -1355,18 +1444,22 @@ export class InfoPageFormComponent
             });
         },
       });
-    else
-      for (const action of JSON.parse(item.action).rules.filter(
-        (c: any) => c.action != 'POST_ACTION'
-      ))
-        this.eventDataService.emit({
-          action: action,
-          control: item,
-          forms: this.forms,
-          value: this.valueTransform,
-          parentData: this.parentData,
-          groupId: this.groupId,
-        });
+    else this.emitControlActions(item);
+  }
+
+  /** Bắn toàn bộ action (trừ POST_ACTION) của một control, không hỏi lại xác nhận. */
+  emitControlActions(item: any) {
+    for (const action of JSON.parse(item.action).rules.filter(
+      (c: any) => c.action != 'POST_ACTION'
+    ))
+      this.eventDataService.emit({
+        action: action,
+        control: item,
+        forms: this.forms,
+        value: this.valueTransform,
+        parentData: this.parentData,
+        groupId: this.groupId,
+      });
   }
 
   reset(control: any) {
@@ -1604,6 +1697,7 @@ export class InfoPageFormComponent
       detail: res.message,
       life: 3000,
     });
+    this.form.markAsPristine();
     for (const action of actionData.action.rules.filter(
       (r: any) => r.action === 'FORM_ON_SUBMIT'
     ))
@@ -2655,6 +2749,7 @@ export class InfoPageFormComponent
       formType: modal?.formType ?? this.formType,
       identifyId: this.identifyId || null,
       readOnly: item.readOnly,
+      ownerModal: modal ?? this.ownerModal,
     });
     this.formConfigCache.set(item.id, config);
     return config;
@@ -2687,6 +2782,8 @@ export class InfoPageFormComponent
       identifyId: this.identifyId || null,
       // để table ẩn nút thao tác trong row khi form đang ở chế độ chỉ xem
       readOnly: formType === 'VIEW' || this.isViewMode,
+      // table tự mở modal riêng cho từng row, không thuộc modal đang chứa nó
+      ownerModal: null,
     });
     this.tableConfigCache.set(item.id, config);
     return config;
@@ -2740,6 +2837,7 @@ export class InfoPageFormComponent
   }
 
   ngOnDestroy(): void {
+    this.ownerModal?.unregisterChildForm(this);
     this.subscriptions.forEach((el) => el.unsubscribe());
   }
 
@@ -2774,6 +2872,10 @@ export class InfoPageFormComponent
 
   ngOnInit(): void {
     this.funcGetChild = this.getAllChildControl.bind(this);
+    this.funcModalDirty = this.isModalDirty.bind(this);
+    this.funcModalSubmit = this.submitFromModal.bind(this);
+    this.funcModalPristine = this.markModalPristine.bind(this);
+    this.ownerModal?.registerChildForm(this);
     this.init();
     this.buildControls();
     this.subscriptions.push(

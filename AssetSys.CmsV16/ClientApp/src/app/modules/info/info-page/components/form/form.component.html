@@ -262,6 +262,9 @@
     [formItem]="item"
     [formCtrl]="formCtrl"
     [body]="modalBodyTmpl"
+    [funcCheckDirty]="funcModalDirty"
+    [funcSubmit]="funcModalSubmit"
+    [funcMarkPristine]="funcModalPristine"
     [parentData]="parentData || value"
   >
     <!-- modalRef.dataId/formType được gán trước khi modal open() nên form bên trong nhận ngay ở ngOnInit -->

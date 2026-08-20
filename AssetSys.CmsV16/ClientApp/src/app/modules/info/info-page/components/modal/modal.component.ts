@@ -11,7 +11,11 @@ import {
 import { FormControl } from '@angular/forms';
 import { EventDataService } from '../../services/event-data.service';
 import { Subscription } from 'rxjs';
-import { ConfirmationService } from 'primeng/api';
+import {
+  ConfirmationService,
+  ConfirmEventType,
+  MessageService,
+} from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
@@ -26,6 +30,13 @@ export class InfoPageModalComponent implements OnInit, OnDestroy {
   @Input() body: TemplateRef<any>;
   @Input() parentData: any;
 
+  /** form.component.isModalDirty - kiểm tra người dùng đã sửa dữ liệu trong modal chưa */
+  @Input() funcCheckDirty: Function;
+  /** form.component.submitFromModal - bắn action của nút submit cấu hình trong modal */
+  @Input() funcSubmit: Function;
+  /** form.component.markModalPristine - reset cờ dirty khi mở modal */
+  @Input() funcMarkPristine: Function;
+
   dataId: any;
   initValue: any;
   groupId: any;
@@ -39,8 +50,26 @@ export class InfoPageModalComponent implements OnInit, OnDestroy {
 
   private modalRef: NgbModalRef;
 
+  private isConfirming = false;
+
+  /**
+   * Các InfoPageFormComponent nằm trong modal này (control loại `layout`), tự
+   * đăng ký qua FormConfig.ownerModal. Mỗi form là một FormGroup riêng nên form
+   * cha không thấy được dirty của chúng.
+   */
+  private childForms: any[] = [];
+
+  registerChildForm(form: any) {
+    if (this.childForms.indexOf(form) < 0) this.childForms.push(form);
+  }
+
+  unregisterChildForm(form: any) {
+    this.childForms = this.childForms.filter((f) => f !== form);
+  }
+
   constructor(
     private confirmationService: ConfirmationService,
+    private messageService: MessageService,
     private eventDataService: EventDataService,
     private changeDetectorRef: ChangeDetectorRef,
     private ngbModal: NgbModal
@@ -99,33 +128,11 @@ export class InfoPageModalComponent implements OnInit, OnDestroy {
         backdropClass: 'modal-backdrop-z999',
         modalDialogClass:
           'w' + (this.formItem.size < 90 ? this.formItem.size : 90),
-        beforeDismiss: () => {
-          return new Promise((resolve, reject) => {
-            if (this.formItem.message != null && this.formItem.message != '')
-              this.confirmationService.confirm({
-                message: this.formItem.message ?? 'Bạn chưa lưu dữ liệu, bạn có muốn thoát không?',
-                header: 'Xác nhận',
-                icon: 'pi pi-exclamation-triangle',
-                acceptIcon: 'none',
-                acceptLabel: 'Đồng ý',
-                rejectIcon: 'none',
-                rejectLabel: 'Quay lại',
-                rejectButtonStyleClass: 'p-button-text',
-                accept: () => {
-                  resolve(true);
-                },
-                reject: () => {
-                  resolve(false);
-                },
-              });
-            else {
-              resolve(true);
-            }
-          });
-        },
+        beforeDismiss: () => this.confirmBeforeClose(),
       });
 
       this.modalRef.shown.subscribe(() => {
+        this.markPristine();
         this.onShow(this.modalRef);
         this.changeDetectorRef.detectChanges();
       });
@@ -139,24 +146,81 @@ export class InfoPageModalComponent implements OnInit, OnDestroy {
     });
   }
 
-  close() {
-    this.dataId = null;
-    if (this.formItem.message != null && this.formItem.message != '')
-        this.confirmationService.confirm({
-          message: this.formItem.message ?? 'Bạn chưa lưu dữ liệu, bạn có muốn thoát không?',
-          header: 'Xác nhận',
-          icon: 'pi pi-exclamation-triangle',
-          acceptIcon: 'none',
-          acceptLabel: 'Đồng ý',
-          rejectIcon: 'none',
-          rejectLabel: 'Quay lại',
-          rejectButtonStyleClass: 'p-button-text',
-          accept: () => {
-            this.modalRef.close();
-          }
-        });
-    else
-      this.modalRef.close();
+  async close() {
+    debugger
+    if (this.modalRef === undefined || this.modalRef === null) return;
+    if (await this.confirmBeforeClose()) this.modalRef.close();
+  }
+
+  /**
+   * Hỏi trước khi đóng modal:
+   * - Form chưa sửa gì -> đóng luôn.
+   * - Đã sửa -> "Lưu" (gọi submit, modal do FORM_ON_SUBMIT đóng lại),
+   *   "Không lưu" -> đóng, X/ESC -> ở lại.
+   */
+  private confirmBeforeClose(): Promise<boolean> {
+    if (this.isConfirming) return Promise.resolve(false);
+
+    const isDirty =
+      (this.funcCheckDirty !== undefined &&
+        this.funcCheckDirty !== null &&
+        this.funcCheckDirty(this.formItem) === true) ||
+      this.childForms.some((f) => f.isFormDirty() === true);
+
+    if (!isDirty) return Promise.resolve(true);
+
+    this.isConfirming = true;
+
+    return new Promise<boolean>((resolve) => {
+      const done = (result: boolean) => {
+        this.isConfirming = false;
+        resolve(result);
+      };
+
+      this.confirmationService.confirm({
+        message:
+          this.formItem.message != null && this.formItem.message != ''
+            ? this.formItem.message
+            : 'Bạn chưa lưu dữ liệu, bạn có muốn lưu không?',
+        header: 'Xác nhận',
+        icon: 'pi pi-exclamation-triangle',
+        acceptIcon: 'none',
+        acceptLabel: 'Lưu',
+        rejectIcon: 'none',
+        rejectLabel: 'Không lưu',
+        rejectButtonStyleClass: 'p-button-text',
+        accept: () => {
+          // nút Lưu có thể nằm ngay trong modal (form cha) hoặc trong form lồng
+          const submitted =
+            (this.funcSubmit !== undefined &&
+              this.funcSubmit !== null &&
+              this.funcSubmit(this.formItem) === true) ||
+            this.childForms.some((f) => f.submitOwnForm() === true);
+
+          if (!submitted)
+            this.messageService.add({
+              severity: 'warn',
+              summary: 'Thông báo',
+              detail: 'Không tìm thấy chức năng lưu trong màn hình này',
+              life: 3000,
+            });
+
+          // Giữ modal mở: nếu lưu thành công, action FORM_ON_SUBMIT sẽ đóng modal.
+          done(false);
+        },
+        reject: (type: ConfirmEventType) => {
+          // Nút "Không lưu" -> đóng modal; đóng dialog bằng X/ESC -> ở lại.
+          done(type === ConfirmEventType.REJECT);
+        },
+      });
+    });
+  }
+
+  /** Reset cờ dirty khi mở modal: FormGroup được dùng lại giữa các lần mở. */
+  private markPristine() {
+    if (this.funcMarkPristine !== undefined && this.funcMarkPristine !== null)
+      this.funcMarkPristine(this.formItem);
+    this.childForms.forEach((f) => f.markOwnPristine());
   }
 
   ngOnDestroy(): void {

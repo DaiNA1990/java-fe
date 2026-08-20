@@ -10,7 +10,7 @@ import {
 } from '@angular/router';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { AuthService } from '@appkkkh/modules/user/auth';
-import { FormConfig, keepConfig } from './services/form-config';
+import { FormConfig, keepConfig } from './services/form-config.service';
 @Component({
   selector: 'app-info-page',
   template: `
@@ -57,6 +57,7 @@ export class InfoPageComponent extends BaseFormPage implements OnInit, OnDestroy
       formType: null,
       identifyId: null,
       readOnly: null,
+      ownerModal: null,
     });
     return this.formConfig;
   }

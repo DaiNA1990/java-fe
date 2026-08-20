@@ -1,0 +1,68 @@
+/**
+ * Biểu mẫu dạng lưới: viền đủ 4 phía, header nền xám, chữ canh giữa và wrap để
+ * tiêu đề nhiều dòng vẫn đọc được.
+ *
+ * Dùng biến của theme thay vì mã màu cứng để đổi theme không lệch màu.
+ */
+
+$grid-border: 1px solid var(--surface-300, #dee2e6);
+
+:host ::ng-deep {
+  .p-datatable {
+    .p-datatable-wrapper {
+      border: $grid-border;
+      background: var(--surface-0, #fff);
+    }
+
+    // cột đông cứng phải có nền riêng, nếu không sẽ nhìn xuyên qua nội dung
+    // đang cuộn bên dưới
+    .p-frozen-column {
+      background: inherit;
+    }
+
+    .p-datatable-tbody > tr {
+      // không kẻ sọc, giữ nền trắng như biểu mẫu in
+      &,
+      &:nth-child(even) {
+        background: var(--surface-0, #fff);
+      }
+
+      &:hover {
+        background: var(--surface-50, #fafafa);
+      }
+
+      // checkbox và STT
+      > td:first-child,
+      > td:nth-child(2) {
+        text-align: center;
+      }
+    }
+  }
+
+  .p-datatable.p-datatable-gridlines {
+    .p-datatable-thead > tr > th {
+      background: var(--surface-100, #f5f5f5);
+      color: var(--text-color, #333);
+      font-weight: 600;
+      text-align: center;
+      vertical-align: middle;
+      white-space: normal;
+      word-break: break-word;
+      border: $grid-border;
+      padding: 0.65rem 0.5rem;
+    }
+
+    .p-datatable-tbody > tr > td {
+      border: $grid-border;
+      vertical-align: middle;
+      padding: 0.55rem 0.5rem;
+    }
+  }
+
+  // th của header gộp nhiều cấp
+  th.dynamic-header {
+    text-align: center !important;
+    vertical-align: middle !important;
+    white-space: normal;
+  }
+}

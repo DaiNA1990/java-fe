@@ -24,7 +24,7 @@ import { CategoryService } from '../../services/category.service';
 import { evaluateExpression } from '../expression-utils';
 import jsonata from 'jsonata';
 import { saveAs } from 'file-saver';
-import { FormConfig } from '../../services/form-config';
+import { FormConfig } from '../../services/form-config.service';
 
 @Component({
   selector: 'app-info-page-table',
@@ -35,15 +35,7 @@ import { FormConfig } from '../../services/form-config';
     CategoryService,
     InfoFormService,
   ],
-  styles: [
-    `
-    :host ::ng-deep th.dynamic-header {
-      text-align: center !important;
-      vertical-align: middle !important;
-      white-space: normal;
-    }
-    `
-  ]
+  styleUrls: ['./table.component.scss'],
 })
 export class InfoPageTableComponent
   extends BaseFormPage
@@ -54,7 +46,7 @@ export class InfoPageTableComponent
   // form cha đang ở chế độ chỉ xem
   isViewMode = false;
 
-  // gom 3 @Input trên; xem form-config.ts về lý do phải memo hoá
+  // gom 3 @Input trên; xem form-config.service.ts về lý do phải memo hoá
   @Input() set config(v: FormConfig) {
     if (!v) return;
     this.parentId = v.parentId;
