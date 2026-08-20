@@ -66,3 +66,57 @@ $grid-border: 1px solid var(--surface-300, #dee2e6);
     white-space: normal;
   }
 }
+
+/**
+ * Cell dữ liệu dài: cắt còn 3 dòng kèm "…", hiện nút mở popup xem đầy đủ.
+ * Nút chỉ hiện khi hover vào cell để không làm rối lưới.
+ */
+:host ::ng-deep {
+  .cell-text {
+    position: relative;
+
+    &.cell-text-clamped > span {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      // Firefox / chuẩn mới
+      line-clamp: 3;
+    }
+
+    .cell-text-expand {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 1.5rem;
+      height: 1.5rem;
+      border: 1px solid var(--surface-300, #dee2e6);
+      border-radius: 0.25rem;
+      background: var(--surface-0, #fff);
+      color: var(--text-color-secondary, #6c757d);
+      font-size: 0.75rem;
+      line-height: 1;
+
+      &:hover {
+        color: var(--primary-color, rgb(0, 107, 104));
+        border-color: var(--primary-color, rgb(0, 107, 104));
+      }
+    }
+  }
+
+  // chỉ hiện nút khi trỏ vào cell
+  td:hover .cell-text .cell-text-expand {
+    display: flex;
+  }
+}
+
+::ng-deep .cell-view-dialog {
+  .cell-view-content {
+    white-space: pre-wrap;
+    word-break: break-word;
+    line-height: 1.6;
+  }
+}

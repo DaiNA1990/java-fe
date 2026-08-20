@@ -73,11 +73,18 @@
           </ng-container>
           <!-- DEFAULT -->
           <ng-container *ngSwitchDefault>
-            <span [ngClass]="col.cssClass" [style]="col.cssStyle">
-              {{ col.controlType === 'year' ? item[col.property.code] :
-              item[col.property.code] | formatText :
-              col.property.typeData }}
-            </span>
+            <div class="cell-text" [class.cell-text-clamped]="isCellTextLong(item[col.property.code])">
+              <span [ngClass]="col.cssClass" [style]="col.cssStyle">
+                {{ col.controlType === 'year' ? item[col.property.code] :
+                item[col.property.code] | formatText :
+                col.property.typeData }}
+              </span>
+              <a href="javascript:;" class="cell-text-expand" title="Xem đầy đủ"
+                *ngIf="isCellTextLong(item[col.property.code])"
+                (click)="openCellView($event, col, item)">
+                <i class="pi pi-window-maximize"></i>
+              </a>
+            </div>
           </ng-container>
         </ng-container>
         <ng-container *ngFor="let tp of funcGetChild(col.id)">
@@ -147,6 +154,11 @@
     </tr>
   </ng-template>
 </p-table>
+<p-dialog [(visible)]="cellView.visible" [header]="cellView.title" [modal]="true" [draggable]="false"
+  [dismissableMask]="true" [style]="{width: '640px'}" [breakpoints]="{'960px': '90vw'}" [appendTo]="'body'"
+  styleClass="cell-view-dialog">
+  <div class="cell-view-content">{{ cellView.content }}</div>
+</p-dialog>
 <p-dialog [(visible)]="isOnSubmit" [modal]="true" [closable]="false" [draggable]="false" [style]="{width: '400px'}"
   [appendTo]="'body'">
   <div class="p-d-flex p-jc-center p-ai-center" style="height: 120px; text-align: center">

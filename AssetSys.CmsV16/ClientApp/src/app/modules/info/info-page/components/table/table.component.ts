@@ -79,6 +79,16 @@ export class InfoPageTableComponent
 
   isOnSubmit: any = false;
 
+  /**
+   * Số ký tự tối đa hiển thị trong cell trước khi cắt bớt và hiện nút xem đầy đủ.
+   * Dùng độ dài chuỗi thay vì đo DOM để không phải reflow mỗi chu kỳ change
+   * detection — đổi lại ngưỡng là ước lượng, không khớp tuyệt đối với số dòng bị
+   * cắt (xem .cell-text-clamped trong scss).
+   */
+  cellTextMaxLength = 100;
+
+  cellView = { visible: false, title: '', content: '' };
+
   itemSelection: any[] = [];
 
   subscriptions: Subscription[] = [];
@@ -1713,6 +1723,22 @@ export class InfoPageTableComponent
     }
 
     return true;
+  }
+
+  /** Nội dung cell có dài tới mức phải cắt bớt và cho xem popup. */
+  isCellTextLong(value: any): boolean {
+    if (value === null || value === undefined) return false;
+    return String(value).trim().length > this.cellTextMaxLength;
+  }
+
+  openCellView(event: Event, col: any, item: any) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.cellView = {
+      visible: true,
+      title: col.name,
+      content: String(item[col.property.code] ?? ''),
+    };
   }
 
   ngOnDestroy(): void {
