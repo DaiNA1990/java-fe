@@ -1533,7 +1533,7 @@ export class InfoPageFormComponent
   /**
    * Mở các tab đang chứa control (kể cả tab lồng tab), rồi focus + cuộn tới nó.
    *
-   * p-tabPanel không hoạt động thì nội dung vẫn render nhưng bị display:none nên
+   * p-tabpanel không hoạt động thì nội dung vẫn render nhưng bị display:none nên
    * focus() không có tác dụng — phải đổi activeIndex trước, chờ Angular render
    * xong mới focus được.
    */

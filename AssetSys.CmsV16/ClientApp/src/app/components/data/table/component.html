@@ -1,4 +1,4 @@
-<p-table [value]="items" [lazy]="true" [autoLayout]="true" [totalRecords]="totalRecords" [showCurrentPageReport]="true"
+<p-table [value]="items" [lazy]="true" [totalRecords]="totalRecords" [showCurrentPageReport]="true"
   [(selection)]="selectedItems" [rowsPerPageOptions]="[10, 25, 50]"
   [currentPageReportTemplate]="isShowPagingReport ? 'Hiển thị từ {first} đến {last} của {totalRecords} bản ghi' : ''"
   [paginator]="true" [rows]="10"

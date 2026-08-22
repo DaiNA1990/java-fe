@@ -2,7 +2,7 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@appkkkh/_metronic/shared/shared.module';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { NbDatetimeComponent } from './component';
 import { NbBoxModule } from '../box-view/module';
 
@@ -16,7 +16,7 @@ import { NbBoxModule } from '../box-view/module';
     ReactiveFormsModule.withConfig({ warnOnNgModelWithFormControl: 'never' }),
     FormsModule,
     ReactiveFormsModule,
-    CalendarModule,
+    DatePickerModule,
     NbBoxModule,
     SharedModule
   ],

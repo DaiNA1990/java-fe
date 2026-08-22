@@ -18,18 +18,18 @@ import { SharedModule } from '@appkkkh/_metronic/shared/shared.module';
 import { TableModule } from 'primeng/table';
 import { NbBreadcrumbModule } from '@appkkkh/components/page/breadcrumb/module';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { CalendarModule } from 'primeng/calendar';
+import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
-import { TabViewModule } from 'primeng/tabview';
+import { TabsModule } from 'primeng/tabs';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TooltipModule } from 'primeng/tooltip';
 import { InputTextModule } from 'primeng/inputtext';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CheckboxModule } from 'primeng/checkbox';
 import { FileUploadModule } from 'primeng/fileupload';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { PopoverModule } from 'primeng/popover';
 import { ButtonModule } from 'primeng/button';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { InfoPageSelectComponent } from './select/select.component';
@@ -72,16 +72,16 @@ import { ToastModule } from 'primeng/toast';
         InputTextModule,
         TooltipModule,
         DialogModule,
-        CalendarModule,
-        TabViewModule,
+        DatePickerModule,
+        TabsModule,
         ScrollPanelModule,
         TableModule,
-        DropdownModule,
+        SelectModule,
         MultiSelectModule,
         CheckboxModule,
         InputNumberModule,
         FileUploadModule,
-        OverlayPanelModule,
+        PopoverModule,
         NbTableModule,
         NbPageModule,
         NbPageDialogModule,

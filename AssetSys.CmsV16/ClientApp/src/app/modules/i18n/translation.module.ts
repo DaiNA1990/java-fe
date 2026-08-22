@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateDirective, TranslatePipe } from '@ngx-translate/core';
 
 @NgModule({
-  imports: [CommonModule, TranslateModule],
-  exports: [TranslateModule],
+  imports: [CommonModule, TranslateDirective, TranslatePipe],
+  exports: [TranslateDirective, TranslatePipe],
 })
 export class TranslationModule {}

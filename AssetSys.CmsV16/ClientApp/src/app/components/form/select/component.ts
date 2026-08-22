@@ -1,14 +1,14 @@
 import { Component, OnInit, Input, forwardRef, OnDestroy, TemplateRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { NbBaseComponent } from '../../form.base';
-import { DropdownFilterEvent } from 'primeng/dropdown';
+import { SelectFilterEvent } from 'primeng/types/select';
 
 @Component({
     selector: 'nb-select',
     template: `
     <nb-form-box [formCtrl]="formCtrl" [name]="name" [label]="label" [message]="message" [hint]="hint"
       [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
-      <p-dropdown [options]="items"
+      <p-select [options]="items"
         [(ngModel)]="value"
         [placeholder]="placeholder"
         [showClear]="true"
@@ -23,7 +23,7 @@ import { DropdownFilterEvent } from 'primeng/dropdown';
             <span>{{ group[fieldText] }}</span>
           </ng-template>
         }
-      </p-dropdown>
+      </p-select>
     </nb-form-box>
     `,
     styles: [`
@@ -61,7 +61,7 @@ export class NbSelectComponent extends NbBaseComponent implements OnInit, OnDest
         super();
     }
 
-    async onFilter(e: DropdownFilterEvent){
+    async onFilter(e: SelectFilterEvent){
         super.getData(e.filter);
     }
 

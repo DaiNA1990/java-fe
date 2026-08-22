@@ -8,7 +8,7 @@ import { DatePipe } from '@angular/common';
     template: `
   <nb-form-box [formCtrl]="formCtrl" [name]="name" [label]="label" [message]="message" [hint]="hint"
     [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
-    <p-calendar [placeholder]="placeholder" 
+    <p-datepicker [placeholder]="placeholder" 
       dateFormat="dd/mm/yy"
       [iconDisplay]="'input'" 
       [showIcon]="true" 

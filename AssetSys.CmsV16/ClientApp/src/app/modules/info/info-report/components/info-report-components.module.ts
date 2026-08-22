@@ -17,6 +17,7 @@ import { NbTextModule } from '@appkkkh/components/form/text/module';
 import { NbCheckboxModule } from '@appkkkh/components/form/checkbox/module';
 import { SharedModule } from '@appkkkh/_metronic/shared/shared.module';
 import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 import { SplitterModule } from 'primeng/splitter';
 import { AccordionModule } from 'primeng/accordion';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -46,6 +47,7 @@ import { InfoFormReportSetupComponent } from './report-setup/subs/component'
   exports: [InfoReportListComponent],
   imports: [
     CommonModule,
+    ButtonModule,
     FormsModule,
     ReactiveFormsModule,
     SplitterModule,

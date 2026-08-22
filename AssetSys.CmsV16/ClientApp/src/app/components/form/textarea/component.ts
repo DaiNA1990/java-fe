@@ -7,7 +7,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
     template: `
   <nb-form-box [formCtrl]="formCtrl" [name]="name" [label]="label" [message]="message" [hint]="hint"
     [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
-    <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="value" [autoResize]="false"></textarea>
+    <textarea rows="5" cols="30" pTextarea [(ngModel)]="value" [autoResize]="false"></textarea>
   </nb-form-box>
   `,
     providers: [

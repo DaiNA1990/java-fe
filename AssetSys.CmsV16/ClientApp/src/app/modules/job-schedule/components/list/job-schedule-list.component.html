@@ -1,10 +1,10 @@
 <div class="p-4 job-schedule-root">
   <h1 class="text-xl font-bold mb-4">Jobs Management</h1>
 
-  <p-tabView [(activeIndex)]="activeIndex" (onChange)="onTabChange($event)">
-    <!-- TAB: Jobs -->
-    <p-tabPanel>
-      <ng-template pTemplate="header">
+  <p-tabs [value]="activeIndex" (valueChange)="onTabChange($event)">
+    <p-tablist>
+      <!-- TAB: Jobs -->
+      <p-tab [value]="0">
         <div class="header">
           <div>Jobs</div>
           <span
@@ -31,7 +31,44 @@
             }}</span
             >
           </div>
-        </ng-template>
+      </p-tab>
+
+      <!-- TAB: Retries (separate tab) -->
+      <p-tab [value]="1">
+          <div class="header">
+            <div class="title">Retries</div>
+            <span [class]="stats?.retries > 0 ? 'metric metric-warning' : 'metric metric-default'">
+              {{ stats?.retries ?? 0 }}
+            </span>
+          </div>
+      </p-tab>
+
+      <!-- TAB: Recurring -->
+      <p-tab [value]="2">
+          <div class="header">
+            <div class="title">Recurring Jobs</div>
+            <span class="metric metric-default">{{ stats?.recurring ?? 0 }}</span>
+          </div>
+      </p-tab>
+
+      <!-- TAB: Servers -->
+      <p-tab [value]="3">
+          <div class="header">
+            <div class="title">Servers</div>
+            <span class="metric metric-default">{{ stats?.servers ?? 0 }}</span>
+          </div>
+      </p-tab>
+
+      <!-- Optional Transform Data -->
+      @if (stats?.enableTransform === 'true') {
+        <p-tab [value]="4">
+            <div class="header"><div class="title">Transform Data</div></div>
+        </p-tab>
+      }
+    </p-tablist>
+
+    <p-tabpanels>
+      <p-tabpanel [value]="0">
 
         <div class="container-fluid mt-3">
           <div class="row">
@@ -380,18 +417,9 @@
             }
           </div>
         </div>
-      </p-tabPanel>
+      </p-tabpanel>
 
-      <!-- TAB: Retries (separate tab) -->
-      <p-tabPanel>
-        <ng-template pTemplate="header">
-          <div class="header">
-            <div class="title">Retries</div>
-            <span [class]="stats?.retries > 0 ? 'metric metric-warning' : 'metric metric-default'">
-              {{ stats?.retries ?? 0 }}
-            </span>
-          </div>
-        </ng-template>
+      <p-tabpanel [value]="1">
 
         <p-button label="Delete selected" icon="pi pi-trash" styleClass="p-button-danger custom-trigger-btn" (onClick)="deleteSelected()"></p-button>
 
@@ -430,16 +458,9 @@
             </tr>
           </ng-template>
         </p-table>
-      </p-tabPanel>
+      </p-tabpanel>
 
-      <!-- TAB: Recurring -->
-      <p-tabPanel>
-        <ng-template pTemplate="header">
-          <div class="header">
-            <div class="title">Recurring Jobs</div>
-            <span class="metric metric-default">{{ stats?.recurring ?? 0 }}</span>
-          </div>
-        </ng-template>
+      <p-tabpanel [value]="2">
 
         <p-button label="Trigger now" icon="pi pi-play" styleClass="p-button-primary custom-trigger-btn" (onClick)="triggerNow()"></p-button>
 
@@ -478,16 +499,9 @@
             </tr>
           </ng-template>
         </p-table>
-      </p-tabPanel>
+      </p-tabpanel>
 
-      <!-- TAB: Servers -->
-      <p-tabPanel>
-        <ng-template pTemplate="header">
-          <div class="header">
-            <div class="title">Servers</div>
-            <span class="metric metric-default">{{ stats?.servers ?? 0 }}</span>
-          </div>
-        </ng-template>
+      <p-tabpanel [value]="3">
 
         <p-table [value]="servers">
           <ng-template pTemplate="header">
@@ -509,20 +523,17 @@
             </tr>
           </ng-template>
         </p-table>
-      </p-tabPanel>
+      </p-tabpanel>
 
-      <!-- Optional Transform Data -->
       @if (stats?.enableTransform === 'true') {
-        <p-tabPanel>
-          <ng-template pTemplate="header">
-            <div class="header"><div class="title">Transform Data</div></div>
-          </ng-template>
+        <p-tabpanel [value]="4">
           <p-fileUpload name="file" [customUpload]="true" [multiple]="true"
             chooseLabel="Chọn file" uploadLabel="Tải lên" cancelLabel="Hủy"
           (uploadHandler)="uploadFile($event)"></p-fileUpload>
-        </p-tabPanel>
+        </p-tabpanel>
       }
-    </p-tabView>
+    </p-tabpanels>
+  </p-tabs>
 
     <p-confirmDialog></p-confirmDialog>
     <p-toast></p-toast>

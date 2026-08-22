@@ -404,8 +404,10 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
   // ---------------------------
   // Tabs
   // ---------------------------
-  onTabChange(event: any) {
-    const idx = event.index;
+  onTabChange(value: any) {
+    // p-tabs (PrimeNG 21) phát ra chính value của tab, không còn {index} như p-tabView.
+    const idx = Number(value);
+    this.activeIndex = idx;
     switch (idx) {
       case 0:
         this.loadQueues();

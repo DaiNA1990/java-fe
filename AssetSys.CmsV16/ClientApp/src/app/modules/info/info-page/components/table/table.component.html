@@ -1,6 +1,6 @@
 <!-- <br> -->
 <!-- table: parentId:{{parentId}} | groupId: {{formItem.layout.groupId | json}} | groupParentId: {{formItem.layout.groupParentId | json}} -->
-<p-table [value]="items" [lazy]="true" [autoLayout]="true" [scrollable]="true" [totalRecords]="itemTotal"
+<p-table [value]="items" [lazy]="true" [scrollable]="true" [totalRecords]="itemTotal"
   [showCurrentPageReport]="true" [rowsPerPageOptions]="[5, 10, 25, 50, 100]"
   [currentPageReportTemplate]="itemTotal === null ? '' : 'Hiển thị từ {first} đến {last} của {totalRecords} bản ghi'"
   [paginator]="true" [rows]="10" [styleClass]="'p-datatable-gridlines'" [resizableColumns]="false"

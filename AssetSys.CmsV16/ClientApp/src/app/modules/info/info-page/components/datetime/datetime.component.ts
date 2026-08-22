@@ -9,7 +9,7 @@ import { evaluateExpression } from '../expression-utils';
 @Component({
     selector: 'app-info-page-datetime',
     template: `
-        <p-calendar [formControl]="formCtrl"
+        <p-datepicker [formControl]="formCtrl"
             [placeholder]="formItem.placeholder || ''"
             dateFormat="dd/mm/yy"
             [readonlyInput]="true"

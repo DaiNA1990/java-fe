@@ -29,7 +29,7 @@ import { BaseFormPage } from '../base.form';
       formItem.controlType === 'select' &&
       !(lookupData?.typeData === 'API')
       ) {
-      <p-dropdown
+      <p-select
         [formControl]="formCtrl"
         [options]="items"
         [showClear]="true"
@@ -52,7 +52,7 @@ import { BaseFormPage } from '../base.form';
             {{ item?.name }}
           </span>
         </ng-template>
-      </p-dropdown>
+      </p-select>
     }
     @if (
       isLoaded &&
@@ -61,7 +61,7 @@ import { BaseFormPage } from '../base.form';
       lookupData?.typeData === 'API') ||
       formItem.controlType === 'selectLazy')
       ) {
-      <p-dropdown
+      <p-select
         [formControl]="formCtrl"
         [options]="items"
         [showClear]="true"
@@ -85,7 +85,7 @@ import { BaseFormPage } from '../base.form';
             {{ item?.name }}
           </span>
         </ng-template>
-      </p-dropdown>
+      </p-select>
     }
     <!-- <div *ngIf="isLoaded && (readOnly || formItem.isReadOnly)">{{ name }}</div> -->
     @if (isLoaded && (readOnly || formItem.isReadOnly)) {

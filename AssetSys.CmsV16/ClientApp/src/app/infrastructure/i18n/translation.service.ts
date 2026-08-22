@@ -23,7 +23,7 @@ export class TranslationService {
     this.translate.addLangs(['en']);
 
     // this language will be used as a fallback when a translation isn't found in the current language
-    this.translate.setDefaultLang('en');
+    this.translate.setFallbackLang('en');
   }
 
   loadTranslations(...args: Locale[]): void {
@@ -43,7 +43,8 @@ export class TranslationService {
 
   setLanguage(lang: string) {
     if (lang) {
-      this.translate.use(this.translate.getDefaultLang());
+      const fallbackLang = this.translate.getFallbackLang();
+      if (fallbackLang) this.translate.use(fallbackLang);
       this.translate.use(lang);
       localStorage.setItem(LOCALIZATION_LOCAL_STORAGE_KEY, lang);
     }
@@ -55,7 +56,7 @@ export class TranslationService {
   getSelectedLanguage(): any {
     return (
       localStorage.getItem(LOCALIZATION_LOCAL_STORAGE_KEY) ||
-      this.translate.getDefaultLang()
+      this.translate.getFallbackLang()
     );
   }
 }

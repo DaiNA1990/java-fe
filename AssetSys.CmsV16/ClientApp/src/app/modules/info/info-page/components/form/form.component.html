@@ -11,7 +11,7 @@
     </i>
   </span>
 }
-<p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true">
+<p-popover #op [dismissable]="true">
   <div style="max-height: 300px; overflow-y: auto; padding: 4px">
     <pre
       style="white-space: pre-wrap; max-width: 400px; background-color: bisque"
@@ -19,7 +19,7 @@
       {{ valueTransform | json }}
     </pre>
   </div>
-</p-overlayPanel>
+</p-popover>
 <!--
 Chỉ render khi form đã dựng xong FormControl. Nếu không, buildControls sẽ
 render một lượt "giả" với getControl() trả về new FormControl() rỗng, rồi
@@ -143,20 +143,27 @@ Dùng ng-container để không thêm DOM node, tránh phá flex layout của .m
 <ng-template #tabControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   @if ((loadFormSubject | async) === false) {
     <p-scrollPanel class="w-full mx-2">
-      <p-tabView
-        [activeIndex]="getTabActiveIndex(item)"
-        (activeIndexChange)="tabActiveIndex[item.id] = $event"
+      <p-tabs
+        [value]="getTabActiveIndex(item)"
+        (valueChange)="tabActiveIndex[item.id] = +($event ?? 0)"
         >
-        @for (control of filterByParent(item); track trackByFn($index, control)) {
-          <p-tabPanel [header]="control.name">
-            @for (tp of filterByParent(control); track trackByFn($index, tp)) {
-              <ng-container
-                *ngTemplateOutlet="showControlTmpl;context: {item: tp, formCtrl: getControl(tp), modal: modal}"
-              ></ng-container>
-            }
-          </p-tabPanel>
-        }
-      </p-tabView>
+        <p-tablist>
+          @for (control of filterByParent(item); track trackByFn($index, control)) {
+            <p-tab [value]="$index">{{ control.name }}</p-tab>
+          }
+        </p-tablist>
+        <p-tabpanels>
+          @for (control of filterByParent(item); track trackByFn($index, control)) {
+            <p-tabpanel [value]="$index">
+              @for (tp of filterByParent(control); track trackByFn($index, tp)) {
+                <ng-container
+                  *ngTemplateOutlet="showControlTmpl;context: {item: tp, formCtrl: getControl(tp), modal: modal}"
+                ></ng-container>
+              }
+            </p-tabpanel>
+          }
+        </p-tabpanels>
+      </p-tabs>
     </p-scrollPanel>
   }
 </ng-template>
@@ -641,11 +648,11 @@ Dùng ng-container để không thêm DOM node, tránh phá flex layout của .m
                                       </i>
                                     </span>
                                   }
-                                  <p-overlayPanel #op1 [dismissable]="true" [showCloseIcon]="true">
+                                  <p-popover #op1 [dismissable]="true">
                                     <div>
                                       <pre>{{item?.property?.code}} ({{item?.property?.typeData}}) ({{item?.propertyId}})</pre>
                                     </div>
-                                  </p-overlayPanel>
+                                  </p-popover>
                                 </label>
                               </ng-template>
                               <p-dialog

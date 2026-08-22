@@ -16,8 +16,9 @@ import { NbTextareaModule } from "../../../../components/form/textarea/module";
 import { SharedModule } from "../../../../_metronic/shared/shared.module";
 import { InfoFormDesignComponent } from './design/component';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
-import { TabViewModule } from 'primeng/tabview';
+import { TabsModule } from 'primeng/tabs';
 import { NbAutocompleteModule } from '@appkkkh/components/form/autocomplete/module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { InfoFormPropertyComponent } from './property/component';
@@ -37,7 +38,7 @@ import { InfoFormPropertyBuildConditionUIComponent } from './property/subs/build
 import { InfoFormPropertyBuildConditionReadOnlyComponent } from './property/subs/build-condition-readonly/component';
 import { InfoFormPropertyBuildConditionDataComponent } from './property/subs/build-condition-data/component';
 import { InfoFormPropertyBuildActionComponent } from './property/subs/build-action/component';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 
 @NgModule({
     declarations: [
@@ -61,6 +62,7 @@ import { DropdownModule } from 'primeng/dropdown';
     ],
     imports: [
         CommonModule,
+        ButtonModule,
         FormsModule,
         ReactiveFormsModule,
         SplitterModule,
@@ -69,10 +71,10 @@ import { DropdownModule } from 'primeng/dropdown';
         DragDropModule,
         DialogModule,
         ConfirmDialogModule,
-        DropdownModule,
+        SelectModule,
         NbSelectModule,
         ToastModule,
-        TabViewModule,
+        TabsModule,
         AutoCompleteModule,
         NbAutocompleteModule,
         NbTableModule,
