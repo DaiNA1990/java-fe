@@ -28,7 +28,7 @@ import { SelectFilterEvent } from 'primeng/types/select';
     `,
     styles: [`
     ::ng-deep {
-        .p-dropdown-items {
+        .p-select-list {
             margin: 0;
             padding-left: 0;
         }

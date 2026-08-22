@@ -26,7 +26,7 @@ interface AutoCompleteCompleteEvent {
   `,
     styles: [`
   ::ng-deep {
-      .p-autocomplete-items {
+      .p-autocomplete-list {
           margin: 0;
           padding-left: 0;
       }

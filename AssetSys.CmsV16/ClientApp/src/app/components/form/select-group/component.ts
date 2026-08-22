@@ -18,7 +18,7 @@ import { NbBaseComponent } from '../../form.base';
     `,
     styles: [`
     ::ng-deep {
-        .p-cascadeselect-panel {
+        .p-cascadeselect-overlay {
             margin: 0;
             padding-left: 0;
         }

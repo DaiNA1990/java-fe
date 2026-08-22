@@ -12,11 +12,12 @@ import { Component } from '@angular/core';
     styles: [
         `
       :host ::ng-deep {
-        .p-tabview-nav-link {
+        // PrimeNG 21: p-tabView -> p-tabs, .p-tabview-nav-link -> .p-tab
+        .p-tab {
           color: rgb(0, 107, 104);
           text-decoration: none !important;
         }
-        .p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+        .p-tabs .p-tablist .p-tab.p-tab-active {
           border-color: rgb(0, 107, 104);
         }
         .p-button {

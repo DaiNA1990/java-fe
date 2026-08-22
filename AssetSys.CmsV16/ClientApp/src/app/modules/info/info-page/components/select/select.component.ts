@@ -128,7 +128,7 @@ import { BaseFormPage } from '../base.form';
     styles: [
         `
       ::ng-deep {
-        .p-dropdown-items {
+        .p-select-list {
           margin: 0;
           padding-left: 0;
         }
