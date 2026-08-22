@@ -2,7 +2,8 @@ import { Directive, Input, TemplateRef, ViewContainerRef } from '@angular/core';
 import { AuthService } from '@appkkkh/modules/user/auth/services/auth.service';
 
 @Directive({
-    selector: '[appPermission]'
+    selector: '[appPermission]',
+    standalone: false
 })
 export class PermissionDirective {
     constructor(

@@ -18,6 +18,7 @@ import { evaluateExpression } from '../expression-utils';
             (onSelect)="onSelect($event)"
             [appendTo]="'body'" />
     `,
+    standalone: false
 })
 export class InfoPageDatetimeComponent implements OnDestroy, OnInit {
 

@@ -5,6 +5,7 @@ import { UserLevelService } from '../../services/user-level.service';
 @Component({
     selector: 'app-user-level-list',
     templateUrl: `./user-level-list.component.html`,
+    standalone: false
 })
 export class UserLevelListComponent implements OnInit {
 

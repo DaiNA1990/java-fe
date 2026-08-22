@@ -34,9 +34,10 @@ interface ConditionDataRule {
 }
 
 @Component({
-  selector: 'app-info-form-property-build-condition-data',
-  templateUrl: `./component.html`,
-  providers: [ConfirmationService, MessageService],
+    selector: 'app-info-form-property-build-condition-data',
+    templateUrl: `./component.html`,
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
   @Input() groupId: any;

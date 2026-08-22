@@ -9,7 +9,8 @@ import dayjs from 'dayjs';
  * Returns object from parent object
  */
 @Pipe({
-  name: 'formatText',
+    name: 'formatText',
+    standalone: false
 })
 export class FormatTextPipe implements PipeTransform {
   /**

@@ -8,7 +8,8 @@ import { firstValueFrom } from 'rxjs';
 @Component({
     selector: 'app-user-role-map-assign',
     templateUrl: `./user-role-map-assign.component.html`,
-    providers: [MessageService]
+    providers: [MessageService],
+    standalone: false
 })
 export class UserRoleMapAssignComponent {
 

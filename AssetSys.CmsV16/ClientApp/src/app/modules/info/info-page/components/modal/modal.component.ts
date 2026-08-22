@@ -20,9 +20,10 @@ import { Dialog } from 'primeng/dialog';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-info-page-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss'],
+    selector: 'app-info-page-modal',
+    templateUrl: './modal.component.html',
+    styleUrls: ['./modal.component.scss'],
+    standalone: false
 })
 export class InfoPageModalComponent implements OnInit, OnDestroy {
   @Input() formCtrl: FormControl;

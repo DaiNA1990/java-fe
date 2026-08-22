@@ -12,7 +12,8 @@ import controlTypes from '../property/controls.json';
 @Component({
     selector: 'app-info-form-control',
     templateUrl: `./component.html`,
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormControlComponent implements OnInit {
 

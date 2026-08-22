@@ -8,8 +8,8 @@ import { environment } from '@srckkkh/environments/environment';
 // import { UploadFileService } from '@appkkkh/modules/files/file/services/upload-file.service';
 
 @Component({
-  selector: 'nb-editor',
-  template: `
+    selector: 'nb-editor',
+    template: `
   <nb-form-box [formCtrl]="formCtrl" [name]="name" [label]="label" [message]="message" [hint]="hint"
     [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
     <editor class="form-control p-0" [init]="editorOption"
@@ -17,18 +17,19 @@ import { environment } from '@srckkkh/environments/environment';
         [class.is-invalid]="formCtrl.touched && formCtrl.invalid"></editor>
   </nb-form-box>
   `,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: forwardRef(() => NbEditorComponent),
-    },
-    {
-      provide: NbBaseComponent,
-      multi: true,
-      useExisting: forwardRef(() => NbEditorComponent)
-    }
-  ]
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => NbEditorComponent),
+        },
+        {
+            provide: NbBaseComponent,
+            multi: true,
+            useExisting: forwardRef(() => NbEditorComponent)
+        }
+    ],
+    standalone: false
 })
 export class NbEditorComponent extends NbBaseComponent implements OnInit, OnDestroy {
 

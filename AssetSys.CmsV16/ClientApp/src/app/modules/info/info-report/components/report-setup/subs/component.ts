@@ -12,9 +12,10 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { InfoReportDesignComponent } from '../../design/component';
 
 @Component({
-  selector: 'app-info-form-report-setup',
-  templateUrl: `./component.html`,
-  providers: [ConfirmationService, MessageService],
+    selector: 'app-info-form-report-setup',
+    templateUrl: `./component.html`,
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormReportSetupComponent implements OnInit {
   private parent: any = inject(InfoReportDesignComponent, { optional: true });

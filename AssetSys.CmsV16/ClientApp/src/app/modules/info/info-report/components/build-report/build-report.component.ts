@@ -5,6 +5,7 @@ import { InfoReportService } from '../../services/info-report.service';
 @Component({
     selector: 'app-info-report-build-report',
     templateUrl: `./build-report.component.html`,
+    standalone: false
 })
 export class InfoReportBuildReportComponent {
 

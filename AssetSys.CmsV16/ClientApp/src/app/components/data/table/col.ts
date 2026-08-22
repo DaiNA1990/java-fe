@@ -1,8 +1,9 @@
 import { Component, ContentChild, Input, TemplateRef, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'nb-table-col',
-  template: ''
+    selector: 'nb-table-col',
+    template: '',
+    standalone: false
 })
 export class NbTableColumnComponent {
 

@@ -12,7 +12,8 @@ import { UserNotifyService } from '../../services/user-notify.service';
             multi: true,
             useExisting: forwardRef(() => UserNotifyDetailComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserNotifyDetailComponent extends NbDialogBaseComponent {
 

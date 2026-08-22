@@ -10,7 +10,8 @@ import { InfoFormService } from '@appkkkh/modules/info/info-form/services/info-f
 @Component({
     selector: 'app-info-form-property-build-data',
     templateUrl: `./component.html`,
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormPropertyBuildDataComponent implements OnInit {
 

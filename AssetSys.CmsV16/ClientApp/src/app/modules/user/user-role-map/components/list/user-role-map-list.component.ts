@@ -5,6 +5,7 @@ import { UserRoleMapService } from '../../services/user-role-map.service';
 @Component({
     selector: 'app-user-role-map-list',
     templateUrl: `./user-role-map-list.component.html`,
+    standalone: false
 })
 export class UserRoleMapListComponent implements OnInit {
 

@@ -12,8 +12,8 @@ import { EventDataService } from '../../services/event-data.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-checkbox',
-  template: `
+    selector: 'app-checkbox',
+    template: `
     <p-checkbox
       [formControl]="formCtrl"
       [ngStyle]="formItem.cssStyle"
@@ -21,6 +21,7 @@ import { Subscription } from 'rxjs';
       [binary]="true"
     ></p-checkbox>
   `,
+    standalone: false
 })
 
 export class InfoPageCheckboxComponent implements OnInit, OnDestroy {

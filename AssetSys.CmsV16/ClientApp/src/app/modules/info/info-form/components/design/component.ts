@@ -41,7 +41,8 @@ import { InfoFormControlComponent } from '../control/component';
         }
         `
     ],
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormDesignComponent implements OnInit {
 

@@ -14,9 +14,10 @@ import { InfoReportDesignComponent } from '../design/component';
 import { InfoReportSetupEditComponent } from '../../../info-report-setup/components/edit/info-report-setup-edit.component';
 
 @Component({
-  selector: 'app-info-form-report',
-  templateUrl: `./component.html`,
-  providers: [ConfirmationService, MessageService],
+    selector: 'app-info-form-report',
+    templateUrl: `./component.html`,
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormReportComponent implements OnInit {
   @Input() reportId: number | null;

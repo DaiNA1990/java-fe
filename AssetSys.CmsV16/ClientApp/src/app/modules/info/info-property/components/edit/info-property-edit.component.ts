@@ -12,7 +12,8 @@ import { InfoPropertyService } from '../../services/info-property.service';
             multi: true,
             useExisting: forwardRef(() => InfoPropertyEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class InfoPropertyEditComponent extends NbDialogBaseComponent {
 

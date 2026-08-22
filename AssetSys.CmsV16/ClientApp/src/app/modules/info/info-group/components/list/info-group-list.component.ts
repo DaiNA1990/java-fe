@@ -8,8 +8,9 @@ import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 import { AuthService } from '@appkkkh/modules/user/auth';
 
 @Component({
-  selector: 'app-info-group-list',
-  templateUrl: `./info-group-list.component.html`,
+    selector: 'app-info-group-list',
+    templateUrl: `./info-group-list.component.html`,
+    standalone: false
 })
 export class InfoGroupListComponent implements OnInit {
   formFilter: FormGroup;

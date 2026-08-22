@@ -5,6 +5,7 @@ import { InfoValueService } from '../../services/info-value.service';
 @Component({
     selector: 'app-info-value-list',
     templateUrl: `./info-value-list.component.html`,
+    standalone: false
 })
 export class InfoValueListComponent implements OnInit {
 

@@ -7,7 +7,8 @@ import { NbLayoutGridItemComponent } from './col';
         <ng-container *ngFor="let col of cols">
             <ng-container *ngTemplateOutlet="col.template"></ng-container>
         </ng-container>        
-    </div>`
+    </div>`,
+    standalone: false
 })
 export class NbLayoutGridComponent implements OnInit, OnDestroy {
 

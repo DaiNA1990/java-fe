@@ -5,6 +5,7 @@ import { UserActivityService } from '../../services/user-activity.service';
 @Component({
     selector: 'app-user-activity-list',
     templateUrl: `./user-activity-list.component.html`,
+    standalone: false
 })
 export class UserActivityListComponent implements OnInit {
 

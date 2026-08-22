@@ -12,7 +12,8 @@ import { UserCodeService } from '../../services/user-code.service';
             multi: true,
             useExisting: forwardRef(() => UserCodeEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserCodeEditComponent extends NbDialogBaseComponent {
 

@@ -12,10 +12,10 @@ import { InfoFormReportSetupComponent } from '../report-setup/subs/component';
 import { InfoFormReportComponent } from '../report-setup/component';
 
 @Component({
-  selector: 'app-info-report-design',
-  templateUrl: `./component.html`,
-  styles: [
-    `
+    selector: 'app-info-report-design',
+    templateUrl: `./component.html`,
+    styles: [
+        `
       .cdk-drag-animating {
         transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
       }
@@ -42,8 +42,9 @@ import { InfoFormReportComponent } from '../report-setup/component';
         padding: 5px;
       }
     `,
-  ],
-  providers: [ConfirmationService, MessageService],
+    ],
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoReportDesignComponent implements OnInit {
   @Input() reportId: number | null;

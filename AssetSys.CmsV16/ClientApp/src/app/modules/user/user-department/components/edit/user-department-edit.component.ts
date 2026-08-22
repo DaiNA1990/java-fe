@@ -12,7 +12,8 @@ import { UserDepartmentService } from '../../services/user-department.service';
             multi: true,
             useExisting: forwardRef(() => UserDepartmentEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserDepartmentEditComponent extends NbDialogBaseComponent {
 

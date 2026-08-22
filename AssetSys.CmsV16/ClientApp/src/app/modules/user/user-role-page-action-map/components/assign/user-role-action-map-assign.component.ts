@@ -8,7 +8,8 @@ import { UserPageActionService } from '@appkkkh/modules/user/user-page-action/se
 @Component({
     selector: 'app-user-role-action-map-assign',
     templateUrl: `./user-role-action-map-assign.component.html`,
-    providers: [MessageService]
+    providers: [MessageService],
+    standalone: false
 })
 export class UserRoleActionMapAssignComponent {
 

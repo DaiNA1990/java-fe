@@ -13,7 +13,8 @@ import { InfoPropertyService } from '@appkkkh/modules/info/info-property/service
             multi: true,
             useExisting: forwardRef(() => InfoFormEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class InfoFormEditComponent extends NbDialogBaseComponent {
 

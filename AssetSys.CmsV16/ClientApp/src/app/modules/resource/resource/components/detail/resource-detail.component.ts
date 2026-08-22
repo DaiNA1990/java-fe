@@ -15,7 +15,8 @@ import { ResourceInfoService } from '../../services/resource.service';
             multi: true,
             useExisting: forwardRef(() => ResourceInfoDetailComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class ResourceInfoDetailComponent extends NbDialogBaseComponent {
 

@@ -19,7 +19,8 @@ interface FCAction {
 @Component({
     selector: 'app-info-form-property-build-action',
     templateUrl: `./component.html`,
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormPropertyBuildActionComponent implements OnInit {
 

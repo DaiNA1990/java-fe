@@ -8,10 +8,10 @@ import { AppCons } from '@appkkkh/core/contants/app.cons';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styles: [
-    `:host {
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styles: [
+        `:host {
     width: 100%;
     @media (min-width: 992px) {
       .login-form {
@@ -24,7 +24,8 @@ import { AuthService } from '../../services/auth.service';
       }
     }
   }`
-  ]
+    ],
+    standalone: false
 })
 export class LoginComponent implements OnInit, OnDestroy {
   defaultAuth: any = {

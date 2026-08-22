@@ -5,6 +5,7 @@ import { UserConnectionService } from '../../services/user-connection.service';
 @Component({
     selector: 'app-user-connection-list',
     templateUrl: `./user-connection-list.component.html`,
+    standalone: false
 })
 export class UserConnectionListComponent implements OnInit {
 

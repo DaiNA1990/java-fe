@@ -8,8 +8,8 @@ interface AutoCompleteCompleteEvent {
 }
 
 @Component({
-  selector: 'nb-autocomplete',
-  template: `
+    selector: 'nb-autocomplete',
+    template: `
   <nb-form-box [formCtrl]="formCtrl" [name]="name" [label]="label" [message]="message" [hint]="hint"
     [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
     <p-autoComplete [(ngModel)]="value" 
@@ -24,7 +24,7 @@ interface AutoCompleteCompleteEvent {
     </p-autoComplete>
   </nb-form-box>
   `,
-  styles: [`
+    styles: [`
   ::ng-deep {
       .p-autocomplete-items {
           margin: 0;
@@ -32,18 +32,19 @@ interface AutoCompleteCompleteEvent {
       }
   }
   `],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: forwardRef(() => NbAutocompleteComponent),
-    },
-    {
-      provide: NbBaseComponent,
-      multi: true,
-      useExisting: forwardRef(() => NbAutocompleteComponent)
-    }
-  ]
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => NbAutocompleteComponent),
+        },
+        {
+            provide: NbBaseComponent,
+            multi: true,
+            useExisting: forwardRef(() => NbAutocompleteComponent)
+        }
+    ],
+    standalone: false
 })
 export class NbAutocompleteComponent extends NbBaseComponent implements OnInit, OnDestroy, ControlValueAccessor {
 

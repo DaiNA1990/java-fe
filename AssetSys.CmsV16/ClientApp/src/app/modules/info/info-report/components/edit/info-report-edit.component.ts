@@ -12,7 +12,8 @@ import { InfoReportService } from '../../services/info-report.service';
             multi: true,
             useExisting: forwardRef(() => InfoReportEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class InfoReportEditComponent extends NbDialogBaseComponent {
 

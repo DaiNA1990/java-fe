@@ -12,7 +12,8 @@ import { UserConnectionService } from '../../services/user-connection.service';
             multi: true,
             useExisting: forwardRef(() => UserConnectionEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserConnectionEditComponent extends NbDialogBaseComponent {
 

@@ -28,9 +28,10 @@ interface FCMapColumn {
 }
 
 @Component({
-  selector: 'app-info-form-report-build-map-column',
-  templateUrl: `./component.html`,
-  providers: [ConfirmationService, MessageService],
+    selector: 'app-info-form-report-build-map-column',
+    templateUrl: `./component.html`,
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormReportBuildMapColumnComponent implements OnInit {
   @Input() formCtrl: AbstractControl;

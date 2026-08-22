@@ -43,7 +43,8 @@ import { DropdownFilterEvent } from 'primeng/dropdown';
             multi: true,
             useExisting: forwardRef(() => NbSelectComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class NbSelectComponent extends NbBaseComponent implements OnInit, OnDestroy, ControlValueAccessor {
 

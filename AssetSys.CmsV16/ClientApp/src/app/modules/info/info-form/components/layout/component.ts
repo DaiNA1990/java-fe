@@ -16,7 +16,8 @@ import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 @Component({
     selector: 'app-info-form-layout',
     templateUrl: `./component.html`,
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormLayoutComponent implements OnInit {
 

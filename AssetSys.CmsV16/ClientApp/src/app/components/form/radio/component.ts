@@ -26,7 +26,8 @@ import { NbBaseComponent } from '../../form.base';
             multi: true,
             useExisting: forwardRef(() => NbRadioComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class NbRadioComponent extends NbBaseComponent implements OnInit, OnDestroy, ControlValueAccessor {
 

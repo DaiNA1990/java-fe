@@ -45,14 +45,15 @@ import { FormConfig, keepConfig } from '../../services/form-config.service';
 import { environment } from '@srckkkh/environments/environment';
 dayjs.extend(duration);
 @Component({
-  selector: 'app-info-page-form',
-  templateUrl: `./form.component.html`,
-  styleUrls: ['./form.component.scss'],
-  providers: [
-    InfoDataService,
-    CategoryService,
-    InfoFormService,
-  ],
+    selector: 'app-info-page-form',
+    templateUrl: `./form.component.html`,
+    styleUrls: ['./form.component.scss'],
+    providers: [
+        InfoDataService,
+        CategoryService,
+        InfoFormService,
+    ],
+    standalone: false
 })
 export class InfoPageFormComponent
   extends BaseFormPage

@@ -5,6 +5,7 @@ import { ResourceInfoService } from '../../services/resource.service';
 @Component({
     selector: 'app-resource-list',
     templateUrl: `./resource-list.component.html`,
+    standalone: false
 })
 export class ResourceInfoListComponent implements OnInit {
 

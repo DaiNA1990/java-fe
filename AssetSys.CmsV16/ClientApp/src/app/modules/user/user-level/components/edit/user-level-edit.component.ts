@@ -12,7 +12,8 @@ import { UserLevelService } from '../../services/user-level.service';
             multi: true,
             useExisting: forwardRef(() => UserLevelEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserLevelEditComponent extends NbDialogBaseComponent {
 

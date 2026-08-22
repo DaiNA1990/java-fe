@@ -13,7 +13,8 @@ import { UserService } from '@appkkkh/modules/user/user/services/user.service';
             multi: true,
             useExisting: forwardRef(() => UserNotifyEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserNotifyEditComponent extends NbDialogBaseComponent {
 

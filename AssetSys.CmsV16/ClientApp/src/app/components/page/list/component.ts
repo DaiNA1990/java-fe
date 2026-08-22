@@ -16,9 +16,10 @@ interface ListQueryDefault {
 }
 
 @Component({
-  selector: 'nb-page-list',
-  templateUrl: './component.html',
-  providers: [ConfirmationService, MessageService]
+    selector: 'nb-page-list',
+    templateUrl: './component.html',
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class NbPageListComponent implements OnInit, OnDestroy {
 

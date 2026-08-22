@@ -5,6 +5,7 @@ import { UserCodeService } from '../../services/user-code.service';
 @Component({
     selector: 'app-user-code-list',
     templateUrl: `./user-code-list.component.html`,
+    standalone: false
 })
 export class UserCodeListComponent implements OnInit {
 

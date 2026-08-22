@@ -12,7 +12,8 @@ import { InfoLayoutService } from '../../services/info-layout.service';
             multi: true,
             useExisting: forwardRef(() => InfoLayoutEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class InfoLayoutEditComponent extends NbDialogBaseComponent {
     

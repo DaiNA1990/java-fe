@@ -13,10 +13,11 @@ import { CategoryService } from '../../services/category.service';
 import { BaseFormPage } from '../base.form';
 
 @Component({
-  selector: 'app-info-page-radio',
-  templateUrl: './radio.component.html',
-  styleUrls: ['./radio.component.less'],
-  providers: [InfoDataService, CategoryService],
+    selector: 'app-info-page-radio',
+    templateUrl: './radio.component.html',
+    styleUrls: ['./radio.component.less'],
+    providers: [InfoDataService, CategoryService],
+    standalone: false
 })
 export class InfoPageRadioComponent extends BaseFormPage implements OnInit, OnDestroy {
   @Input() formCtrl: FormControl;

@@ -7,8 +7,9 @@ import { InfoReportBuildReportComponent } from '../build-report/build-report.com
 import { AuthService } from '@appkkkh/modules/user/auth';
 
 @Component({
-  selector: 'app-info-report-list',
-  templateUrl: `./info-report-list.component.html`,
+    selector: 'app-info-report-list',
+    templateUrl: `./info-report-list.component.html`,
+    standalone: false
 })
 export class InfoReportListComponent implements OnInit {
   formFilter: FormGroup;

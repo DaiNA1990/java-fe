@@ -4,9 +4,9 @@ import { DatePipe } from '@angular/common';
 import op from 'object-path';
 
 @Component({
-  selector: 'nb-table',
-  templateUrl: './component.html',
-  styles: [`
+    selector: 'nb-table',
+    templateUrl: './component.html',
+    styles: [`
   ::ng-deep {
     .p-datatable .p-datatable-tbody > tr > td {
       border: 1px dashed #f1f1f4;
@@ -14,9 +14,10 @@ import op from 'object-path';
     }
   }
   `],
-  providers: [
-    DatePipe
-  ]
+    providers: [
+        DatePipe
+    ],
+    standalone: false
 })
 export class NbTableComponent implements OnInit, OnDestroy {
 

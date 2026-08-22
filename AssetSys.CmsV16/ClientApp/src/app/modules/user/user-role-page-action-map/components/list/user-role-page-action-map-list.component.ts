@@ -5,6 +5,7 @@ import { UserRolePageActionMapService } from '../../services/user-role-page-acti
 @Component({
     selector: 'app-user-role-page-action-map-list',
     templateUrl: `./user-role-page-action-map-list.component.html`,
+    standalone: false
 })
 export class UserRolePageActionMapListComponent implements OnInit {
 

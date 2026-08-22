@@ -5,6 +5,7 @@ import { UserTitleService } from '../../services/user-title.service';
 @Component({
     selector: 'app-user-title-list',
     templateUrl: `./user-title-list.component.html`,
+    standalone: false
 })
 export class UserTitleListComponent implements OnInit {
 

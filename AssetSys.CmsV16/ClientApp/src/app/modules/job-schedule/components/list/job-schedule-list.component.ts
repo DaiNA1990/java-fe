@@ -28,11 +28,12 @@ interface PagedResponse<T> {
   totalRecords?: number;
 }
 @Component({
-  selector: 'app-job-schedule-list',
-  templateUrl: './job-schedule-list.component.html',
-  styleUrls: ['./job-schedule-list.component.scss'],
-  providers: [FileService],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-job-schedule-list',
+    templateUrl: './job-schedule-list.component.html',
+    styleUrls: ['./job-schedule-list.component.scss'],
+    providers: [FileService],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class JobScheduleListComponent implements OnInit, OnDestroy {
   // ViewChilds (match template ids)

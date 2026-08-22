@@ -5,10 +5,10 @@ import { FormBuilder } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-job-details',
-  templateUrl: './job-details.component.html',
-  styles: [
-    `
+    selector: 'app-job-details',
+    templateUrl: './job-details.component.html',
+    styles: [
+        `
       pre {
         font-family: 'Fira Code', monospace;
         font-size: 13px;
@@ -25,7 +25,8 @@ import { firstValueFrom } from 'rxjs';
         border-radius: 10px;
       }
     `,
-  ],
+    ],
+    standalone: false
 })
 export class JobDetailsComponent implements OnInit {
   job: any;

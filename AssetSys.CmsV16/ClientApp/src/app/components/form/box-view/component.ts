@@ -20,6 +20,7 @@ import { AbstractControl, FormControl } from '@angular/forms';
             [innerHTML]="message" *ngIf="formCtrl.touched && formCtrl.invalid"></div>
     </div>
     `,
+    standalone: false
 })
 export class NbBoxComponent {
 

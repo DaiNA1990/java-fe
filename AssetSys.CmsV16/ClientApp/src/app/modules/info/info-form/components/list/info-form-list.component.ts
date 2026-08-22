@@ -4,7 +4,8 @@ import { InfoFormService } from '../../services/info-form.service';
 
 @Component({
     selector: 'app-info-form-list',
-    templateUrl: `./info-form-list.component.html`
+    templateUrl: `./info-form-list.component.html`,
+    standalone: false
 })
 export class InfoFormListComponent implements OnInit {
 

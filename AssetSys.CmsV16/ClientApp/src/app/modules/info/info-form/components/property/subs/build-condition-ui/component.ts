@@ -12,7 +12,8 @@ import { isNull } from 'lodash';
 @Component({
     selector: 'app-info-form-property-build-condition-ui',
     templateUrl: `./component.html`,
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormPropertyBuildConditionUIComponent implements OnInit {
 

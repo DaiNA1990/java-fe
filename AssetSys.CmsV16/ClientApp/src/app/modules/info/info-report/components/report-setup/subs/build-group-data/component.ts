@@ -27,9 +27,10 @@ interface FCGroupdata {
 }
 
 @Component({
-  selector: 'app-info-form-report-build-group-data',
-  templateUrl: `./component.html`,
-  providers: [ConfirmationService, MessageService],
+    selector: 'app-info-form-report-build-group-data',
+    templateUrl: `./component.html`,
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormReportBuildGroupDataComponent implements OnInit {
   @Input() formCtrl: AbstractControl;

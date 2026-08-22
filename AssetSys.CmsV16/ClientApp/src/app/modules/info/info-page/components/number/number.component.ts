@@ -16,6 +16,7 @@ import { FormControl } from '@angular/forms';
             [useGrouping]="isCurrency"
             [inputStyle]="{'text-align':'right'}" />
     `,
+    standalone: false
 })
 export class InfoPageNumberComponent implements OnInit {
 

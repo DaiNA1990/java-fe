@@ -5,6 +5,7 @@ import { UserNotifyService } from '../../services/user-notify.service';
 @Component({
     selector: 'app-user-notify-list',
     templateUrl: `./user-notify-list.component.html`,
+    standalone: false
 })
 export class UserNotifyListComponent implements OnInit {
 

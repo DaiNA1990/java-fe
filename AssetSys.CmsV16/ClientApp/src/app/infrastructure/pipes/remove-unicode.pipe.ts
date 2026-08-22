@@ -4,7 +4,8 @@ import { Pipe, PipeTransform } from '@angular/core';
  * Returns object from parent object
  */
 @Pipe({
-	name: 'removeUnicode'
+    name: 'removeUnicode',
+    standalone: false
 })
 export class RemoveUnicodePipe implements PipeTransform {
 

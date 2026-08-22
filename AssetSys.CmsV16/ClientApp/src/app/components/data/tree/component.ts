@@ -4,8 +4,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NbBaseComponent } from '@appkkkh/components/form.base';
 
 @Component({
-  selector: 'nb-tree',
-  template: `
+    selector: 'nb-tree',
+    template: `
     <nb-form-box
       [formCtrl]="formCtrl"
       [name]="name"
@@ -34,8 +34,8 @@ import { NbBaseComponent } from '@appkkkh/components/form.base';
       </p-tree>
     </nb-form-box>
   `,
-  styles: [
-    `
+    styles: [
+        `
       ::ng-deep {
         .p-tree-container {
           margin: 0;
@@ -50,19 +50,20 @@ import { NbBaseComponent } from '@appkkkh/components/form.base';
         }
       }
     `,
-  ],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: forwardRef(() => NbTreeComponent),
-    },
-    {
-      provide: NbBaseComponent,
-      multi: true,
-      useExisting: forwardRef(() => NbTreeComponent),
-    },
-  ],
+    ],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => NbTreeComponent),
+        },
+        {
+            provide: NbBaseComponent,
+            multi: true,
+            useExisting: forwardRef(() => NbTreeComponent),
+        },
+    ],
+    standalone: false
 })
 export class NbTreeComponent
   extends NbBaseComponent

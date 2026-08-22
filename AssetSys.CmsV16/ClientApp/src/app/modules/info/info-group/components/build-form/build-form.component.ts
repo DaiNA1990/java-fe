@@ -5,6 +5,7 @@ import { InfoGroupService } from '../../services/info-group.service';
 @Component({
     selector: 'app-info-group-build-form',
     templateUrl: `./build-form.component.html`,
+    standalone: false
 })
 export class InfoGroupBuildFormComponent {
 

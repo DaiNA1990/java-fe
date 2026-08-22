@@ -8,9 +8,9 @@ import { UserModel } from '../../models/user.model';
 import { first } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-registration',
-  templateUrl: './registration.component.html',
-  styles: [`:host {
+    selector: 'app-registration',
+    templateUrl: './registration.component.html',
+    styles: [`:host {
     width: 100%;
     @media (min-width: 992px) {
       .login-form {
@@ -22,7 +22,8 @@ import { first } from 'rxjs/operators';
         }
       }
     }
-  }`]
+  }`],
+    standalone: false
 })
 export class RegistrationComponent implements OnInit, OnDestroy {
   registrationForm: FormGroup;

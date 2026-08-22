@@ -4,15 +4,16 @@ import { NbDialogBaseComponent } from '@appkkkh/components/page/dialog/dialog.ba
 import { InfoGroupService } from '../../services/info-group.service';
 
 @Component({
-  selector: 'app-info-group-edit',
-  templateUrl: `./info-group-edit.component.html`,
-  providers: [
-    {
-      provide: NbDialogBaseComponent,
-      multi: true,
-      useExisting: forwardRef(() => InfoGroupEditComponent),
-    },
-  ],
+    selector: 'app-info-group-edit',
+    templateUrl: `./info-group-edit.component.html`,
+    providers: [
+        {
+            provide: NbDialogBaseComponent,
+            multi: true,
+            useExisting: forwardRef(() => InfoGroupEditComponent),
+        },
+    ],
+    standalone: false
 })
 export class InfoGroupEditComponent extends NbDialogBaseComponent {
   constructor(public infoGroupService: InfoGroupService, private formBuilder: FormBuilder) {

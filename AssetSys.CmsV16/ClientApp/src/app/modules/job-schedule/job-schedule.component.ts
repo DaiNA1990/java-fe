@@ -2,15 +2,15 @@ import { style } from '@angular/animations';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-job-schedule',
-  template: `
+    selector: 'app-job-schedule',
+    template: `
     <!-- <div class="pb-3 pb-lg-6">
     <app-breadcrumb module="JobSchedule" group="JobSchedule" name="JobSchedule"></app-breadcrumb>
   </div> -->
     <app-job-schedule-list></app-job-schedule-list>
   `,
-  styles: [
-    `
+    styles: [
+        `
       :host ::ng-deep {
         .p-tabview-nav-link {
           color: rgb(0, 107, 104);
@@ -32,7 +32,8 @@ import { Component } from '@angular/core';
         }
       }
     `,
-  ],
+    ],
+    standalone: false
 })
 export class JobScheduleComponent {
   constructor() {}

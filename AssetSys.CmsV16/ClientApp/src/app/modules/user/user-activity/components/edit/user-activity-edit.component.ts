@@ -12,7 +12,8 @@ import { UserActivityService } from '../../services/user-activity.service';
             multi: true,
             useExisting: forwardRef(() => UserActivityEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserActivityEditComponent extends NbDialogBaseComponent {
 

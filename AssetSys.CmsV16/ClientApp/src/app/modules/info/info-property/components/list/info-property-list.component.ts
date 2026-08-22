@@ -5,6 +5,7 @@ import { InfoPropertyService } from '../../services/info-property.service';
 @Component({
     selector: 'app-info-property-list',
     templateUrl: `./info-property-list.component.html`,
+    standalone: false
 })
 export class InfoPropertyListComponent implements OnInit {
 

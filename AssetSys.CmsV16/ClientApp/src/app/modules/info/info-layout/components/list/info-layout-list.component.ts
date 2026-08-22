@@ -5,6 +5,7 @@ import { InfoLayoutService } from '../../services/info-layout.service';
 @Component({
     selector: 'app-info-layout-list',
     templateUrl: `./info-layout-list.component.html`,
+    standalone: false
 })
 export class InfoLayoutListComponent implements OnInit {
 

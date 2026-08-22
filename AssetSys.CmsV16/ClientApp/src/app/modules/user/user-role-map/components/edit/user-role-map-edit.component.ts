@@ -12,7 +12,8 @@ import { UserRoleMapService } from '../../services/user-role-map.service';
             multi: true,
             useExisting: forwardRef(() => UserRoleMapEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserRoleMapEditComponent extends NbDialogBaseComponent {
 

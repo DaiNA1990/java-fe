@@ -6,6 +6,7 @@ import { UserRoleActionMapAssignComponent } from '@appkkkh/modules/user/user-rol
 @Component({
     selector: 'app-user-role-list',
     templateUrl: `./user-role-list.component.html`,
+    standalone: false
 })
 export class UserRoleListComponent implements OnInit {
 

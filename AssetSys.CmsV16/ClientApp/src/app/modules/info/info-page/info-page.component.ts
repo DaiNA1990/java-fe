@@ -12,8 +12,8 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { AuthService } from '@appkkkh/modules/user/auth';
 import { FormConfig, keepConfig } from './services/form-config.service';
 @Component({
-  selector: 'app-info-page',
-  template: `
+    selector: 'app-info-page',
+    template: `
     <!-- <div class="pb-3 pb-lg-6">
     <app-breadcrumb [module]="layout?.group.name || ''" group="Thông tin" name="Quản lý"></app-breadcrumb>
   </div> -->
@@ -39,9 +39,10 @@ import { FormConfig, keepConfig } from './services/form-config.service';
     <p-toast></p-toast>
     <p-confirmDialog appendTo="body"></p-confirmDialog>
   `,
-  providers: [
-    InfoLayoutService
-  ]
+    providers: [
+        InfoLayoutService
+    ],
+    standalone: false
 })
 export class InfoPageComponent extends BaseFormPage implements OnInit, OnDestroy {
   layout: any = null;

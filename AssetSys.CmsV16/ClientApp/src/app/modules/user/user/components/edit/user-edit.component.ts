@@ -9,15 +9,16 @@ import { UserRoleService } from '@appkkkh/modules/user/user-role/services/user-r
 
 /// USER_CMS
 @Component({
-  selector: 'app-user-edit',
-  templateUrl: `./user-edit.component.html`,
-  providers: [
-    {
-      provide: NbDialogBaseComponent,
-      multi: true,
-      useExisting: forwardRef(() => UserEditComponent)
-    }
-  ]
+    selector: 'app-user-edit',
+    templateUrl: `./user-edit.component.html`,
+    providers: [
+        {
+            provide: NbDialogBaseComponent,
+            multi: true,
+            useExisting: forwardRef(() => UserEditComponent)
+        }
+    ],
+    standalone: false
 })
 export class UserEditComponent extends NbDialogBaseComponent {
 

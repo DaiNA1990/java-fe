@@ -6,9 +6,10 @@ import { LayoutService } from '../../../core/layout.service';
 import menus from './menus.json';
 
 @Component({
-  selector: 'app-header-menu',
-  templateUrl: './header-menu.component.html',
-  styleUrls: ['./header-menu.component.scss'],
+    selector: 'app-header-menu',
+    templateUrl: './header-menu.component.html',
+    styleUrls: ['./header-menu.component.scss'],
+    standalone: false
 })
 export class HeaderMenuComponent implements OnInit {
 

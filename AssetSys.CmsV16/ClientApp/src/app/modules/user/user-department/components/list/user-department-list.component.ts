@@ -5,6 +5,7 @@ import { UserDepartmentService } from '../../services/user-department.service';
 @Component({
     selector: 'app-user-department-list',
     templateUrl: `./user-department-list.component.html`,
+    standalone: false
 })
 export class UserDepartmentListComponent implements OnInit {
 

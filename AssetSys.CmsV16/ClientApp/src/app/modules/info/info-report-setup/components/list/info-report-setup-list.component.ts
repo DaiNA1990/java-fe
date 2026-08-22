@@ -6,8 +6,9 @@ import { firstValueFrom } from 'rxjs';
 import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 
 @Component({
-  selector: 'app-info-report-setup-list',
-  templateUrl: `./info-report-setup-list.component.html`,
+    selector: 'app-info-report-setup-list',
+    templateUrl: `./info-report-setup-list.component.html`,
+    standalone: false
 })
 export class InfoReportSetupListComponent implements OnInit {
   constructor(

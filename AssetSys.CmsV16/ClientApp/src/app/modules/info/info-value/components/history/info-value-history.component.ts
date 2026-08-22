@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
     selector: 'app-info-value-history',
     templateUrl: `./info-value-history.component.html`,
+    standalone: false
 })
 export class InfoValueHistoryComponent implements OnInit {
 

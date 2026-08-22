@@ -8,7 +8,8 @@ import { Component, OnInit, OnDestroy, TemplateRef, ViewChild, Input } from '@an
                 <ng-content></ng-content>
             </div>
         </ng-template>        
-    `
+    `,
+    standalone: false
 })
 export class NbLayoutGridItemComponent implements OnInit, OnDestroy {
 

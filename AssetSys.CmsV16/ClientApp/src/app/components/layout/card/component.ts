@@ -21,7 +21,8 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, Input, ContentChild, T
         <div class="card-footer" [class]="footerClass">
             <ng-container *ngTemplateOutlet="footerTemplate"></ng-container>
         </div>
-    </ng-template>`
+    </ng-template>`,
+    standalone: false
 })
 export class NbLayoutCardComponent implements OnInit, OnDestroy {
 

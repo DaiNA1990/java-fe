@@ -17,7 +17,8 @@ import { RemoveUnicodePipe } from '@appkkkh/infrastructure/pipes/remove-unicode.
         }
         `
     ],
-    providers: [ConfirmationService, MessageService, RemoveUnicodePipe]
+    providers: [ConfirmationService, MessageService, RemoveUnicodePipe],
+    standalone: false
 })
 export class InfoFormDataFieldComponent implements OnInit {
 

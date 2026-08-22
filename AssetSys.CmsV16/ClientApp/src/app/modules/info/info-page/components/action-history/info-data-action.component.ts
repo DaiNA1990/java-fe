@@ -14,10 +14,11 @@ import { ActivatedRoute } from '@angular/router';
 import { BaseFormPage } from '../base.form';
 
 @Component({
-  selector: 'app-info-data-action',
-  templateUrl: `./info-data-action.component.html`,
-  styleUrls: ['./info-data-action.component.scss'],
-  providers: [InfoDataActionService],
+    selector: 'app-info-data-action',
+    templateUrl: `./info-data-action.component.html`,
+    styleUrls: ['./info-data-action.component.scss'],
+    providers: [InfoDataActionService],
+    standalone: false
 })
 export class InfoDataActionComponent
   extends BaseFormPage

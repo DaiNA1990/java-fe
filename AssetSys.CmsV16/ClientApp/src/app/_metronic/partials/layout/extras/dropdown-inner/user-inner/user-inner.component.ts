@@ -5,8 +5,9 @@ import { AuthService } from '@appkkkh/modules/user/auth';
 import { AppCons } from '@appkkkh/core/contants/app.cons';
 
 @Component({
-  selector: 'app-user-inner',
-  templateUrl: './user-inner.component.html',
+    selector: 'app-user-inner',
+    templateUrl: './user-inner.component.html',
+    standalone: false
 })
 export class UserInnerComponent implements OnInit, OnDestroy {
   @HostBinding('class')

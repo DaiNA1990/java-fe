@@ -7,9 +7,10 @@ import { BaseFormPage } from '../base.form';
 import { saveAs } from 'file-saver';
 
 @Component({
-  selector: 'app-info-page-fileupload',
-  templateUrl: `./fileupload.component.html`,
-  providers: [ConfirmationService, MessageService, FileService],
+    selector: 'app-info-page-fileupload',
+    templateUrl: `./fileupload.component.html`,
+    providers: [ConfirmationService, MessageService, FileService],
+    standalone: false
 })
 export class InfoPageFileUploadComponent
   extends BaseFormPage

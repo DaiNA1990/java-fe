@@ -8,7 +8,8 @@ import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 import { NbPageListComponent } from '../list/component';
 
 @Directive({
-    providers: [MessageService]
+    providers: [MessageService],
+    standalone: false
 })
 export abstract class NbDialogBaseComponent implements OnInit, OnDestroy {
 

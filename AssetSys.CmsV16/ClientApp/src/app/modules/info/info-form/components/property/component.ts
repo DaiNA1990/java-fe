@@ -13,7 +13,8 @@ import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 @Component({
     selector: 'app-info-form-property',
     templateUrl: `./component.html`,
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormPropertyComponent implements OnInit {
 

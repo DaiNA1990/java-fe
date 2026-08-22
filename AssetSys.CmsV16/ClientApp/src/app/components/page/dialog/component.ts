@@ -3,8 +3,9 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { NbDialogBaseComponent } from './dialog.base';
 
 @Component({
-  selector: 'nb-page-dialog',
-  templateUrl: './component.html',
+    selector: 'nb-page-dialog',
+    templateUrl: './component.html',
+    standalone: false
 })
 export class NbPageDialogComponent implements OnInit, OnDestroy {
 

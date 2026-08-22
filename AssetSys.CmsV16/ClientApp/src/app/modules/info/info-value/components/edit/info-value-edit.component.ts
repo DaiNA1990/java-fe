@@ -12,7 +12,8 @@ import { InfoValueService } from '../../services/info-value.service';
             multi: true,
             useExisting: forwardRef(() => InfoValueEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class InfoValueEditComponent extends NbDialogBaseComponent {
 

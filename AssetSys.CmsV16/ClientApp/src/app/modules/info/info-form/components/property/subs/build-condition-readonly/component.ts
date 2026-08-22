@@ -11,7 +11,8 @@ import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 @Component({
     selector: 'app-info-form-property-build-condition-readonly',
     templateUrl: `./component.html`,
-    providers: [ConfirmationService, MessageService]
+    providers: [ConfirmationService, MessageService],
+    standalone: false
 })
 export class InfoFormPropertyBuildConditionReadOnlyComponent implements OnInit {
 

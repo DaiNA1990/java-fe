@@ -114,7 +114,8 @@ import { map } from 'lodash';
             multi: true,
             useExisting: forwardRef(() => NbFileComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class NbFileComponent extends NbBaseComponent implements OnInit, OnDestroy, ControlValueAccessor {
 

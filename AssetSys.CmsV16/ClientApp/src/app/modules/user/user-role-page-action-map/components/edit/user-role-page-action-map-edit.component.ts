@@ -12,7 +12,8 @@ import { UserRolePageActionMapService } from '../../services/user-role-page-acti
             multi: true,
             useExisting: forwardRef(() => UserRolePageActionMapEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserRolePageActionMapEditComponent extends NbDialogBaseComponent {
 

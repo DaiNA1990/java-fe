@@ -21,8 +21,8 @@ import { CategoryService } from '../../services/category.service';
 import { BaseFormPage } from '../base.form';
 
 @Component({
-  selector: 'app-info-page-select',
-  template: `
+    selector: 'app-info-page-select',
+    template: `
     <p-dropdown
       [formControl]="formCtrl"
       [options]="items"
@@ -120,8 +120,8 @@ import { BaseFormPage } from '../base.form';
       </span>
     </div>
   `,
-  styles: [
-    `
+    styles: [
+        `
       ::ng-deep {
         .p-dropdown-items {
           margin: 0;
@@ -137,8 +137,9 @@ import { BaseFormPage } from '../base.form';
         }
       }
     `,
-  ],
-  providers: [InfoDataService, CategoryService],
+    ],
+    providers: [InfoDataService, CategoryService],
+    standalone: false
 })
 export class InfoPageSelectComponent
   extends BaseFormPage

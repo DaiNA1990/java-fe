@@ -12,7 +12,8 @@ import { UserPageActionService } from '../../services/user-page-action.service';
             multi: true,
             useExisting: forwardRef(() => UserPageActionEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserPageActionEditComponent extends NbDialogBaseComponent {
 

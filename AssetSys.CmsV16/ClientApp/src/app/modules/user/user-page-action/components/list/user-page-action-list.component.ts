@@ -7,6 +7,7 @@ import { UserPageActionEditComponent } from '../edit/user-page-action-edit.compo
 @Component({
     selector: 'app-user-page-action-list',
     templateUrl: `./user-page-action-list.component.html`,
+    standalone: false
 })
 export class UserPageActionListComponent implements OnInit {
 

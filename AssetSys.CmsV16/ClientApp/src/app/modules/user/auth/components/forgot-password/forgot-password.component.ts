@@ -11,9 +11,9 @@ enum ErrorStates {
 }
 
 @Component({
-  selector: 'app-forgot-password',
-  templateUrl: './forgot-password.component.html',
-  styles: [`:host {
+    selector: 'app-forgot-password',
+    templateUrl: './forgot-password.component.html',
+    styles: [`:host {
     width: 100%;
     @media (min-width: 992px) {
       .login-form {
@@ -25,7 +25,8 @@ enum ErrorStates {
         }
       }
     }
-  }`]
+  }`],
+    standalone: false
 })
 export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm: FormGroup;

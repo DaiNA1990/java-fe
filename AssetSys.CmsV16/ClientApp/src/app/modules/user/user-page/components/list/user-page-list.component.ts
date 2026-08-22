@@ -6,6 +6,7 @@ import { UserPageActionListComponent } from '@appkkkh/modules/user/user-page-act
 @Component({
     selector: 'app-user-page-list',
     templateUrl: `./user-page-list.component.html`,
+    standalone: false
 })
 export class UserPageListComponent implements OnInit {
 

@@ -27,15 +27,16 @@ import { saveAs } from 'file-saver';
 import { FormConfig } from '../../services/form-config.service';
 
 @Component({
-  selector: 'app-info-page-table',
-  templateUrl: `./table.component.html`,
-  providers: [
-    InfoDataService,
-    FileService,
-    CategoryService,
-    InfoFormService,
-  ],
-  styleUrls: ['./table.component.scss'],
+    selector: 'app-info-page-table',
+    templateUrl: `./table.component.html`,
+    providers: [
+        InfoDataService,
+        FileService,
+        CategoryService,
+        InfoFormService,
+    ],
+    styleUrls: ['./table.component.scss'],
+    standalone: false
 })
 export class InfoPageTableComponent
   extends BaseFormPage

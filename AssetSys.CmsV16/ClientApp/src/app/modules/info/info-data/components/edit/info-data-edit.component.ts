@@ -12,7 +12,8 @@ import { InfoDataService } from '../../services/info-data.service';
             multi: true,
             useExisting: forwardRef(() => InfoDataEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class InfoDataEditComponent extends NbDialogBaseComponent {
 

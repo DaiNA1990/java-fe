@@ -7,7 +7,8 @@ import * as objectPath from 'object-path';
  * Returns object from parent object
  */
 @Pipe({
-	name: 'getObject'
+    name: 'getObject',
+    standalone: false
 })
 export class GetObjectPipe implements PipeTransform {
 	/**

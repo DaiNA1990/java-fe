@@ -12,7 +12,8 @@ import { UserTitleService } from '../../services/user-title.service';
             multi: true,
             useExisting: forwardRef(() => UserTitleEditComponent)
         }
-    ]
+    ],
+    standalone: false
 })
 export class UserTitleEditComponent extends NbDialogBaseComponent {
 
