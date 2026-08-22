@@ -4,9 +4,15 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@srckkkh/*": ["./src/*"],
-      "@appkkkh/*": ["./src/app/*"],
-      "@components/*": ["./src/app/components/*"]
+      "@srckkkh/*": [
+        "./src/*"
+      ],
+      "@appkkkh/*": [
+        "./src/app/*"
+      ],
+      "@components/*": [
+        "./src/app/components/*"
+      ]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
@@ -19,7 +25,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
