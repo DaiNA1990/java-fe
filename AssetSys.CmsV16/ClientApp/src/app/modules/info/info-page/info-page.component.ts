@@ -30,6 +30,13 @@ import { FormConfig, keepConfig } from './services/form-config.service';
         <span class="visually-hidden">Loading...</span>
       </span>
     </div>
+    <!--
+      p-toast / p-confirmDialog để ở đây, KHÔNG để trong form.component:
+      form lồng nhau (control loại layout, form trong modal) nên mỗi instance sẽ
+      render thêm một cái, mà MessageService lại là singleton của info-page.module
+      -> một message add() hiện ra trên tất cả các toast, nhìn thành chồng nhau.
+    -->
+    <p-toast></p-toast>
     <p-confirmDialog appendTo="body"></p-confirmDialog>
   `,
   providers: [

@@ -6,6 +6,7 @@ import { InfoPageComponent } from './info-page.component';
 import { InfoPageComponentsModule } from './components/info-page-components.module';
 import { AuthGuard } from '../../user/auth/services/auth.guard';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
 import { ConfirmationService,MessageService } from 'primeng/api';
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { ConfirmationService,MessageService } from 'primeng/api';
         ]),
         InfoPageComponentsModule,
         NbBreadcrumbModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        ToastModule
     ],
     providers: [ConfirmationService, MessageService]
 })
