@@ -1,46 +1,62 @@
 <p-table [value]="items" [lazy]="true" [autoLayout]="true" [totalRecords]="totalRecords" [showCurrentPageReport]="true"
-    [(selection)]="selectedItems" [rowsPerPageOptions]="[10, 25, 50]"
-    [currentPageReportTemplate]="isShowPagingReport ? 'Hiển thị từ {first} đến {last} của {totalRecords} bản ghi' : ''" 
-    [paginator]="true" [rows]="10"
-    [tableStyle]="{ 'min-width': minWidth }" 
-    [scrollable]="isScrollable"
-    scrollHeight="{{scrollHeight}}"
-    styleClass="p-datatable-gridlines" 
-    [resizableColumns]="false"
-    (selectionChange)="onSelectionChange($event)" (onPage)="onPage($event)" (onSort)="onSort($event)"
-    (onFilter)="onFilter($event)">
-    <ng-template pTemplate="header">
-        <tr>
-            <th scope="col" style="width: 4rem" *ngIf="isRowCheckbox">
-                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-            </th>
-            <th scope="col" *ngFor="let col of columns" [pSortableColumn]="col.canSort ? col.field : undefined">
-                {{col.header}}
-                <p-sortIcon [field]="col.field" *ngIf="col.canSort"></p-sortIcon>
-            </th>
-            <th scope="col" [ngStyle]="{'width': rowActionWidth}" *ngIf="rowActionsTemplate !== null"></th>
-        </tr>
-        <!-- <tr>
-            <td></td>
-            <td *ngFor="let col of columns" class="py-3">
-                <p-columnFilter type="text" [field]="col.field"></p-columnFilter>
-            </td>
-            <td></td>
-        </tr> -->
-    </ng-template>
-    <ng-template pTemplate="body" let-item>
-        <tr>
-             <td *ngIf="isRowCheckbox">
-                <p-tableCheckbox [value]="item"></p-tableCheckbox>
-            </td>           
-            <td *ngFor="let col of columns">
-                <ng-container *ngIf="col.columnTemplate === undefined">{{getText(item, col)}}</ng-container>
-                <ng-container
-                    *ngTemplateOutlet="col.columnTemplate !== undefined ? col.columnTemplate : null;context: {item: item}" />
-            </td>
-            <td class="text-end" *ngIf="rowActionsTemplate !== null">
-                <ng-container *ngTemplateOutlet="rowActionsTemplate;context: {item: item}" />
-            </td>
-        </tr>
-    </ng-template>
+  [(selection)]="selectedItems" [rowsPerPageOptions]="[10, 25, 50]"
+  [currentPageReportTemplate]="isShowPagingReport ? 'Hiển thị từ {first} đến {last} của {totalRecords} bản ghi' : ''"
+  [paginator]="true" [rows]="10"
+  [tableStyle]="{ 'min-width': minWidth }"
+  [scrollable]="isScrollable"
+  scrollHeight="{{scrollHeight}}"
+  styleClass="p-datatable-gridlines"
+  [resizableColumns]="false"
+  (selectionChange)="onSelectionChange($event)" (onPage)="onPage($event)" (onSort)="onSort($event)"
+  (onFilter)="onFilter($event)">
+  <ng-template pTemplate="header">
+    <tr>
+      @if (isRowCheckbox) {
+        <th scope="col" style="width: 4rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+      }
+      @for (col of columns; track col) {
+        <th scope="col" [pSortableColumn]="col.canSort ? col.field : undefined">
+          {{col.header}}
+          @if (col.canSort) {
+            <p-sortIcon [field]="col.field"></p-sortIcon>
+          }
+        </th>
+      }
+      @if (rowActionsTemplate !== null) {
+        <th scope="col" [ngStyle]="{'width': rowActionWidth}"></th>
+      }
+    </tr>
+    <!-- <tr>
+    <td></td>
+    <td *ngFor="let col of columns" class="py-3">
+      <p-columnFilter type="text" [field]="col.field"></p-columnFilter>
+    </td>
+    <td></td>
+  </tr> -->
+</ng-template>
+<ng-template pTemplate="body" let-item>
+  <tr>
+    @if (isRowCheckbox) {
+      <td>
+        <p-tableCheckbox [value]="item"></p-tableCheckbox>
+      </td>
+    }
+    @for (col of columns; track col) {
+      <td>
+        @if (col.columnTemplate === undefined) {
+          {{getText(item, col)}}
+        }
+        <ng-container
+          *ngTemplateOutlet="col.columnTemplate !== undefined ? col.columnTemplate : null;context: {item: item}" />
+        </td>
+      }
+      @if (rowActionsTemplate !== null) {
+        <td class="text-end">
+          <ng-container *ngTemplateOutlet="rowActionsTemplate;context: {item: item}" />
+        </td>
+      }
+    </tr>
+  </ng-template>
 </p-table>

@@ -1,6 +1,6 @@
-<ng-container *ngFor="let item of items">
+@for (item of items; track item) {
   <ng-container *ngTemplateOutlet="menu;context: {item: item}" />
-</ng-container>
+}
 
 <ng-template #menu let-item="item">
   <ng-container *ngTemplateOutlet="item.subs === undefined ? menuNoSub : menuSubs;context: {item: item}" />
@@ -27,9 +27,9 @@
     </span>
     <div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown menu-rounded-0 py-lg-4 w-lg-225px"
       data-kt-menu-dismiss="true">
-      <ng-container *ngFor="let sub of item.subs">
+      @for (sub of item.subs; track sub) {
         <ng-container *ngTemplateOutlet="sub.subs === undefined ? menuNoSub : menuSubs;context: {item: sub}" />
-      </ng-container>
+      }
     </div>
   </div>
 </ng-template>

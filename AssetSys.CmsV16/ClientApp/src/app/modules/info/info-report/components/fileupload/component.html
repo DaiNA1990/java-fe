@@ -1,35 +1,41 @@
 <div class="dropzone dropzone-queue mb-2">
-    <div class="dropzone-panel mb-4" *ngIf="formCtrl.value === undefined || formCtrl.value === null || formCtrl.value === ''">
-        <a href="javascript:;" class="dropzone-select btn btn-sm btn-primary me-2" (click)="chosenFile($event)">Chọn file</a>
+  @if (formCtrl.value === undefined || formCtrl.value === null || formCtrl.value === '') {
+    <div class="dropzone-panel mb-4">
+      <a href="javascript:;" class="dropzone-select btn btn-sm btn-primary me-2" (click)="chosenFile($event)">Chọn file</a>
     </div>
-    <div class="dropzone-items" *ngIf="formCtrl.value && formCtrl.value.length > 0">
-        <div class="dropzone-item p-5 dz-image-preview">
-            <div class="dropzone-file">
-                <div class="dropzone-filename text-gray-900">
-                    <a href="javascript:;" (click)="downloadFile($event)">{{formCtrl.value}}</a>
-                    <strong *ngIf="fileChosen">(<span><strong>{{fileChosen.size / 1024 / 1024 |
-                                number:'1.2-2'}}</strong> MB</span>)</strong>
-                </div>
-                <div class="dropzone-error mt-0"></div>
-            </div>
-            <!-- <div class="dropzone-progress">
-                <div class="progress bg-gray-300">
-                    <div class="progress-bar bg-primary"
-                        role="progressbar"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        aria-valuenow="100"></div>
-                </div>
-            </div> -->
-            <div class="dropzone-toolbar">
-                <span class="dropzone-delete" (click)="removeFile($event)">
-                    <i class="ki-duotone ki-cross fs-2">
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                    </i>
-                </span>
-            </div>
+  }
+  @if (formCtrl.value && formCtrl.value.length > 0) {
+    <div class="dropzone-items">
+      <div class="dropzone-item p-5 dz-image-preview">
+        <div class="dropzone-file">
+          <div class="dropzone-filename text-gray-900">
+            <a href="javascript:;" (click)="downloadFile($event)">{{formCtrl.value}}</a>
+            @if (fileChosen) {
+              <strong>(<span><strong>{{fileChosen.size / 1024 / 1024 |
+              number:'1.2-2'}}</strong> MB</span>)</strong>
+            }
+          </div>
+          <div class="dropzone-error mt-0"></div>
         </div>
+        <!-- <div class="dropzone-progress">
+        <div class="progress bg-gray-300">
+          <div class="progress-bar bg-primary"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          aria-valuenow="100"></div>
+        </div>
+      </div> -->
+      <div class="dropzone-toolbar">
+        <span class="dropzone-delete" (click)="removeFile($event)">
+          <i class="ki-duotone ki-cross fs-2">
+            <span class="path1"></span>
+            <span class="path2"></span>
+          </i>
+        </span>
+      </div>
     </div>
+  </div>
+}
 </div>
 <p-toast></p-toast>

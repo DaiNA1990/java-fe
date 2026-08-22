@@ -7,21 +7,23 @@ import { DropdownFilterEvent } from 'primeng/dropdown';
     selector: 'nb-select',
     template: `
     <nb-form-box [formCtrl]="formCtrl" [name]="name" [label]="label" [message]="message" [hint]="hint"
-        [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
-        <p-dropdown [options]="items" 
-            [(ngModel)]="value" 
-            [placeholder]="placeholder" 
-            [showClear]="true"
-            [editable]="isEdit" 
-            [filter]="isFilter"
-            [group]="isGroup"
-            [optionLabel]="fieldText" 
-            [optionValue]="fieldValue"
-            (onFilter)="onFilter($event)">
-            <ng-template let-group pTemplate="group" *ngIf="isGroup">
-                <span>{{ group[fieldText] }}</span>
-            </ng-template>
-        </p-dropdown>
+      [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
+      <p-dropdown [options]="items"
+        [(ngModel)]="value"
+        [placeholder]="placeholder"
+        [showClear]="true"
+        [editable]="isEdit"
+        [filter]="isFilter"
+        [group]="isGroup"
+        [optionLabel]="fieldText"
+        [optionValue]="fieldValue"
+        (onFilter)="onFilter($event)">
+        @if (isGroup; as group) {
+          <ng-template let-group pTemplate="group">
+            <span>{{ group[fieldText] }}</span>
+          </ng-template>
+        }
+      </p-dropdown>
     </nb-form-box>
     `,
     styles: [`

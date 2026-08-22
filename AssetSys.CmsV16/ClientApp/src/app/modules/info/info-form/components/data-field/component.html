@@ -1,86 +1,86 @@
 <!-- https://preview.keenthemes.com/metronic8/demo1/dashboards/online-courses.html -->
 <p-panel header="Trường thông tin" [toggleable]="true">
-	<ng-template pTemplate="icons">
-		<button class="p-panel-header-icon p-link mr-2" (click)="openAddGroup()">
-			<i class="ki-duotone ki-add-item fs-2">
-				<span class="path1"></span>
-				<span class="path2"></span>
-				<span class="path3"></span>
-			</i>
-		</button>
-		<button class="p-panel-header-icon p-link mr-2" (click)="open()">
-			<i class="ki-duotone ki-plus-square fs-2">
-				<span class="path1"></span>
-				<span class="path2"></span>
-				<span class="path3"></span>
-			</i>
-		</button>
-	</ng-template>
-	<ng-template pTemplate="content">
-		<nb-text [formCtrl]="keywordCtrl" placeholder="Từ khoá..." (onChange)="keywordChange($event)" />
-		<div class="pt-6" style="height: calc(40vh + 18px); max-width: 100%; overflow-y: auto; overflow-x: hidden;"
-			cdkDropList>
-			<ng-container *ngFor="let item of properties">
-				<div class="d-flex flex-stack" cdkDrag [cdkDragData]="item">
-					<a href="javascript:;"
-						class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px me-4 w-25px"
-						cdkDragHandle>
-						<i class="ki-duotone ki-sort fs-2">
-							<span class="path1"></span>
-							<span class="path2"></span>
-							<span class="path3"></span>
-							<span class="path4"></span>
-						</i>
-					</a>
-					<div class="d-flex align-items-center flex-row-fluid flex-wrap">
-						<div class="flex-grow-1 me-2">
-							<a href="javascript:;" class="text-gray-800 text-hover-primary fs-6 fw-bold"
-								(click)="open(item)">{{item.name}}</a>
-							<span class="text-muted fw-semibold d-block fs-7">{{item.code}}({{item.typeData}})</span>
-						</div>
-						<a href="javascript:;"
-							class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px"
-							(click)="deleteItem($event, item)">
-							<i class="ki-duotone ki-cross fs-2">
-								<span class="path1"></span>
-								<span class="path2"></span>
-							</i>
-						</a>
-					</div>
-					<div class="flex-grow-1 me-2" *cdkDragPreview>
-						<a href="javascript:;" class="text-gray-800 text-hover-primary fs-6 fw-bold"
-							(click)="open(item)">{{item.name}}</a>
-						<span class="text-muted fw-semibold d-block fs-7">{{item.code}}({{item.typeData}})</span>
-					</div>
-				</div>
-				<div class="separator separator-dashed my-4"></div>
-			</ng-container>
-		</div>
-	</ng-template>
+  <ng-template pTemplate="icons">
+    <button class="p-panel-header-icon p-link mr-2" (click)="openAddGroup()">
+      <i class="ki-duotone ki-add-item fs-2">
+        <span class="path1"></span>
+        <span class="path2"></span>
+        <span class="path3"></span>
+      </i>
+    </button>
+    <button class="p-panel-header-icon p-link mr-2" (click)="open()">
+      <i class="ki-duotone ki-plus-square fs-2">
+        <span class="path1"></span>
+        <span class="path2"></span>
+        <span class="path3"></span>
+      </i>
+    </button>
+  </ng-template>
+  <ng-template pTemplate="content">
+    <nb-text [formCtrl]="keywordCtrl" placeholder="Từ khoá..." (onChange)="keywordChange($event)" />
+    <div class="pt-6" style="height: calc(40vh + 18px); max-width: 100%; overflow-y: auto; overflow-x: hidden;"
+      cdkDropList>
+      @for (item of properties; track item) {
+        <div class="d-flex flex-stack" cdkDrag [cdkDragData]="item">
+          <a href="javascript:;"
+            class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px me-4 w-25px"
+            cdkDragHandle>
+            <i class="ki-duotone ki-sort fs-2">
+              <span class="path1"></span>
+              <span class="path2"></span>
+              <span class="path3"></span>
+              <span class="path4"></span>
+            </i>
+          </a>
+          <div class="d-flex align-items-center flex-row-fluid flex-wrap">
+            <div class="flex-grow-1 me-2">
+              <a href="javascript:;" class="text-gray-800 text-hover-primary fs-6 fw-bold"
+              (click)="open(item)">{{item.name}}</a>
+              <span class="text-muted fw-semibold d-block fs-7">{{item.code}}({{item.typeData}})</span>
+            </div>
+            <a href="javascript:;"
+              class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px"
+              (click)="deleteItem($event, item)">
+              <i class="ki-duotone ki-cross fs-2">
+                <span class="path1"></span>
+                <span class="path2"></span>
+              </i>
+            </a>
+          </div>
+          <div class="flex-grow-1 me-2" *cdkDragPreview>
+            <a href="javascript:;" class="text-gray-800 text-hover-primary fs-6 fw-bold"
+            (click)="open(item)">{{item.name}}</a>
+            <span class="text-muted fw-semibold d-block fs-7">{{item.code}}({{item.typeData}})</span>
+          </div>
+        </div>
+        <div class="separator separator-dashed my-4"></div>
+      }
+    </div>
+  </ng-template>
 </p-panel>
 
 <p-dialog header="Thêm nhiều trường thông tin" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }"
-	[styleClass]="'blockui'">
-	<ng-template pTemplate="header">
-		<div class="inline-flex align-items-center justify-content-center gap-2">
-			<span class="font-bold white-space-nowrap">
-				Thêm nhiều trường thông tin
-			</span>
-		</div>
-	</ng-template>
-	<div class="mb-10">
-		<nb-textarea [formCtrl]="formAddGroupControl.controls.fields" label="Thông tin" placeholder="Nhập thông tin" />
-	</div>
-	<ng-template pTemplate="footer">
-		<p-button label="Đóng" [text]="true" severity="secondary" styleClass="mx-3" (click)="visible = false" />
-		<p-button label="Thực hiện" [outlined]="true" severity="secondary" (click)="submit($event)" />
-	</ng-template>
-	<div class="blockui-overlay bg-warning bg-opacity-5" style="z-index: 10;" [ngClass]="{'d-none': !isSubmiting}">
-		<div class="blockui-message">
-			<span class="spinner-border text-primary"></span>
-			Đang thực hiện...
-		</div>
-	</div>
+  [styleClass]="'blockui'">
+  <ng-template pTemplate="header">
+    <div class="inline-flex align-items-center justify-content-center gap-2">
+      <span class="font-bold white-space-nowrap">
+        Thêm nhiều trường thông tin
+      </span>
+    </div>
+  </ng-template>
+  <div class="mb-10">
+    <nb-textarea [formCtrl]="formAddGroupControl.controls.fields" label="Thông tin" placeholder="Nhập thông tin" />
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button label="Đóng" [text]="true" severity="secondary" styleClass="mx-3" (click)="visible = false" />
+    <p-button label="Thực hiện" [outlined]="true" severity="secondary" (click)="submit($event)" />
+  </ng-template>
+  <div class="blockui-overlay bg-warning bg-opacity-5" style="z-index: 10;" [ngClass]="{'d-none': !isSubmiting}">
+    <div class="blockui-message">
+      <span class="spinner-border text-primary"></span>
+      Đang thực hiện...
+    </div>
+  </div>
 </p-dialog>
 
 <app-info-property-edit [groupId]="groupId" (onSubmited)="onPropertySubmit($event)" />

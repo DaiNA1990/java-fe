@@ -1,132 +1,146 @@
 <div class="card mb-5 mb-xl-10">
-    <div class="card-header py-0 px-3">
-        <div class="card-title">
-            <div class="d-flex align-items-center position-relative my-1 me-3">
-                <app-keenicon name="magnifier" class="fs-3 position-absolute ms-4"></app-keenicon>
-                <input #keywordInput type="text" class="form-control form-control-solid w-250px ps-12"
-                    placeholder="Từ khoá..." (keyup)="keywordChanged($event)" />
-            </div>
-            <div class="position-relative">
-                <a href="javascript:;" class="btn btn-icon btn-light me-3" data-kt-menu-trigger="click"
-                    data-kt-menu-placement="bottom-start" data-kt-menu-overflow="true">
-                    <i class="ki-duotone ki-filter fs-2">
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                    </i>
-                </a>
-                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-350px"
-                    data-kt-menu="true">
-                    <div class="px-7 py-5">
-                        <div class="fs-5 text-gray-900 fw-bolder">Tìm kiếm</div>
-                    </div>
-                    <div class="separator border-gray-200"></div>
-                    <div class="px-7 py-5">
-                        <ng-content select="[filter]"></ng-content>
-                        <div class="d-flex justify-content-end">
-                            <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2"
-                                data-kt-menu-dismiss="true">
-                                Đóng
-                            </button>
-                            <button type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
-                                (click)="getList()">
-                                Áp dụng
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="position-relative" [class.d-none]="!hasSelection" *ngIf="!isLimitAction">
-                <button type="button" class="btn btn-flex btn-secondary" data-kt-menu-trigger="click"
-                    data-kt-menu-placement="bottom-start" data-kt-menu-overflow="true">
-                    <i class="ki-duotone ki-double-check fs-2">
-                        <span class="path1"></span>
-                        <span class="path2"></span>
-                    </i>
-                    Lựa chọn
-                </button>
-                <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-200px"
-                    data-kt-menu="true">
-                    <div class="menu-item px-3">
-                        <div class="menu-content fs-6 text-gray-900 fw-bolder px-3 py-4">
-                            Chức năng
-                        </div>
-                    </div>
-                    <div class="separator mb-3 opacity-75"></div>
-                    <div class="menu-item px-3">
-                        <a class="menu-link px-3 cursor-pointer" (click)="offAll($event)"> Ẩn </a>
-                    </div>
-                    <div class="menu-item px-3">
-                        <a class="menu-link px-3 cursor-pointer" (click)="onAll($event)"> Hiển thị </a>
-                    </div>
-                    <div class="menu-item px-3">
-                        <a class="menu-link px-3 cursor-pointer" (click)="deleteAll($event)"> Xoá </a>
-                    </div>
-                </div>
-            </div>
+  <div class="card-header py-0 px-3">
+    <div class="card-title">
+      <div class="d-flex align-items-center position-relative my-1 me-3">
+        <app-keenicon name="magnifier" class="fs-3 position-absolute ms-4"></app-keenicon>
+        <input #keywordInput type="text" class="form-control form-control-solid w-250px ps-12"
+          placeholder="Từ khoá..." (keyup)="keywordChanged($event)" />
         </div>
-        <div class="card-toolbar flex-row-fluid justify-content-end gap-5" *ngIf="!isLimitAction">
-            <div class="d-flex justify-content-end" data-kt-filemanager-table-toolbar="base">
-                <a href="javascript:;" class="btn btn-icon btn-primary" (click)="onAdd()" *ngIf="isButtonAddIcon">
-                    <i class="ki-duotone ki-plus fs-2"></i>
-                </a>
-                <button type="button" class="btn btn-flex btn-primary" (click)="onAdd()" *ngIf="!isButtonAddIcon">
-                    <i class="ki-duotone ki-plus fs-2"></i>
-                    Thêm mới
-                </button>
-                <ng-container *ngIf="isButtonMore">
-                    <button class="btn btn-icon btn-color-gray-500 btn-active-color-primary"
-                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-overflow="true">
-                        <app-keenicon name="dots-vertical" class="fs-1 text-gray300 me-n1"></app-keenicon>
-                    </button>
-                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-200px"
-                        data-kt-menu="true">
-                        <div class="menu-item px-3">
-                            <div class="menu-content fs-6 text-gray-900 fw-bolder px-3 py-4">
-                                Chức năng
-                            </div>
-                        </div>
-                        <div class="separator mb-3 opacity-75"></div>
-                        <div class="menu-item px-3">
-                            <a class="menu-link px-3 cursor-pointer" (click)="getList()"> Làm mới </a>
-                        </div>
-                        <div class="menu-item px-3">
-                            <a class="menu-link px-3 cursor-pointer"> Nhập từ excel </a>
-                        </div>
-                        <div class="menu-item px-3">
-                            <a class="menu-link px-3 cursor-pointer"> Xuất excel </a>
-                        </div>
-                    </div>
-                </ng-container>
+        <div class="position-relative">
+          <a href="javascript:;" class="btn btn-icon btn-light me-3" data-kt-menu-trigger="click"
+            data-kt-menu-placement="bottom-start" data-kt-menu-overflow="true">
+            <i class="ki-duotone ki-filter fs-2">
+              <span class="path1"></span>
+              <span class="path2"></span>
+            </i>
+          </a>
+          <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-350px"
+            data-kt-menu="true">
+            <div class="px-7 py-5">
+              <div class="fs-5 text-gray-900 fw-bolder">Tìm kiếm</div>
             </div>
+            <div class="separator border-gray-200"></div>
+            <div class="px-7 py-5">
+              <ng-content select="[filter]"></ng-content>
+              <div class="d-flex justify-content-end">
+                <button type="reset" class="btn btn-sm btn-light btn-active-light-primary me-2"
+                  data-kt-menu-dismiss="true">
+                  Đóng
+                </button>
+                <button type="submit" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
+                  (click)="getList()">
+                  Áp dụng
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
+        @if (!isLimitAction) {
+          <div class="position-relative" [class.d-none]="!hasSelection">
+            <button type="button" class="btn btn-flex btn-secondary" data-kt-menu-trigger="click"
+              data-kt-menu-placement="bottom-start" data-kt-menu-overflow="true">
+              <i class="ki-duotone ki-double-check fs-2">
+                <span class="path1"></span>
+                <span class="path2"></span>
+              </i>
+              Lựa chọn
+            </button>
+            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-200px"
+              data-kt-menu="true">
+              <div class="menu-item px-3">
+                <div class="menu-content fs-6 text-gray-900 fw-bolder px-3 py-4">
+                  Chức năng
+                </div>
+              </div>
+              <div class="separator mb-3 opacity-75"></div>
+              <div class="menu-item px-3">
+                <a class="menu-link px-3 cursor-pointer" (click)="offAll($event)"> Ẩn </a>
+              </div>
+              <div class="menu-item px-3">
+                <a class="menu-link px-3 cursor-pointer" (click)="onAll($event)"> Hiển thị </a>
+              </div>
+              <div class="menu-item px-3">
+                <a class="menu-link px-3 cursor-pointer" (click)="deleteAll($event)"> Xoá </a>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+      @if (!isLimitAction) {
+        <div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+          <div class="d-flex justify-content-end" data-kt-filemanager-table-toolbar="base">
+            @if (isButtonAddIcon) {
+              <a href="javascript:;" class="btn btn-icon btn-primary" (click)="onAdd()">
+                <i class="ki-duotone ki-plus fs-2"></i>
+              </a>
+            }
+            @if (!isButtonAddIcon) {
+              <button type="button" class="btn btn-flex btn-primary" (click)="onAdd()">
+                <i class="ki-duotone ki-plus fs-2"></i>
+                Thêm mới
+              </button>
+            }
+            @if (isButtonMore) {
+              <button class="btn btn-icon btn-color-gray-500 btn-active-color-primary"
+                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-overflow="true">
+                <app-keenicon name="dots-vertical" class="fs-1 text-gray300 me-n1"></app-keenicon>
+              </button>
+              <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-200px"
+                data-kt-menu="true">
+                <div class="menu-item px-3">
+                  <div class="menu-content fs-6 text-gray-900 fw-bolder px-3 py-4">
+                    Chức năng
+                  </div>
+                </div>
+                <div class="separator mb-3 opacity-75"></div>
+                <div class="menu-item px-3">
+                  <a class="menu-link px-3 cursor-pointer" (click)="getList()"> Làm mới </a>
+                </div>
+                <div class="menu-item px-3">
+                  <a class="menu-link px-3 cursor-pointer"> Nhập từ excel </a>
+                </div>
+                <div class="menu-item px-3">
+                  <a class="menu-link px-3 cursor-pointer"> Xuất excel </a>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
     </div>
     <div class="card-body p-0">
-        <nb-table [items]="list$ | async" [totalRecords]="totalRecords" [columns]="columns" [minWidth]="minWidth"
-            [rowActionWidth]="rowActionWidth" [isRowCheckbox]="isRowCheckbox" [isShowPagingReport]="isShowPagingReport"
-            [isScrollable]="isScrollable" [scrollHeight]="scrollHeight" (onChange)="tableChange($event)">
-            <ng-template #rowActions let-item="item">
-                <ng-container *ngTemplateOutlet="rowActionsTemplate;context: {item: item}"></ng-container>
-                <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-                    (click)="confirmOnOff($event, item)" *ngIf="!isLimitAction">
-                    <app-keenicon name="switch" class="fs-2"></app-keenicon>
-                </a>
-                <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-                    (click)="onDetail(item)" *ngIf="detailDialog !== undefined && detailDialog !== null && !isLimitAction" >
-                    <app-keenicon name="information" class="fs-2"></app-keenicon>
-                </a>
-                <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
-                    (click)="onEdit(item)">
-                    <app-keenicon name="pencil" class="fs-2"></app-keenicon>
-                </a>
-                <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
-                    (click)="confirmDelete($event, item)" *ngIf="!isLimitAction">
-                    <app-keenicon name="trash" class="fs-2"></app-keenicon>
-                </a>
-            </ng-template>
-        </nb-table>
+      <nb-table [items]="list$ | async" [totalRecords]="totalRecords" [columns]="columns" [minWidth]="minWidth"
+        [rowActionWidth]="rowActionWidth" [isRowCheckbox]="isRowCheckbox" [isShowPagingReport]="isShowPagingReport"
+        [isScrollable]="isScrollable" [scrollHeight]="scrollHeight" (onChange)="tableChange($event)">
+        <ng-template #rowActions let-item="item">
+          <ng-container *ngTemplateOutlet="rowActionsTemplate;context: {item: item}"></ng-container>
+          @if (!isLimitAction) {
+            <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+              (click)="confirmOnOff($event, item)">
+              <app-keenicon name="switch" class="fs-2"></app-keenicon>
+            </a>
+          }
+          @if (detailDialog !== undefined && detailDialog !== null && !isLimitAction) {
+            <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+              (click)="onDetail(item)" >
+              <app-keenicon name="information" class="fs-2"></app-keenicon>
+            </a>
+          }
+          <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"
+            (click)="onEdit(item)">
+            <app-keenicon name="pencil" class="fs-2"></app-keenicon>
+          </a>
+          @if (!isLimitAction) {
+            <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm"
+              (click)="confirmDelete($event, item)">
+              <app-keenicon name="trash" class="fs-2"></app-keenicon>
+            </a>
+          }
+        </ng-template>
+      </nb-table>
     </div>
-</div>
-<ng-content select="[detail]"></ng-content>
-<ng-content select="[edit]"></ng-content>
-<p-confirmDialog></p-confirmDialog>
-<p-toast></p-toast>
+  </div>
+  <ng-content select="[detail]"></ng-content>
+  <ng-content select="[edit]"></ng-content>
+  <p-confirmDialog></p-confirmDialog>
+  <p-toast></p-toast>

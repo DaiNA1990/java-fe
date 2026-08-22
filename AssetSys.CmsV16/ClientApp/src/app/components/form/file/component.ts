@@ -11,95 +11,109 @@ import { map } from 'lodash';
     selector: 'nb-file',
     template: `
     <nb-form-box [formCtrl]="formCtrl" [name]="name" [label]="label" [message]="message" [hint]="hint"
-        [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
-        <div class="fv-row">
-            <div class="dropzone">
+      [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
+      <div class="fv-row">
+        <div class="dropzone">
+          <div class="dz-message needsclick">
+            <i class="ki-duotone ki-file-up fs-3x text-primary"><span class="path1"></span><span class="path2"></span></i>
+            <div class="ms-4">
+              <h3 class="fs-5 fw-bold text-gray-900 mb-1">Drop files here or click to upload.</h3>
+              <span class="fs-7 fw-semibold text-gray-500">Upload up to 10 files</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="dropzone dropzone-queue mb-2">
+          <div class="dropzone-panel mb-lg-0 mb-2">
+            <a class="dropzone-select btn btn-sm btn-primary me-2">Chọn file</a>
+            <a class="dropzone-upload btn btn-sm btn-light-primary me-2">Upload All</a>
+            <a class="dropzone-remove-all btn btn-sm btn-light-primary">Remove All</a>
+          </div>
+          <div class="dropzone-items wm-200px">
+            <div class="dropzone-item" style="display:none">
+              <div class="dropzone-file">
+                <div class="dropzone-filename" title="some_image_file_name.jpg">
+                  <span data-dz-name>some_image_file_name.jpg</span>
+                  <strong>(<span data-dz-size>340kb</span>)</strong>
+                </div>
+                <div class="dropzone-error" data-dz-errormessage></div>
+              </div>
+              <div class="dropzone-progress">
+                <div class="progress">
+                  <div
+                    class="progress-bar bg-primary"
+                    role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-dz-uploadprogress>
+                  </div>
+                </div>
+              </div>
+              <div class="dropzone-toolbar">
+                <span class="dropzone-start"><i class="bi bi-play-fill fs-3"></i></span>
+                <span class="dropzone-cancel" data-dz-remove style="display: none;"><i class="bi bi-x fs-3"></i></span>
+                <span class="dropzone-delete" data-dz-remove><i class="bi bi-x fs-1"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        @if (!readonly) {
+          <label class="w-100">
+            @if (uploadType === 'box') {
+              <div class="dropzone dropzone-default dz-clickable">
                 <div class="dz-message needsclick">
-                    <i class="ki-duotone ki-file-up fs-3x text-primary"><span class="path1"></span><span class="path2"></span></i>
-                    <div class="ms-4">
-                        <h3 class="fs-5 fw-bold text-gray-900 mb-1">Drop files here or click to upload.</h3>
-                        <span class="fs-7 fw-semibold text-gray-500">Upload up to 10 files</span>
-                    </div>
+                  <i class="ki-duotone ki-file-up fs-3x text-primary">
+                    <span class="path1"></span>
+                    <span class="path2"></span>
+                  </i>
+                  <div class="ms-4">
+                    <h3 class="fs-5 fw-bold text-gray-900 mb-1">Kéo hoặc click để chọn file.</h3>
+                    <span class="fs-7 fw-semibold text-gray-400">{{placeholder}}</span>
+                  </div>
                 </div>
-            </div>
-        </div>
-        <div class="form-group row">
-            <div class="dropzone dropzone-queue mb-2">
-                <div class="dropzone-panel mb-lg-0 mb-2">
-                    <a class="dropzone-select btn btn-sm btn-primary me-2">Chọn file</a>
-                    <a class="dropzone-upload btn btn-sm btn-light-primary me-2">Upload All</a>
-                    <a class="dropzone-remove-all btn btn-sm btn-light-primary">Remove All</a>
+              </div>
+            }
+            @if (uploadType === 'button') {
+              <a class="dropzone-select btn btn-label-brand btn-bold btn-sm">Chọn file</a>
+            }
+            <input class="file-input" #file type="file" (change)="onFileChange(file.files)" />
+          </label>
+        }
+        <div class="dropzone dropzone-queue">
+          @if (listFiles.length !== 0) {
+            <div class="dropzone-items">
+              @for (item of listFiles; track item; let i = $index) {
+                <div class="dropzone-item">
+                  <div class="dropzone-file">
+                    <div class="dropzone-filename" title="{{item.fileName}}">
+                      <span data-dz-name>{{item.fileName}}</span> <strong>(<span data-dz-size>{{item.size |
+                      number:
+                    '1.0-0'}}mb</span>)</strong>
+                  </div>
+                  <div class="dropzone-error" data-dz-errormessage>{{item.message}}</div>
                 </div>
-                <div class="dropzone-items wm-200px">
-                    <div class="dropzone-item" style="display:none">
-                        <div class="dropzone-file">
-                            <div class="dropzone-filename" title="some_image_file_name.jpg">
-                                <span data-dz-name>some_image_file_name.jpg</span>
-                                <strong>(<span data-dz-size>340kb</span>)</strong>
-                            </div>
-                            <div class="dropzone-error" data-dz-errormessage></div>
-                        </div>
-                        <div class="dropzone-progress">
-                            <div class="progress">
-                                <div
-                                    class="progress-bar bg-primary"
-                                    role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" data-dz-uploadprogress>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="dropzone-toolbar">
-                            <span class="dropzone-start"><i class="bi bi-play-fill fs-3"></i></span>
-                            <span class="dropzone-cancel" data-dz-remove style="display: none;"><i class="bi bi-x fs-3"></i></span>
-                            <span class="dropzone-delete" data-dz-remove><i class="bi bi-x fs-1"></i></span>
-                        </div>
-                    </div>
+                <div class="dropzone-progress" [class.d-none]="item.process === 100">
+                  <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
                 </div>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="w-100" *ngIf="!readonly">
-                <div class="dropzone dropzone-default dz-clickable" *ngIf="uploadType === 'box'">
-                    <div class="dz-message needsclick">
-                        <i class="ki-duotone ki-file-up fs-3x text-primary">
-                            <span class="path1"></span>
-                            <span class="path2"></span>
-                        </i>
-                        <div class="ms-4">
-                            <h3 class="fs-5 fw-bold text-gray-900 mb-1">Kéo hoặc click để chọn file.</h3>
-                            <span class="fs-7 fw-semibold text-gray-400">{{placeholder}}</span>
-                        </div>
-                    </div>
+                <div class="dropzone-toolbar">
+                  @if (item.path !== '') {
+                    <span class="dropzone-delete me-2" data-dz-remove (click)="downloadFile(i)"
+                      title="{{item.path}}">
+                      <em class="bi bi-cloud-download fs-2"></em>
+                    </span>
+                  }
+                  @if (!readonly) {
+                    <span class="dropzone-delete" data-dz-remove (click)="removeFile(i)">
+                      <em class="bi bi-x fs-2"></em>
+                    </span>
+                  }
                 </div>
-                <a class="dropzone-select btn btn-label-brand btn-bold btn-sm" *ngIf="uploadType === 'button'">Chọn file</a>
-                <input class="file-input" #file type="file" (change)="onFileChange(file.files)" />
-            </label>
-            <div class="dropzone dropzone-queue">
-                <div class="dropzone-items" *ngIf="listFiles.length !== 0">
-                    <div class="dropzone-item" *ngFor="let item of listFiles; let i = index">
-                        <div class="dropzone-file">
-                            <div class="dropzone-filename" title="{{item.fileName}}">
-                                <span data-dz-name>{{item.fileName}}</span> <strong>(<span data-dz-size>{{item.size |
-                                        number:
-                                        '1.0-0'}}mb</span>)</strong>
-                            </div>
-                            <div class="dropzone-error" data-dz-errormessage>{{item.message}}</div>
-                        </div>
-                        <div class="dropzone-progress" [class.d-none]="item.process === 100">
-                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                        </div>
-                        <div class="dropzone-toolbar">
-                            <span class="dropzone-delete me-2" data-dz-remove (click)="downloadFile(i)"
-                                title="{{item.path}}" *ngIf="item.path !== ''">
-                                <em class="bi bi-cloud-download fs-2"></em>
-                            </span>
-                            <span class="dropzone-delete" data-dz-remove (click)="removeFile(i)" *ngIf="!readonly">
-                                <em class="bi bi-x fs-2"></em>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
     </nb-form-box>
     `,
     styles: [`.file-input { display: none; }`],

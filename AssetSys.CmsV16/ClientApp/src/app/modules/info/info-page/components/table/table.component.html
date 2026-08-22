@@ -8,24 +8,27 @@
   (onSort)="onSort($event)">
   <ng-template pTemplate="header">
 
-    <tr *ngFor="let row of headerRows; let rowIndex = index">
-
-      <!-- Checkbox -->
-      <th *ngIf="rowIndex === 0" scope="col" style="width: 4rem" [attr.rowspan]="headerDepth">
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-
-      <!-- STT -->
-      <th *ngIf="rowIndex === 0" scope="col" style="width: 4rem" [attr.rowspan]="headerDepth">
-        STT
-      </th>
-
-      <!-- Dynamic headers -->
-      <th *ngFor="let cell of row" 
-        class="dynamic-header"
-        scope="col" [attr.colspan]="cell.colspan > 1 ? cell.colspan : null"
-        [attr.rowspan]="cell.rowspan > 1 ? cell.rowspan : null"
-        [pSortableColumn]="cell.sortField"
+    @for (row of headerRows; track row; let rowIndex = $index) {
+      <tr>
+        <!-- Checkbox -->
+        @if (rowIndex === 0) {
+          <th scope="col" style="width: 4rem" [attr.rowspan]="headerDepth">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
+        }
+        <!-- STT -->
+        @if (rowIndex === 0) {
+          <th scope="col" style="width: 4rem" [attr.rowspan]="headerDepth">
+            STT
+          </th>
+        }
+        <!-- Dynamic headers -->
+        @for (cell of row; track cell) {
+          <th
+            class="dynamic-header"
+            scope="col" [attr.colspan]="cell.colspan > 1 ? cell.colspan : null"
+            [attr.rowspan]="cell.rowspan > 1 ? cell.rowspan : null"
+            [pSortableColumn]="cell.sortField"
         [pSortableColumnDisabled]="!cell.sortField" [ngStyle]="{
         'min-width':
           (
@@ -35,14 +38,14 @@
       }" alignFrozen="right" pFrozenColumn [frozen]="
         cell.isLeaf ? cols[cell.startIndex].isFrozen : false
       ">
-
-        {{ cell.label }}
-
-        <p-sortIcon *ngIf="cell.sortField" [field]="cell.sortField"></p-sortIcon>
-
-      </th>
-
-    </tr>
+            {{ cell.label }}
+            @if (cell.sortField) {
+              <p-sortIcon [field]="cell.sortField"></p-sortIcon>
+            }
+          </th>
+        }
+      </tr>
+    }
 
   </ng-template>
   <ng-template pTemplate="body" let-item let-index="rowIndex">
@@ -53,103 +56,119 @@
       <td>
         <span>{{ index + 1 }}</span>
       </td>
-      <td *ngFor="let col of cols" [class]="col.cssClass" [style]="col.cssStyle" alignFrozen="right" pFrozenColumn
+      @for (col of cols; track col) {
+        <td [class]="col.cssClass" [style]="col.cssStyle" alignFrozen="right" pFrozenColumn
         [frozen]="col.isFrozen" [ngClass]="{
           'text-end': col.controlType === 'number' || col.controlType === 'decimal'
         }">
-        <ng-container [ngSwitch]="col.controlType">
-          <!-- SELECT -->
-          <ng-container *ngSwitchCase="'select'">
-            <ng-container *ngIf="col.optionLst?.length > 0">
-              {{ getValueReadOnly(item[col.property.code], col.optionLst) }}
-            </ng-container>
-          </ng-container>
-          <!-- CHECKBOX -->
-          <ng-container *ngSwitchCase="'checkbox'">
+          @switch (col.controlType) {
+            <!-- SELECT -->
+            @case ('select') {
+              @if (col.optionLst?.length > 0) {
+                {{ getValueReadOnly(item[col.property.code], col.optionLst) }}
+              }
+            }
+            <!-- CHECKBOX -->
+            @case ('checkbox') {
             <p-checkbox [binary]="true" [disabled]="true" [ngModel]="item[col.property.code] === true ||
                  item[col.property.code] === 'True' ||
                  item[col.property.code] === 'true'">
-            </p-checkbox>
-          </ng-container>
-          <!-- DEFAULT -->
-          <ng-container *ngSwitchDefault>
-            <div class="cell-text" [class.cell-text-clamped]="isCellTextLong(item[col.property.code])">
-              <span [ngClass]="col.cssClass" [style]="col.cssStyle">
-                {{ col.controlType === 'year' ? item[col.property.code] :
-                item[col.property.code] | formatText :
-                col.property.typeData }}
-              </span>
-              <a href="javascript:;" class="cell-text-expand" title="Xem đầy đủ"
-                *ngIf="isCellTextLong(item[col.property.code])"
-                (click)="openCellView($event, col, item)">
-                <i class="pi pi-window-maximize"></i>
-              </a>
-            </div>
-          </ng-container>
-        </ng-container>
-        <ng-container *ngFor="let tp of funcGetChild(col.id)">
-          <ng-container *ngIf="checkIsDisplay(tp, item)">
-            <ng-container [ngSwitch]="tp.controlType">
-              <ng-container *ngSwitchCase="'select'">
-                {{ item[col.property.code] |
-                formatText:col.property.typeData }}
-              </ng-container>
-              <ng-container *ngSwitchCase="'file-download'">
-                <span [class]="tp.cssClass" [style]="tp.cssStyle" [title]="tp.name">
-                  {{ item[tp.property.code] ? item[tp.property.code].split('|')[0] : item[tp.property.code] }}
+              </p-checkbox>
+            }
+            <!-- DEFAULT -->
+            @default {
+              <div class="cell-text" [class.cell-text-clamped]="isCellTextLong(item[col.property.code])">
+                <span [ngClass]="col.cssClass" [style]="col.cssStyle">
+                  {{ col.controlType === 'year' ? item[col.property.code] :
+                  item[col.property.code] | formatText :
+                  col.property.typeData }}
                 </span>
-                <a href="javascript:;" class="mx-1" (click)="rowClick($event, item, tp)" title="Tải về"
-                  *ngIf="item[tp.property.code] !== null && item[tp.property.code] !== '' && !item.isDownload">
-                  <i class="ki-duotone ki-file-down fs-3 text-primary">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                  </i>
-                </a>
-                <span class="indicator-progress" style="display: inline-block" *ngIf="item.isDownload">
-                  <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                </span>
-              </ng-container>
-              <ng-container *ngSwitchCase="'file-download-ecm'">
-                <span [class]="tp.cssClass" [style]="tp.cssStyle" [title]="tp.name">
-                  {{ item[tp.property.code] ? item[tp.property.code].split('|')[0] : item[tp.property.code] }}
-                </span>
-                <a href="javascript:;" class="mx-1" (click)="rowClick($event, item, tp)" title="Tải về"
-                  *ngIf="item[tp.property.code] !== null && item[tp.property.code] !== '' && !item.isDownload">
-                  <i class="ki-duotone ki-file-down fs-3 text-primary">
-                    <span class="path1"></span>
-                    <span class="path2"></span>
-                  </i>
-                </a>
-                <span class="indicator-progress" style="display: inline-block" *ngIf="item.isDownload">
-                  <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                </span>
-              </ng-container>
-              <ng-container *ngSwitchCase="'button'">
-                <a href="javascript:;" class="btn w-30px h-30px mx-2" [class]="tp.cssClass" [style]="tp.cssStyle"
-                  *ngIf="!isViewMode || tp.referenceCode === 'SHOW_ON_VIEW'"
-                  (click)="rowClick($event, item, tp)" [title]="tp.name">
-                  <app-keenicon [name]="tp.icon" [class]="tp.iconClass" [cssStyle]="tp.cssStyle"></app-keenicon>
-                </a>
-              </ng-container>
-              <ng-container *ngSwitchDefault>
-                <span [ngClass]="tp.cssClass" [style]="tp.cssStyle">{{ item[tp.property.code] |
+                @if (isCellTextLong(item[col.property.code])) {
+                  <a href="javascript:;" class="cell-text-expand" title="Xem đầy đủ"
+                    (click)="openCellView($event, col, item)">
+                    <i class="pi pi-window-maximize"></i>
+                  </a>
+                }
+              </div>
+            }
+          }
+          @for (tp of funcGetChild(col.id); track tp) {
+            @if (checkIsDisplay(tp, item)) {
+              @switch (tp.controlType) {
+                @case ('select') {
+                  {{ item[col.property.code] |
+                  formatText:col.property.typeData }}
+                }
+                @case ('file-download') {
+                  <span [class]="tp.cssClass" [style]="tp.cssStyle" [title]="tp.name">
+                    {{ item[tp.property.code] ? item[tp.property.code].split('|')[0] : item[tp.property.code] }}
+                  </span>
+                  @if (item[tp.property.code] !== null && item[tp.property.code] !== '' && !item.isDownload) {
+                    <a href="javascript:;" class="mx-1" (click)="rowClick($event, item, tp)" title="Tải về"
+                      >
+                      <i class="ki-duotone ki-file-down fs-3 text-primary">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                      </i>
+                    </a>
+                  }
+                  @if (item.isDownload) {
+                    <span class="indicator-progress" style="display: inline-block">
+                      <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                  }
+                }
+                @case ('file-download-ecm') {
+                  <span [class]="tp.cssClass" [style]="tp.cssStyle" [title]="tp.name">
+                    {{ item[tp.property.code] ? item[tp.property.code].split('|')[0] : item[tp.property.code] }}
+                  </span>
+                  @if (item[tp.property.code] !== null && item[tp.property.code] !== '' && !item.isDownload) {
+                    <a href="javascript:;" class="mx-1" (click)="rowClick($event, item, tp)" title="Tải về"
+                      >
+                      <i class="ki-duotone ki-file-down fs-3 text-primary">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                      </i>
+                    </a>
+                  }
+                  @if (item.isDownload) {
+                    <span class="indicator-progress" style="display: inline-block">
+                      <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                    </span>
+                  }
+                }
+                @case ('button') {
+                  @if (!isViewMode || tp.referenceCode === 'SHOW_ON_VIEW') {
+                    <a href="javascript:;" class="btn w-30px h-30px mx-2" [class]="tp.cssClass" [style]="tp.cssStyle"
+                      (click)="rowClick($event, item, tp)" [title]="tp.name">
+                      <app-keenicon [name]="tp.icon" [class]="tp.iconClass" [cssStyle]="tp.cssStyle"></app-keenicon>
+                    </a>
+                  }
+                }
+                @default {
+                  <span [ngClass]="tp.cssClass" [style]="tp.cssStyle">{{ item[tp.property.code] |
                   formatText:tp.property.typeData }}</span>
-              </ng-container>
-            </ng-container>
-          </ng-container>
-        </ng-container>
-      </td>
+                }
+              }
+            }
+          }
+        </td>
+      }
     </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage">
     <tr>
       <td [attr.colspan]="(cols?.length || 0) + 2">
-        <p class="text-center" *ngIf="itemTotal === null">
-          Đang tải dữ liệu...
-        </p>
-        <p class="text-center" *ngIf="itemTotal === 0">
-          Không tìm thấy thông tin phù hợp.
-        </p>
+        @if (itemTotal === null) {
+          <p class="text-center">
+            Đang tải dữ liệu...
+          </p>
+        }
+        @if (itemTotal === 0) {
+          <p class="text-center">
+            Không tìm thấy thông tin phù hợp.
+          </p>
+        }
       </td>
     </tr>
   </ng-template>
@@ -164,6 +183,6 @@
   <div class="p-d-flex p-jc-center p-ai-center" style="height: 120px; text-align: center">
     <p-progressSpinner [style]="{'width': '50px'}" strokeWidth="5" fill="var(--surface-ground)"
       animationDuration=".5s" />
-    <p style="margin: 5px 0">Đang thực hiện, vui lòng chờ...</p>
-  </div>
-</p-dialog>
+      <p style="margin: 5px 0">Đang thực hiện, vui lòng chờ...</p>
+    </div>
+  </p-dialog>

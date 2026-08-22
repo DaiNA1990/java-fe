@@ -4,10 +4,10 @@ import { NbLayoutGridItemComponent } from './col';
 @Component({
     selector: 'nb-layout-grid',
     template: `<div class="row">
-        <ng-container *ngFor="let col of cols">
+          @for (col of cols; track col) {
             <ng-container *ngTemplateOutlet="col.template"></ng-container>
-        </ng-container>        
-    </div>`,
+          }
+        </div>`,
     standalone: false
 })
 export class NbLayoutGridComponent implements OnInit, OnDestroy {

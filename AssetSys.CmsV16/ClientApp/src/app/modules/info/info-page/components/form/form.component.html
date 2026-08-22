@@ -1,39 +1,44 @@
 <!-- Dành cho admin -->
-<span
-  class="ms-1"
-  (click)="op.toggle($event)"
-  *ngIf="currentUser?.roleCodes?.includes('DEVELOP')"
->
-  <i class="ki-duotone ki-information fs-7">
-    <span class="path1"></span>
-    <span class="path2"></span>
-    <span class="path3"></span>
-  </i>
-</span>
+@if (currentUser?.roleCodes?.includes('DEVELOP')) {
+  <span
+    class="ms-1"
+    (click)="op.toggle($event)"
+    >
+    <i class="ki-duotone ki-information fs-7">
+      <span class="path1"></span>
+      <span class="path2"></span>
+      <span class="path3"></span>
+    </i>
+  </span>
+}
 <p-overlayPanel #op [dismissable]="true" [showCloseIcon]="true">
   <div style="max-height: 300px; overflow-y: auto; padding: 4px">
     <pre
       style="white-space: pre-wrap; max-width: 400px; background-color: bisque"
-    >
+      >
       {{ valueTransform | json }}
     </pre>
   </div>
 </p-overlayPanel>
 <!--
-  Chỉ render khi form đã dựng xong FormControl. Nếu không, buildControls sẽ
-  render một lượt "giả" với getControl() trả về new FormControl() rỗng, rồi
-  loadForm mới dựng lại — nhìn thành nháy control trắng rồi mới có dữ liệu.
-  Dùng ng-container để không thêm DOM node, tránh phá flex layout của .modal-content.
+Chỉ render khi form đã dựng xong FormControl. Nếu không, buildControls sẽ
+render một lượt "giả" với getControl() trả về new FormControl() rỗng, rồi
+loadForm mới dựng lại — nhìn thành nháy control trắng rồi mới có dữ liệu.
+Dùng ng-container để không thêm DOM node, tránh phá flex layout của .modal-content.
 -->
-<ng-container
-  *ngIf="(loadFormSubject | async) === false; else formLoadingTmpl"
->
-  <ng-container *ngFor="let item of filterByParent(); trackBy: trackByFn">
+@if ((loadFormSubject | async) === false) {
+  @for (item of filterByParent(); track trackByFn($index, item)) {
     <ng-container
       *ngTemplateOutlet="showControlTmpl;context: {item: item, formCtrl: getControl(item)}"
     ></ng-container>
-  </ng-container>
-</ng-container>
+  }
+} @else {
+  <div class="d-flex justify-content-center align-items-center py-10">
+    <span class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </span>
+  </div>
+}
 
 <ng-template #formLoadingTmpl>
   <div class="d-flex justify-content-center align-items-center py-10">
@@ -49,75 +54,75 @@
   let-formCtrl="formCtrl"
   let-parentData="parentData"
   let-modal="modal"
->
-  <ng-container *ngIf="getTemplate(item.controlType) as template">
+  >
+  @if (getTemplate(item.controlType); as template) {
     <ng-container
       *ngTemplateOutlet="template; context: { item: item, formCtrl: formCtrl, parentData: parentData, modal: modal }"
-    >
+      >
     </ng-container>
-  </ng-container>
-  <ng-container *ngIf="!getTemplate(item.controlType)">
+  }
+  @if (!getTemplate(item.controlType)) {
     <span>{{ item.name }}</span>
-  </ng-container>
+  }
 </ng-template>
 
 <ng-template #cardControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="card">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
+    @for (control of filterByParent(item); track trackByFn($index, control)) {
       <ng-container
         *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
-    </ng-container>
+    }
   </div>
 </ng-template>
 
 <ng-template #cardHeaderControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="card-header" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
+    @for (control of filterByParent(item); track trackByFn($index, control)) {
       <ng-container
         *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
-    </ng-container>
+    }
   </div>
 </ng-template>
 
 <ng-template #cardBodyControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="card-body" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
+    @for (control of filterByParent(item); track trackByFn($index, control)) {
       <ng-container
         *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
-    </ng-container>
+    }
   </div>
 </ng-template>
 
 <ng-template #cardFooterControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="card-footer" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
+    @for (control of filterByParent(item); track trackByFn($index, control)) {
       <ng-container
         *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
-    </ng-container>
+    }
   </div>
 </ng-template>
 
 <ng-template #containerControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
+    @for (control of filterByParent(item); track trackByFn($index, control)) {
       <ng-container
         *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
-    </ng-container>
+    }
   </div>
 </ng-template>
 
 <ng-template #gridControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
   <div class="row" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
+    @for (control of filterByParent(item); track trackByFn($index, control)) {
       <ng-container
         *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
-    </ng-container>
+    }
   </div>
 </ng-template>
 
@@ -126,82 +131,85 @@
     [class]="'col-' + item.size"
     [ngClass]="item.cssClass"
     [style]="item.cssStyle"
-  >
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
+    >
+    @for (control of filterByParent(item); track trackByFn($index, control)) {
       <ng-container
         *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), modal: modal}"
       ></ng-container>
-    </ng-container>
+    }
   </div>
 </ng-template>
 
 <ng-template #tabControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
-  <p-scrollPanel class="w-full mx-2" *ngIf="(loadFormSubject | async) === false">
-    <p-tabView
-      [activeIndex]="getTabActiveIndex(item)"
-      (activeIndexChange)="tabActiveIndex[item.id] = $event"
-    >
-      <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
-        <p-tabPanel [header]="control.name">
-          <ng-container *ngFor="let tp of filterByParent(control); trackBy: trackByFn">
-            <ng-container
-              *ngTemplateOutlet="showControlTmpl;context: {item: tp, formCtrl: getControl(tp), modal: modal}"
-            ></ng-container>
-          </ng-container>
-        </p-tabPanel>
-      </ng-container>
-    </p-tabView>
-  </p-scrollPanel>
+  @if ((loadFormSubject | async) === false) {
+    <p-scrollPanel class="w-full mx-2">
+      <p-tabView
+        [activeIndex]="getTabActiveIndex(item)"
+        (activeIndexChange)="tabActiveIndex[item.id] = $event"
+        >
+        @for (control of filterByParent(item); track trackByFn($index, control)) {
+          <p-tabPanel [header]="control.name">
+            @for (tp of filterByParent(control); track trackByFn($index, tp)) {
+              <ng-container
+                *ngTemplateOutlet="showControlTmpl;context: {item: tp, formCtrl: getControl(tp), modal: modal}"
+              ></ng-container>
+            }
+          </p-tabPanel>
+        }
+      </p-tabView>
+    </p-scrollPanel>
+  }
 </ng-template>
 
 <ng-template #buttonControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <button
-    class="btn"
-    [class]="item.cssClass"
-    [style]="item.cssStyle"
-    (click)="btnClick(item)"
-    *ngIf="!isViewMode || item.referenceCode === 'SHOW_ON_VIEW'"
-  >
-    <ng-container *ngIf="item.icon !== null && item.icon !== ''">
-      <app-keenicon [name]="item.icon" [class]="item.iconClass"></app-keenicon>
-    </ng-container>
-    <ng-container
-      *ngIf="item.cssClass !== null && item.cssClass.indexOf('btn-icon') === -1"
-    >
-      {{item.name}}
-    </ng-container>
-  </button>
+  @if (!isViewMode || item.referenceCode === 'SHOW_ON_VIEW') {
+    <button
+      class="btn"
+      [class]="item.cssClass"
+      [style]="item.cssStyle"
+      (click)="btnClick(item)"
+      >
+      @if (item.icon !== null && item.icon !== '') {
+        <app-keenicon [name]="item.icon" [class]="item.iconClass"></app-keenicon>
+      }
+      @if (item.cssClass !== null && item.cssClass.indexOf('btn-icon') === -1) {
+        {{item.name}}
+      }
+    </button>
+  }
 </ng-template>
 
 <ng-template #menuControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <ng-container *ngIf="!isViewMode || item.referenceCode === 'SHOW_ON_VIEW'">
-  <button
-    class="btn btn-icon btn-color-gray-500 btn-active-color-primary"
-    data-kt-menu-trigger="click"
-    data-kt-menu-placement="bottom-end"
-    data-kt-menu-overflow="true"
-    data-kt-menu="true"
-    data-kt-menu-attach="parent"
-  >
-    <app-keenicon name="dots-vertical" class="fs-1 text-gray300 me-n1" />
-  </button>
-  <div
-    class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-200px"
-    data-kt-menu="true"
-  >
-    <div class="menu-item px-3">
-      <div class="menu-content fs-6 text-gray-900 fw-bolder px-3 py-4">
-        {{item.name || 'Chức năng'}}
+  @if (!isViewMode || item.referenceCode === 'SHOW_ON_VIEW') {
+    <button
+      class="btn btn-icon btn-color-gray-500 btn-active-color-primary"
+      data-kt-menu-trigger="click"
+      data-kt-menu-placement="bottom-end"
+      data-kt-menu-overflow="true"
+      data-kt-menu="true"
+      data-kt-menu-attach="parent"
+      >
+      <app-keenicon name="dots-vertical" class="fs-1 text-gray300 me-n1" />
+    </button>
+    <div
+      class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold w-200px"
+      data-kt-menu="true"
+      >
+      <div class="menu-item px-3">
+        <div class="menu-content fs-6 text-gray-900 fw-bolder px-3 py-4">
+          {{item.name || 'Chức năng'}}
+        </div>
       </div>
+      <div class="separator mb-3 opacity-75"></div>
+      @for (child of filterByParent(item); track trackByFn($index, child)) {
+        <div class="menu-item px-3">
+          <a class="menu-link px-3 cursor-pointer" (click)="btnClick(child)">
+            {{child.name}}
+          </a>
+        </div>
+      }
     </div>
-    <div class="separator mb-3 opacity-75"></div>
-    <div class="menu-item px-3" *ngFor="let child of filterByParent(item); trackBy: trackByFn">
-      <a class="menu-link px-3 cursor-pointer" (click)="btnClick(child)">
-        {{child.name}}
-      </a>
-    </div>
-  </div>
-  </ng-container>
+  }
 </ng-template>
 
 <ng-template
@@ -209,13 +217,14 @@
   let-item="item"
   let-formCtrl="formCtrl"
   let-parentData="parentData"
->
-  <app-info-data-action
-    [dataId]="dataId"
-    *ngIf="dataId"
-    [formItem]="item"
-    [formCtrl]="formCtrl"
-  />
+  >
+  @if (dataId) {
+    <app-info-data-action
+      [dataId]="dataId"
+      [formItem]="item"
+      [formCtrl]="formCtrl"
+      />
+  }
 </ng-template>
 
 <ng-template
@@ -224,13 +233,14 @@
   let-formCtrl="formCtrl"
   let-parentData="parentData"
   let-modal="modal"
->
+  >
   <!-- form:dataId:{{dataId}} | parentId:{{parentId}} | groupCode:{{groupCode}} | form.groupId:{{groupId}} | passGroupId:{{passGroupId}} | passDataId:{{passDataId}} | modal:{{modal}} -->
-  <app-info-page-form
-    [config]="getFormConfig(item, modal)"
-    [parentData]="parentData || value"
-    *ngIf="(loadFormSubject | async) === false"
-  />
+  @if ((loadFormSubject | async) === false) {
+    <app-info-page-form
+      [config]="getFormConfig(item, modal)"
+      [parentData]="parentData || value"
+      />
+  }
 </ng-template>
 
 <ng-template
@@ -239,16 +249,17 @@
   let-formCtrl="formCtrl"
   let-parentData="parentData"
   let-modal="modal"
->
-  <app-info-page-table
-    [config]="getTableConfig(item, modal)"
-    [formItem]="item"
-    [formCtrl]="formCtrl"
-    [funcGetChild]="funcGetChild"
-    [formData]="value"
-    [parentData]="parentData || valueTransform.parentData || value"
-    *ngIf="(loadFormSubject | async) === false"
-  />
+  >
+  @if ((loadFormSubject | async) === false) {
+    <app-info-page-table
+      [config]="getTableConfig(item, modal)"
+      [formItem]="item"
+      [formCtrl]="formCtrl"
+      [funcGetChild]="funcGetChild"
+      [formData]="value"
+      [parentData]="parentData || valueTransform.parentData || value"
+      />
+  }
 </ng-template>
 
 <ng-template #separatorControlTmpl let-item="item" let-formCtrl="formCtrl">
@@ -269,418 +280,391 @@
     [funcSubmit]="funcModalSubmit"
     [funcMarkPristine]="funcModalPristine"
     [parentData]="parentData || value"
-  >
+    >
     <!-- modalRef.dataId/formType được gán trước khi modal open() nên form bên trong nhận ngay ở ngOnInit -->
     <ng-template #modalBodyTmpl>
-      <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
+      @for (control of filterByParent(item); track trackByFn($index, control)) {
         <ng-container
           *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modalRef}"
-        />
-      </ng-container>
-    </ng-template>
-  </app-info-page-modal>
-</ng-template>
-
-<ng-template #modalContentControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
-  <div class="modal-content" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
-      <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
-      />
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #modalHeaderControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
-  <div class="modal-header" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
-      <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
-      />
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #modalBodyControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
-  <div class="modal-body" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
-      <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
-      />
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #modalFooterControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
-  <div class="modal-footer" [class]="item.cssClass" [style]="item.cssStyle">
-    <ng-container *ngFor="let control of filterByParent(item); trackBy: trackByFn">
-      <ng-container
-        *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
-      />
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #readonlyControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <ng-container
-        *ngIf="formCtrl.value === true || formCtrl.value === false || formCtrl.value === 'True' || formCtrl.value === 'False'"
-      >
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [attr.disabled]="true"
-            [checked]="formCtrl.value"
           />
-          <label class="form-check-label">{{item.placeholder || ''}}</label>
-        </div>
-      </ng-container>
-      <ng-container
-        *ngIf="!(formCtrl.value === true || formCtrl.value === false || formCtrl.value === 'True' || formCtrl.value === 'False')"
-      >
-        <input
-          type="text"
-          class="form-control form-control-solid"
-          [placeholder]="item.placeholder || ''"
-          readonly
-          [value]="formCtrl.value | formatText"
-        />
-      </ng-container>
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
+        }
+      </ng-template>
+    </app-info-page-modal>
+  </ng-template>
 
-<ng-template #plaintextControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <span [class]="item.cssClass" [style]="item.cssStyle">{{item.name}}</span>
-</ng-template>
-
-<ng-template #valueControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <span [class]="item.cssClass" [style]="item.cssStyle"
-    >{{formCtrl.value | formatText:item.property.typeData}}</span
-  >
-</ng-template>
-
-<ng-template #textControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <input
-        type="text"
-        pInputText
-        [name]="item.code"
-        [formControl]="formCtrl"
-        [placeholder]="item.placeholder || ''"
-      />
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #textareaControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <textarea
-      [name]="item.code"
-      [formControl]="formCtrl"
-      class="form-control mb-2"
-      [placeholder]="item.placeholder || ''"
-      [style]="item.cssStyle"
-    >
-    </textarea>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #numberControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <app-info-page-number
-        [formCtrl]="formCtrl"
-        [formItem]="item"
-        [readOnly]="item.readOnly || isViewMode"
-      />
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #yearControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <app-info-page-number
-        [formCtrl]="formCtrl"
-        [formItem]="item"
-        [readOnly]="item.readOnly || isViewMode"
-        [isCurrency]="false"
-      />
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #decimalControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <app-info-page-number
-        [formCtrl]="formCtrl"
-        [formItem]="item"
-        [isDecimal]="true"
-        [readOnly]="item.readOnly || isViewMode"
-      />
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #currencyControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <app-info-page-number
-        [formCtrl]="formCtrl"
-        [formItem]="item"
-        [isDecimal]="true"
-        [isCurrency]="true"
-        [readOnly]="item.readOnly || isViewMode"
-      />
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #selectControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <app-info-page-select
-        [formCtrl]="formCtrl"
-        [formItem]="item"
-        [readOnly]="item.readOnly || isViewMode"
-        [parentData]="parentData"
-        [formData]="value"
-      />
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #radioControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <app-info-page-radio
-        [formCtrl]="formCtrl"
-        [formItem]="item"
-        [readOnly]="item.readOnly || isViewMode"
-      />
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #fileControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <app-info-page-fileupload
-        [formCtrl]="formCtrl"
-        [formItem]="item"
-        [readOnly]="item.readOnly || isViewMode"
-        [attr.identify]="item.code"
-      />
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #dateControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <app-info-page-datetime
-        [formCtrl]="formCtrl"
-        [formItem]="item"
-        [readOnly]="item.readOnly || isViewMode"
-      />
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #checkboxControlTmpl let-item="item" let-formCtrl="formCtrl">
-  <div class="mb-3 fv-row">
-    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
-    <div class="p-fluid">
-      <!-- <div class="form-check"> -->
-      <!-- <input
-          class="form-check-input"
-          type="checkbox"
-          [formControl]="formCtrl"
-          [style]="item.cssStyle"
-        /> -->
-      <!-- <p-checkbox
-        [formControl]="formCtrl"
-        [ngStyle]="item.cssStyle"
-        [binary]="true"
-      ></p-checkbox> -->
-
-      <!-- TODO: Chỗ em sửa -->
-      <!-- Start -->
-      <app-checkbox
-        [formCtrl]="formCtrl"
-        [formItem]="item"
-        [readOnly]="item.readOnly || isViewMode"
-      ></app-checkbox>
-      <!-- End -->
-      <label class="form-check-label">{{item.placeholder || ''}}</label>
-      <!-- </div> -->
-    </div>
-    <ng-container
-      *ngIf="formCtrl !== null && formCtrl.touched && formCtrl.invalid"
-    >
-      <span
-        class="fs-7 fv-plugins-message-container invalid-feedback"
-        [innerHTML]="item.message"
-      ></span>
-    </ng-container>
-  </div>
-</ng-template>
-
-<ng-template #labelFormTmpl let-item="item">
-  <label
-    [class.required]="item.isRequired && item.name"
-    class="fw-semibold fs-6 mb-2"
-  >
-    {{item.name}}
-    <ng-container *ngIf="item.hint !== null && item.hint !== ''">
-      <span class="ms-1" [pTooltip]="item.hint">
-        <i class="ki-duotone ki-information fs-7">
-          <span class="path1"></span>
-          <span class="path2"></span>
-          <span class="path3"></span>
-        </i>
-      </span>
-    </ng-container>
-    <!-- Dành cho admin -->
-    <span
-      class="ms-1"
-      (click)="op1.toggle($event)"
-      *ngIf="currentUser?.roleCodes?.includes('DEVELOP') && item?.property?.code"
-    >
-      <i class="ki-duotone ki-information fs-7">
-        <span class="path1"></span>
-        <span class="path2"></span>
-        <span class="path3"></span>
-      </i>
-    </span>
-    <p-overlayPanel #op1 [dismissable]="true" [showCloseIcon]="true">
-      <div>
-        <pre>{{item?.property?.code}} ({{item?.property?.typeData}}) ({{item?.propertyId}})</pre>
+  <ng-template #modalContentControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
+    <div class="modal-content" [class]="item.cssClass" [style]="item.cssStyle">
+      @for (control of filterByParent(item); track trackByFn($index, control)) {
+        <ng-container
+          *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
+          />
+        }
       </div>
-    </p-overlayPanel>
-  </label>
-</ng-template>
-<p-dialog
-  [(visible)]="isOnSubmit"
-  [modal]="true"
-  [closable]="false"
-  [draggable]="false"
-  [style]="{width: '400px'}"
->
-  <div
-    class="p-d-flex p-jc-center p-ai-center"
-    style="height: 120px; text-align: center"
-  >
-    <p-progressSpinner
-      [style]="{'width': '50px'}"
-      strokeWidth="5"
-      fill="var(--surface-ground)"
-      animationDuration=".5s"
-    />
-    <p style="margin: 5px 0">Đang thực hiện, vui lòng chờ...</p>
-  </div>
-</p-dialog>
+    </ng-template>
+
+    <ng-template #modalHeaderControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
+      <div class="modal-header" [class]="item.cssClass" [style]="item.cssStyle">
+        @for (control of filterByParent(item); track trackByFn($index, control)) {
+          <ng-container
+            *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
+            />
+          }
+        </div>
+      </ng-template>
+
+      <ng-template #modalBodyControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
+        <div class="modal-body" [class]="item.cssClass" [style]="item.cssStyle">
+          @for (control of filterByParent(item); track trackByFn($index, control)) {
+            <ng-container
+              *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
+              />
+            }
+          </div>
+        </ng-template>
+
+        <ng-template #modalFooterControlTmpl let-item="item" let-formCtrl="formCtrl" let-modal="modal">
+          <div class="modal-footer" [class]="item.cssClass" [style]="item.cssStyle">
+            @for (control of filterByParent(item); track trackByFn($index, control)) {
+              <ng-container
+                *ngTemplateOutlet="showControlTmpl;context: {item: control, formCtrl: getControl(control), parentData: parentData, modal: modal}"
+                />
+              }
+            </div>
+          </ng-template>
+
+          <ng-template #readonlyControlTmpl let-item="item" let-formCtrl="formCtrl">
+            <div class="mb-3 fv-row">
+              <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+              <div class="p-fluid">
+                @if (formCtrl.value === true || formCtrl.value === false || formCtrl.value === 'True' || formCtrl.value === 'False') {
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      [attr.disabled]="true"
+                      [checked]="formCtrl.value"
+                      />
+                      <label class="form-check-label">{{item.placeholder || ''}}</label>
+                    </div>
+                  }
+                  @if (!(formCtrl.value === true || formCtrl.value === false || formCtrl.value === 'True' || formCtrl.value === 'False')) {
+                    <input
+                      type="text"
+                      class="form-control form-control-solid"
+                      [placeholder]="item.placeholder || ''"
+                      readonly
+                      [value]="formCtrl.value | formatText"
+                      />
+                    }
+                  </div>
+                  @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                    <span
+                      class="fs-7 fv-plugins-message-container invalid-feedback"
+                      [innerHTML]="item.message"
+                    ></span>
+                  }
+                </div>
+              </ng-template>
+
+              <ng-template #plaintextControlTmpl let-item="item" let-formCtrl="formCtrl">
+                <span [class]="item.cssClass" [style]="item.cssStyle">{{item.name}}</span>
+              </ng-template>
+
+              <ng-template #valueControlTmpl let-item="item" let-formCtrl="formCtrl">
+                <span [class]="item.cssClass" [style]="item.cssStyle"
+                  >{{formCtrl.value | formatText:item.property.typeData}}</span
+                  >
+                </ng-template>
+
+                <ng-template #textControlTmpl let-item="item" let-formCtrl="formCtrl">
+                  <div class="mb-3 fv-row">
+                    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                    <div class="p-fluid">
+                      <input
+                        type="text"
+                        pInputText
+                        [name]="item.code"
+                        [formControl]="formCtrl"
+                        [placeholder]="item.placeholder || ''"
+                        />
+                      </div>
+                      @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                        <span
+                          class="fs-7 fv-plugins-message-container invalid-feedback"
+                          [innerHTML]="item.message"
+                        ></span>
+                      }
+                    </div>
+                  </ng-template>
+
+                  <ng-template #textareaControlTmpl let-item="item" let-formCtrl="formCtrl">
+                    <div class="mb-3 fv-row">
+                      <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                      <textarea
+                        [name]="item.code"
+                        [formControl]="formCtrl"
+                        class="form-control mb-2"
+                        [placeholder]="item.placeholder || ''"
+                        [style]="item.cssStyle"
+                        >
+                      </textarea>
+                      @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                        <span
+                          class="fs-7 fv-plugins-message-container invalid-feedback"
+                          [innerHTML]="item.message"
+                        ></span>
+                      }
+                    </div>
+                  </ng-template>
+
+                  <ng-template #numberControlTmpl let-item="item" let-formCtrl="formCtrl">
+                    <div class="mb-3 fv-row">
+                      <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                      <div class="p-fluid">
+                        <app-info-page-number
+                          [formCtrl]="formCtrl"
+                          [formItem]="item"
+                          [readOnly]="item.readOnly || isViewMode"
+                          />
+                        </div>
+                        @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                          <span
+                            class="fs-7 fv-plugins-message-container invalid-feedback"
+                            [innerHTML]="item.message"
+                          ></span>
+                        }
+                      </div>
+                    </ng-template>
+
+                    <ng-template #yearControlTmpl let-item="item" let-formCtrl="formCtrl">
+                      <div class="mb-3 fv-row">
+                        <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                        <div class="p-fluid">
+                          <app-info-page-number
+                            [formCtrl]="formCtrl"
+                            [formItem]="item"
+                            [readOnly]="item.readOnly || isViewMode"
+                            [isCurrency]="false"
+                            />
+                          </div>
+                          @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                            <span
+                              class="fs-7 fv-plugins-message-container invalid-feedback"
+                              [innerHTML]="item.message"
+                            ></span>
+                          }
+                        </div>
+                      </ng-template>
+
+                      <ng-template #decimalControlTmpl let-item="item" let-formCtrl="formCtrl">
+                        <div class="mb-3 fv-row">
+                          <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                          <div class="p-fluid">
+                            <app-info-page-number
+                              [formCtrl]="formCtrl"
+                              [formItem]="item"
+                              [isDecimal]="true"
+                              [readOnly]="item.readOnly || isViewMode"
+                              />
+                            </div>
+                            @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                              <span
+                                class="fs-7 fv-plugins-message-container invalid-feedback"
+                                [innerHTML]="item.message"
+                              ></span>
+                            }
+                          </div>
+                        </ng-template>
+
+                        <ng-template #currencyControlTmpl let-item="item" let-formCtrl="formCtrl">
+                          <div class="mb-3 fv-row">
+                            <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                            <div class="p-fluid">
+                              <app-info-page-number
+                                [formCtrl]="formCtrl"
+                                [formItem]="item"
+                                [isDecimal]="true"
+                                [isCurrency]="true"
+                                [readOnly]="item.readOnly || isViewMode"
+                                />
+                              </div>
+                              @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                                <span
+                                  class="fs-7 fv-plugins-message-container invalid-feedback"
+                                  [innerHTML]="item.message"
+                                ></span>
+                              }
+                            </div>
+                          </ng-template>
+
+                          <ng-template #selectControlTmpl let-item="item" let-formCtrl="formCtrl">
+                            <div class="mb-3 fv-row">
+                              <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                              <div class="p-fluid">
+                                <app-info-page-select
+                                  [formCtrl]="formCtrl"
+                                  [formItem]="item"
+                                  [readOnly]="item.readOnly || isViewMode"
+                                  [parentData]="parentData"
+                                  [formData]="value"
+                                  />
+                                </div>
+                                @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                                  <span
+                                    class="fs-7 fv-plugins-message-container invalid-feedback"
+                                    [innerHTML]="item.message"
+                                  ></span>
+                                }
+                              </div>
+                            </ng-template>
+
+                            <ng-template #radioControlTmpl let-item="item" let-formCtrl="formCtrl">
+                              <div class="mb-3 fv-row">
+                                <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                                <div class="p-fluid">
+                                  <app-info-page-radio
+                                    [formCtrl]="formCtrl"
+                                    [formItem]="item"
+                                    [readOnly]="item.readOnly || isViewMode"
+                                    />
+                                  </div>
+                                  @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                                    <span
+                                      class="fs-7 fv-plugins-message-container invalid-feedback"
+                                      [innerHTML]="item.message"
+                                    ></span>
+                                  }
+                                </div>
+                              </ng-template>
+
+                              <ng-template #fileControlTmpl let-item="item" let-formCtrl="formCtrl">
+                                <div class="mb-3 fv-row">
+                                  <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                                  <div class="p-fluid">
+                                    <app-info-page-fileupload
+                                      [formCtrl]="formCtrl"
+                                      [formItem]="item"
+                                      [readOnly]="item.readOnly || isViewMode"
+                                      [attr.identify]="item.code"
+                                      />
+                                    </div>
+                                    @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                                      <span
+                                        class="fs-7 fv-plugins-message-container invalid-feedback"
+                                        [innerHTML]="item.message"
+                                      ></span>
+                                    }
+                                  </div>
+                                </ng-template>
+
+                                <ng-template #dateControlTmpl let-item="item" let-formCtrl="formCtrl">
+                                  <div class="mb-3 fv-row">
+                                    <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                                    <div class="p-fluid">
+                                      <app-info-page-datetime
+                                        [formCtrl]="formCtrl"
+                                        [formItem]="item"
+                                        [readOnly]="item.readOnly || isViewMode"
+                                        />
+                                      </div>
+                                      @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                                        <span
+                                          class="fs-7 fv-plugins-message-container invalid-feedback"
+                                          [innerHTML]="item.message"
+                                        ></span>
+                                      }
+                                    </div>
+                                  </ng-template>
+
+                                  <ng-template #checkboxControlTmpl let-item="item" let-formCtrl="formCtrl">
+                                    <div class="mb-3 fv-row">
+                                      <ng-container *ngTemplateOutlet="labelFormTmpl;context: {item: item}" />
+                                      <div class="p-fluid">
+                                        <!-- <div class="form-check"> -->
+                                        <!-- <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        [formControl]="formCtrl"
+                                        [style]="item.cssStyle"
+                                        /> -->
+                                        <!-- <p-checkbox
+                                        [formControl]="formCtrl"
+                                        [ngStyle]="item.cssStyle"
+                                        [binary]="true"
+                                      ></p-checkbox> -->
+
+                                      <!-- TODO: Chỗ em sửa -->
+                                      <!-- Start -->
+                                      <app-checkbox
+                                        [formCtrl]="formCtrl"
+                                        [formItem]="item"
+                                        [readOnly]="item.readOnly || isViewMode"
+                                      ></app-checkbox>
+                                      <!-- End -->
+                                      <label class="form-check-label">{{item.placeholder || ''}}</label>
+                                    <!-- </div> -->
+                                  </div>
+                                  @if (formCtrl !== null && formCtrl.touched && formCtrl.invalid) {
+                                    <span
+                                      class="fs-7 fv-plugins-message-container invalid-feedback"
+                                      [innerHTML]="item.message"
+                                    ></span>
+                                  }
+                                </div>
+                              </ng-template>
+
+                              <ng-template #labelFormTmpl let-item="item">
+                                <label
+                                  [class.required]="item.isRequired && item.name"
+                                  class="fw-semibold fs-6 mb-2"
+                                  >
+                                  {{item.name}}
+                                  @if (item.hint !== null && item.hint !== '') {
+                                    <span class="ms-1" [pTooltip]="item.hint">
+                                      <i class="ki-duotone ki-information fs-7">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                      </i>
+                                    </span>
+                                  }
+                                  <!-- Dành cho admin -->
+                                  @if (currentUser?.roleCodes?.includes('DEVELOP') && item?.property?.code) {
+                                    <span
+                                      class="ms-1"
+                                      (click)="op1.toggle($event)"
+                                      >
+                                      <i class="ki-duotone ki-information fs-7">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                      </i>
+                                    </span>
+                                  }
+                                  <p-overlayPanel #op1 [dismissable]="true" [showCloseIcon]="true">
+                                    <div>
+                                      <pre>{{item?.property?.code}} ({{item?.property?.typeData}}) ({{item?.propertyId}})</pre>
+                                    </div>
+                                  </p-overlayPanel>
+                                </label>
+                              </ng-template>
+                              <p-dialog
+                                [(visible)]="isOnSubmit"
+                                [modal]="true"
+                                [closable]="false"
+                                [draggable]="false"
+                                [style]="{width: '400px'}"
+                                >
+                                <div
+                                  class="p-d-flex p-jc-center p-ai-center"
+                                  style="height: 120px; text-align: center"
+                                  >
+                                  <p-progressSpinner
+                                    [style]="{'width': '50px'}"
+                                    strokeWidth="5"
+                                    fill="var(--surface-ground)"
+                                    animationDuration=".5s"
+                                    />
+                                    <p style="margin: 5px 0">Đang thực hiện, vui lòng chờ...</p>
+                                  </div>
+                                </p-dialog>

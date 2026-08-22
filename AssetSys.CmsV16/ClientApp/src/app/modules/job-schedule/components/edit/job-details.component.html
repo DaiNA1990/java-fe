@@ -1,62 +1,64 @@
-<div class="card p-4" *ngIf="job">
-  <h2 class="text-xl font-semibold mb-3">{{ job.type }}.{{ job.method }}</h2>
-  <p-message
-    severity="info"
-    text="The job is finished. It will be removed automatically after 1 day."
-  ></p-message>
-  <p-panel header="Code Preview" [toggleable]="true">
-    <pre class="bg-slate-50 text-slate-700 font-mono text-sm p-4 rounded-lg"
-      >{{ job.codePreview }}
+@if (job) {
+  <div class="card p-4">
+    <h2 class="text-xl font-semibold mb-3">{{ job.type }}.{{ job.method }}</h2>
+    <p-message
+      severity="info"
+      text="The job is finished. It will be removed automatically after 1 day."
+    ></p-message>
+    <p-panel header="Code Preview" [toggleable]="true">
+      <pre class="bg-slate-50 text-slate-700 font-mono text-sm p-4 rounded-lg"
+        >{{ job.codePreview }}
         </pre
-    >
-  </p-panel>
-  <h3 class="mt-4 text-lg font-medium">Parameters</h3>
-  <p-table [value]="job.parameters">
-    <ng-template pTemplate="body" let-param>
-      <tr>
-        <td>{{ param.name }}</td>
-        <td>{{ param.value }}</td>
-      </tr>
-    </ng-template>
-  </p-table>
-
-  <!-- <h3 class="mt-4 text-lg font-medium">State</h3>
-  <div class="mt-2 grid grid-cols-2 gap-4">
-    <div>
-      <p><strong>Created:</strong> {{ job.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</p>
-      <p><strong>Started:</strong> {{ job.startedAt | date:'dd/MM/yyyy HH:mm:ss' }}</p>
-      <p><strong>Succeeded:</strong> {{ job.succeededAt | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+        >
+      </p-panel>
+      <h3 class="mt-4 text-lg font-medium">Parameters</h3>
+      <p-table [value]="job.parameters">
+        <ng-template pTemplate="body" let-param>
+          <tr>
+            <td>{{ param.name }}</td>
+            <td>{{ param.value }}</td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <!-- <h3 class="mt-4 text-lg font-medium">State</h3>
+      <div class="mt-2 grid grid-cols-2 gap-4">
+        <div>
+          <p><strong>Created:</strong> {{ job.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+          <p><strong>Started:</strong> {{ job.startedAt | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+          <p><strong>Succeeded:</strong> {{ job.succeededAt | date:'dd/MM/yyyy HH:mm:ss' }}</p>
+        </div>
+        <div>
+          <p><strong>Duration:</strong> {{ job.duration | number:'1.2-2' }}s</p>
+          <p><strong>Latency:</strong> {{ job.latency | number:'1.2-2' }}s</p>
+          <p><strong>Result:</strong> {{ job.result }}</p>
+        </div>
+      </div> -->
+      <h3 class="mt-4 text-lg font-medium">History</h3>
+      <p-table [value]="job.history">
+        <ng-template pTemplate="header">
+          <tr>
+            <th scope="col">State</th>
+            <th scope="col">Created At</th>
+            <th scope="col">Data</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-h>
+          <tr>
+            <td>{{ h.stateName }}</td>
+            <td>{{ h.createdAt | date : "dd/MM/yyyy HH:mm:ss" }}</td>
+            <td>
+              <ul>
+                @for (kv of h.data | keyvalue; track kv) {
+                  <li>
+                    {{ kv.key }}: {{ kv.value }}
+                  </li>
+                }
+              </ul>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </div>
-    <div>
-      <p><strong>Duration:</strong> {{ job.duration | number:'1.2-2' }}s</p>
-      <p><strong>Latency:</strong> {{ job.latency | number:'1.2-2' }}s</p>
-      <p><strong>Result:</strong> {{ job.result }}</p>
-    </div>
-  </div> -->
+  }
 
-  <h3 class="mt-4 text-lg font-medium">History</h3>
-  <p-table [value]="job.history">
-    <ng-template pTemplate="header">
-      <tr>
-        <th scope="col">State</th>
-        <th scope="col">Created At</th>
-        <th scope="col">Data</th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-h>
-      <tr>
-        <td>{{ h.stateName }}</td>
-        <td>{{ h.createdAt | date : "dd/MM/yyyy HH:mm:ss" }}</td>
-        <td>
-          <ul>
-            <li *ngFor="let kv of h.data | keyvalue">
-              {{ kv.key }}: {{ kv.value }}
-            </li>
-          </ul>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
-</div>
-
-<!-- <p-progressSpinner *ngIf="loading"></p-progressSpinner> -->
+  <!-- <p-progressSpinner *ngIf="loading"></p-progressSpinner> -->

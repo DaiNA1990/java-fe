@@ -23,103 +23,108 @@ import { BaseFormPage } from '../base.form';
 @Component({
     selector: 'app-info-page-select',
     template: `
-    <p-dropdown
-      [formControl]="formCtrl"
-      [options]="items"
-      [showClear]="true"
-      appendTo="body"
-      optionLabel="name"
-      optionValue="value"
-      emptyMessage="Không có dữ liệu"
-      emptyFilterMessage="Không tìm thấy dữ liệu"
-      [filter]="items.length >= 20"
-      [placeholder]="formItem.placeholder || ''"
-      (onChange)="onChange($event)"
-      *ngIf="
-        isLoaded &&
-        !(readOnly || formItem.isReadOnly) &&
-        formItem.controlType === 'select' &&
-        !(lookupData?.typeData === 'API')
-      "
-    >
-      <ng-template pTemplate="selectedItem" let-item>
-        <span
-          #textEl
-          class="truncate"
-          [pTooltip]="shouldShowTooltip(textEl) ? item?.name : null"
-          tooltipPosition="top"
+    @if (
+      isLoaded &&
+      !(readOnly || formItem.isReadOnly) &&
+      formItem.controlType === 'select' &&
+      !(lookupData?.typeData === 'API')
+      ) {
+      <p-dropdown
+        [formControl]="formCtrl"
+        [options]="items"
+        [showClear]="true"
+        appendTo="body"
+        optionLabel="name"
+        optionValue="value"
+        emptyMessage="Không có dữ liệu"
+        emptyFilterMessage="Không tìm thấy dữ liệu"
+        [filter]="items.length >= 20"
+        [placeholder]="formItem.placeholder || ''"
+        (onChange)="onChange($event)"
         >
-          {{ item?.name }}
-        </span>
-      </ng-template>
-    </p-dropdown>
-    <p-dropdown
-      [formControl]="formCtrl"
-      [options]="items"
-      [showClear]="true"
-      appendTo="body"
-      optionLabel="name"
-      optionValue="value"
-      emptyMessage="Không có dữ liệu"
-      emptyFilterMessage="Không tìm thấy dữ liệu"
-      [filter]="true"
-      (onFilter)="onFilterInput($event)"
-      [placeholder]="formItem.placeholder || ''"
-      (onChange)="onChange($event)"
-      *ngIf="
-        isLoaded &&
-        !(readOnly || formItem.isReadOnly) &&
-        ((formItem.controlType === 'select' &&
-          lookupData?.typeData === 'API') ||
-          formItem.controlType === 'selectLazy')
-      "
-    >
-      <ng-template pTemplate="selectedItem" let-item>
-        <span
-          #textEl
-          class="truncate"
-          [pTooltip]="shouldShowTooltip(textEl) ? item?.name : null"
-          tooltipPosition="top"
+        <ng-template pTemplate="selectedItem" let-item>
+          <span
+            #textEl
+            class="truncate"
+            [pTooltip]="shouldShowTooltip(textEl) ? item?.name : null"
+            tooltipPosition="top"
+            >
+            {{ item?.name }}
+          </span>
+        </ng-template>
+      </p-dropdown>
+    }
+    @if (
+      isLoaded &&
+      !(readOnly || formItem.isReadOnly) &&
+      ((formItem.controlType === 'select' &&
+      lookupData?.typeData === 'API') ||
+      formItem.controlType === 'selectLazy')
+      ) {
+      <p-dropdown
+        [formControl]="formCtrl"
+        [options]="items"
+        [showClear]="true"
+        appendTo="body"
+        optionLabel="name"
+        optionValue="value"
+        emptyMessage="Không có dữ liệu"
+        emptyFilterMessage="Không tìm thấy dữ liệu"
+        [filter]="true"
+        (onFilter)="onFilterInput($event)"
+        [placeholder]="formItem.placeholder || ''"
+        (onChange)="onChange($event)"
         >
-          {{ item?.name }}
-        </span>
-      </ng-template>
-    </p-dropdown>
+        <ng-template pTemplate="selectedItem" let-item>
+          <span
+            #textEl
+            class="truncate"
+            [pTooltip]="shouldShowTooltip(textEl) ? item?.name : null"
+            tooltipPosition="top"
+            >
+            {{ item?.name }}
+          </span>
+        </ng-template>
+      </p-dropdown>
+    }
     <!-- <div *ngIf="isLoaded && (readOnly || formItem.isReadOnly)">{{ name }}</div> -->
-    <input
-      *ngIf="isLoaded && (readOnly || formItem.isReadOnly)"
-      type="text"
-      pInputText
-      [value]="this.getValueReadOnly(formCtrl.value) | formatText"
-      [disabled]="true"
-    />
-    <p-multiSelect
-      [formControl]="formCtrl"
-      [options]="items"
-      optionLabel="name"
-      optionValue="value"
-      appendTo="body"
-      emptyMessage="Không có dữ liệu"
-      emptyFilterMessage="Không tìm thấy dữ liệu"
-      [placeholder]="formItem.placeholder || ''"
-      (onChange)="onChange($event)"
-      [maxSelectedLabels]="3"
-      *ngIf="
-        isLoaded &&
-        !(readOnly || formItem.isReadOnly) &&
-        formItem.controlType === 'multiSelect'
-      "
-    />
-    <div
-      class="form-control form-control-solid text-center"
-      data-kt-indicator="on"
-      *ngIf="!isLoaded"
-    >
-      <span class="indicator-progress">
-        <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-      </span>
-    </div>
-  `,
+    @if (isLoaded && (readOnly || formItem.isReadOnly)) {
+      <input
+        type="text"
+        pInputText
+        [value]="this.getValueReadOnly(formCtrl.value) | formatText"
+        [disabled]="true"
+        />
+    }
+    @if (
+      isLoaded &&
+      !(readOnly || formItem.isReadOnly) &&
+      formItem.controlType === 'multiSelect'
+      ) {
+      <p-multiSelect
+        [formControl]="formCtrl"
+        [options]="items"
+        optionLabel="name"
+        optionValue="value"
+        appendTo="body"
+        emptyMessage="Không có dữ liệu"
+        emptyFilterMessage="Không tìm thấy dữ liệu"
+        [placeholder]="formItem.placeholder || ''"
+        (onChange)="onChange($event)"
+        [maxSelectedLabels]="3"
+        />
+    }
+    @if (!isLoaded) {
+      <div
+        class="form-control form-control-solid text-center"
+        data-kt-indicator="on"
+        >
+        <span class="indicator-progress">
+          <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+        </span>
+      </div>
+    }
+    `,
     styles: [
         `
       ::ng-deep {

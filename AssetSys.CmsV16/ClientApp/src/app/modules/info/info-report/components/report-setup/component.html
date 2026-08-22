@@ -1,66 +1,68 @@
 <!-- https://preview.keenthemes.com/metronic8/demo1/dashboards/online-courses.html -->
 <p-panel header="Giao diện" [toggleable]="false" [collapsed]="false">
-	<ng-template pTemplate="icons">
-		<button class="p-panel-header-icon p-link mr-2" (click)="open()">
-			<i class="ki-duotone ki-add-item fs-2">
-				<span class="path1"></span>
-				<span class="path2"></span>
-				<span class="path3"></span>
-			</i>
-		</button>
-	</ng-template>
-	<div class="pt-6" style="height: 40vh; max-width: 100%; overflow-y: auto; overflow-x: auto;">
-		<ng-container *ngFor="let item of layouts">
-			<div class="d-flex flex-stack" cdkDrag >
-				<a href="javascript:;"
-					class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px me-4 w-25px"
-					cdkDragHandle>
-					<i class="ki-duotone ki-sort fs-2">
-						<span class="path1"></span>
-						<span class="path2"></span>
-						<span class="path3"></span>
-						<span class="path4"></span>
-					</i>
-				</a>
-				<div class="d-flex align-items-center flex-row-fluid flex-wrap">
-					<div class="flex-grow-1 me-2">
-						<a href="javascript:;" class="text-gray-800 text-hover-primary fs-6 fw-bold"
-							(click)="open(item)">{{item.name}}</a>
-						<span class="text-muted fw-semibold d-block fs-7">{{item.code}}</span>
-					</div>
-					<a href="javascript:;"
-						class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px"
-						(click)="deleteItem($event, item)">
-						<i class="ki-duotone ki-cross fs-2">
-							<span class="path1"></span>
-							<span class="path2"></span>
-						</i>
-					</a>
-					<a href="javascript:;"
-						class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px"
-						[class.btn-warning]="currentItem !== undefined && item.id === currentItem.id"
-						(click)="builder(item)">
-						<i class="ki-duotone ki-arrow-right fs-2">
-							<span class="path1"></span>
-							<span class="path2"></span>
-						</i>
-					</a>
-				</div>
-			</div>
-			<div class="d-flex flex-stack my-2" *ngIf="item.editBy !== null && item.editBy !== ''">
-				<span class="text-gray-500 fw-bold">
-					<i class="ki-duotone ki-lock mx-2">
-						<span class="path1"></span>
-						<span class="path2"></span>
-						<span class="path3"></span>
-					</i>
-					<a href="javascript:;" class="text-gray-800 text-hover-primary fw-bold">Editing by</a>
-				</span>
-				<span class="badge badge-light-danger">{{item.editBy}}</span>
-			</div>
-			<div class="separator separator-dashed my-4"></div>
-		</ng-container>
-	</div>
+  <ng-template pTemplate="icons">
+    <button class="p-panel-header-icon p-link mr-2" (click)="open()">
+      <i class="ki-duotone ki-add-item fs-2">
+        <span class="path1"></span>
+        <span class="path2"></span>
+        <span class="path3"></span>
+      </i>
+    </button>
+  </ng-template>
+  <div class="pt-6" style="height: 40vh; max-width: 100%; overflow-y: auto; overflow-x: auto;">
+    @for (item of layouts; track item) {
+      <div class="d-flex flex-stack" cdkDrag >
+        <a href="javascript:;"
+          class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px me-4 w-25px"
+          cdkDragHandle>
+          <i class="ki-duotone ki-sort fs-2">
+            <span class="path1"></span>
+            <span class="path2"></span>
+            <span class="path3"></span>
+            <span class="path4"></span>
+          </i>
+        </a>
+        <div class="d-flex align-items-center flex-row-fluid flex-wrap">
+          <div class="flex-grow-1 me-2">
+            <a href="javascript:;" class="text-gray-800 text-hover-primary fs-6 fw-bold"
+            (click)="open(item)">{{item.name}}</a>
+            <span class="text-muted fw-semibold d-block fs-7">{{item.code}}</span>
+          </div>
+          <a href="javascript:;"
+            class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px"
+            (click)="deleteItem($event, item)">
+            <i class="ki-duotone ki-cross fs-2">
+              <span class="path1"></span>
+              <span class="path2"></span>
+            </i>
+          </a>
+          <a href="javascript:;"
+            class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px"
+            [class.btn-warning]="currentItem !== undefined && item.id === currentItem.id"
+            (click)="builder(item)">
+            <i class="ki-duotone ki-arrow-right fs-2">
+              <span class="path1"></span>
+              <span class="path2"></span>
+            </i>
+          </a>
+        </div>
+      </div>
+      @if (item.editBy !== null && item.editBy !== '') {
+        <div class="d-flex flex-stack my-2">
+          <span class="text-gray-500 fw-bold">
+            <i class="ki-duotone ki-lock mx-2">
+              <span class="path1"></span>
+              <span class="path2"></span>
+              <span class="path3"></span>
+            </i>
+            <a href="javascript:;" class="text-gray-800 text-hover-primary fw-bold">Editing by</a>
+          </span>
+          <span class="badge badge-light-danger">{{item.editBy}}</span>
+        </div>
+      }
+      <div class="separator separator-dashed my-4"></div>
+    }
+  </div>
 </p-panel>
 
 <app-info-report-setup-edit [reportId]="reportId" (onSubmited)="onSubmit($event)" />

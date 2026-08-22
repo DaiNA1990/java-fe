@@ -1,307 +1,324 @@
 <label class="d-flex align-items-center fs-6 fw-semibold mb-2"
   >Khai báo các cột dữ liệu được nhóm lại</label
->
-<div
-  class="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4 me-6 mb-3"
->
-  <ng-container>
-    <nb-text [ngModel]="value" [disabled]="true" placeholder="Nhập thông tin" />
-  </ng-container>
-  <div class="my-1 text-center">
-    <a href="javascript:;" (click)="open()">
-      <i class="ki-duotone ki-pencil fs-2">
-        <span class="path1"></span>
-        <span class="path2"></span>
-      </i>
-    </a>
-  </div>
-</div>
-
-<p-dialog
-  header="Header"
-  [(visible)]="visible"
-  [modal]="true"
-  [style]="{ width: '100rem' }"
->
-  <ng-template pTemplate="header">
-    <div class="inline-flex align-items-center justify-content-center gap-2">
-      <span class="font-bold white-space-nowrap">Thao tác</span>
-    </div>
-  </ng-template>
-  <div class="table-responsive mb-10">
-    <label class="form-label mb-10">Thông tin hành động</label>
-    <div class="input-group mb-5">
-      <label>
-        Border Cell
-        <input type="checkbox" [(ngModel)]="groupData.summary.borderCell" />
-      </label>
-    </div>
-    <div class="input-group mb-5">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Tiêu đề tổng cộng"
-        [(ngModel)]="groupData.summary.label"
-      />
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Ô excel điền tiêu đề"
-        [(ngModel)]="groupData.summary.cellLabel"
-      />
-    </div>
-    <div class="input-group mb-5">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Các trường dữ liệu thực hiện SUM"
-        [(ngModel)]="groupData.summary.columnSumName"
-      />
-      <label>
-        Summary Top
-        <input type="checkbox" [(ngModel)]="groupData.summary.sumTop" />
-      </label>
-      <label>
-        Summary All
-        <input type="checkbox" [(ngModel)]="groupData.summary.sumAll" />
-      </label>
-    </div>
-    <div class="input-group mb-5">
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Các trường dữ liệu thực hiện lọc theo tham số"
-        [(ngModel)]="groupData.summary.columnParam"
-      />
-    </div>
-    <div class="row mb-3">
-      <div class="col-6"></div>
-      <div class="col-6 text-end" *ngIf="!groupData?.groupData">
-        <a
-          href="javascript:;"
-          class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-          (click)="addGroupData($event)"
-        >
-          <i class="ki-duotone ki-plus fs-2"></i>
-        </a>
-      </div>
-    </div>
-    <div *ngIf="groupData.groupData">
-      <ng-container
-        *ngTemplateOutlet="GroupDataTemp;context: {item: groupData?.groupData, parent : null}"
-      />
-    </div>
-  </div>
-  <ng-template pTemplate="footer">
-    <p-button
-      label="Đóng"
-      [text]="true"
-      severity="secondary"
-      styleClass="mx-3"
-      (click)="visible = false"
-    />
-    <p-button
-      label="Lưu thông tin"
-      [outlined]="true"
-      severity="secondary"
-      (click)="save()"
-    />
-  </ng-template>
-</p-dialog>
-
-<ng-template #GroupDataTemp let-item="item" let-parent="parent">
-  <div class="border border-dashed border-gray-300 rounded px-3 py-3 mb-5">
-    <div class="col-6 text-end" *ngIf="item && !item.groupData">
-      <a
-        href="javascript:;"
-        class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-        (click)="addChildGroupData(item)"
-      >
-        <i class="ki-duotone ki-plus fs-2"></i>
-      </a>
-      <a
-        href="javascript:;"
-        class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-        (click)="removeGroupData(parent)"
-      >
-        <i class="ki-duotone ki-trash fs-2">
+  >
+  <div
+    class="border border-gray-300 border-dashed rounded min-w-100px w-100 py-2 px-4 me-6 mb-3"
+    >
+    <ng-container>
+      <nb-text [ngModel]="value" [disabled]="true" placeholder="Nhập thông tin" />
+    </ng-container>
+    <div class="my-1 text-center">
+      <a href="javascript:;" (click)="open()">
+        <i class="ki-duotone ki-pencil fs-2">
           <span class="path1"></span>
           <span class="path2"></span>
-          <span class="path3"></span>
-          <span class="path4"></span>
-          <span class="path5"></span>
         </i>
       </a>
     </div>
-    <div class="input-group mb-5">
-      <ng-container
-        *ngTemplateOutlet="columnGroupNameTemp;context: {item: item }"
-      />
-      <div *ngIf="item?.groupData">
-        <ng-container
-          *ngTemplateOutlet="GroupDataTemp;context: {item: item.groupData,parent: item}"
-        />
+  </div>
+
+  <p-dialog
+    header="Header"
+    [(visible)]="visible"
+    [modal]="true"
+    [style]="{ width: '100rem' }"
+    >
+    <ng-template pTemplate="header">
+      <div class="inline-flex align-items-center justify-content-center gap-2">
+        <span class="font-bold white-space-nowrap">Thao tác</span>
       </div>
-    </div>
-  </div>
-</ng-template>
+    </ng-template>
+    <div class="table-responsive mb-10">
+      <label class="form-label mb-10">Thông tin hành động</label>
+      <div class="input-group mb-5">
+        <label>
+          Border Cell
+          <input type="checkbox" [(ngModel)]="groupData.summary.borderCell" />
+        </label>
+      </div>
+      <div class="input-group mb-5">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Tiêu đề tổng cộng"
+          [(ngModel)]="groupData.summary.label"
+          />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Ô excel điền tiêu đề"
+            [(ngModel)]="groupData.summary.cellLabel"
+            />
+          </div>
+          <div class="input-group mb-5">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Các trường dữ liệu thực hiện SUM"
+              [(ngModel)]="groupData.summary.columnSumName"
+              />
+              <label>
+                Summary Top
+                <input type="checkbox" [(ngModel)]="groupData.summary.sumTop" />
+              </label>
+              <label>
+                Summary All
+                <input type="checkbox" [(ngModel)]="groupData.summary.sumAll" />
+              </label>
+            </div>
+            <div class="input-group mb-5">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Các trường dữ liệu thực hiện lọc theo tham số"
+                [(ngModel)]="groupData.summary.columnParam"
+                />
+              </div>
+              <div class="row mb-3">
+                <div class="col-6"></div>
+                @if (!groupData?.groupData) {
+                  <div class="col-6 text-end">
+                    <a
+                      href="javascript:;"
+                      class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                      (click)="addGroupData($event)"
+                      >
+                      <i class="ki-duotone ki-plus fs-2"></i>
+                    </a>
+                  </div>
+                }
+              </div>
+              @if (groupData.groupData) {
+                <div>
+                  <ng-container
+                    *ngTemplateOutlet="GroupDataTemp;context: {item: groupData?.groupData, parent : null}"
+                    />
+                  </div>
+                }
+              </div>
+              <ng-template pTemplate="footer">
+                <p-button
+                  label="Đóng"
+                  [text]="true"
+                  severity="secondary"
+                  styleClass="mx-3"
+                  (click)="visible = false"
+                  />
+                  <p-button
+                    label="Lưu thông tin"
+                    [outlined]="true"
+                    severity="secondary"
+                    (click)="save()"
+                    />
+                  </ng-template>
+                </p-dialog>
 
-<ng-template #columnGroupNameTemp let-item="item">
-  <div class="border-gray-300 rounded px-3 py-3 mb-5">
-    <div class="input-group mb-5">
-      Khai báo trường GROUP dữ liệu:
-      <a
-        href="javascript:;"
-        class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-        (click)="addcolumnGroupName(item.columnGroupName)"
-      >
-        <i class="ki-duotone ki-plus fs-2"></i>
-      </a>
-      <ng-container *ngFor="let obj of item.columnGroupName">
-        <ng-container
-          *ngTemplateOutlet="columnGroupNameValueTemp;context: {item: obj,list:item.columnGroupName }"
-        />
-      </ng-container>
-    </div>
-    <div class="input-group mb-5">
-      Khai báo trường SUM dữ liệu:
-      <a
-        href="javascript:;"
-        class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-        (click)="addcolumnGroupName(item.columnSumName)"
-      >
-        <i class="ki-duotone ki-plus fs-2"></i>
-      </a>
-      <ng-container *ngFor="let obj of item.columnSumName">
-        <ng-container
-          *ngTemplateOutlet="columnSumNameValueTemp;context: {item: obj,list:item.columnSumName}"
-        />
-      </ng-container>
-    </div>
-    <div class="input-group mb-5">
-      Khai báo số thứ tự cho nhóm dữ liệu:
-      <a
-        href="javascript:;"
-        class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-        (click)="addSttGroup(item)"
-        *ngIf="!item.stt"
-      >
-        <i class="ki-duotone ki-plus fs-2"></i>
-      </a>
-      <ng-container
-        *ngTemplateOutlet="sttValueTemp;context: {item: item.stt,parent: item}"
-      />
-    </div>
-    <!-- <a
-        href="javascript:;"
-        class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                <ng-template #GroupDataTemp let-item="item" let-parent="parent">
+                  <div class="border border-dashed border-gray-300 rounded px-3 py-3 mb-5">
+                    @if (item && !item.groupData) {
+                      <div class="col-6 text-end">
+                        <a
+                          href="javascript:;"
+                          class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                          (click)="addChildGroupData(item)"
+                          >
+                          <i class="ki-duotone ki-plus fs-2"></i>
+                        </a>
+                        <a
+                          href="javascript:;"
+                          class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                          (click)="removeGroupData(parent)"
+                          >
+                          <i class="ki-duotone ki-trash fs-2">
+                            <span class="path1"></span>
+                            <span class="path2"></span>
+                            <span class="path3"></span>
+                            <span class="path4"></span>
+                            <span class="path5"></span>
+                          </i>
+                        </a>
+                      </div>
+                    }
+                    <div class="input-group mb-5">
+                      <ng-container
+                        *ngTemplateOutlet="columnGroupNameTemp;context: {item: item }"
+                        />
+                        @if (item?.groupData) {
+                          <div>
+                            <ng-container
+                              *ngTemplateOutlet="GroupDataTemp;context: {item: item.groupData,parent: item}"
+                              />
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    </ng-template>
 
-      >
-        <i class="ki-duotone ki-trash fs-2">
-          <span class="path1"></span>
-          <span class="path2"></span>
-          <span class="path3"></span>
-          <span class="path4"></span>
-          <span class="path5"></span>
-        </i>
-      </a> -->
-  </div>
-</ng-template>
+                    <ng-template #columnGroupNameTemp let-item="item">
+                      <div class="border-gray-300 rounded px-3 py-3 mb-5">
+                        <div class="input-group mb-5">
+                          Khai báo trường GROUP dữ liệu:
+                          <a
+                            href="javascript:;"
+                            class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                            (click)="addcolumnGroupName(item.columnGroupName)"
+                            >
+                            <i class="ki-duotone ki-plus fs-2"></i>
+                          </a>
+                          @for (obj of item.columnGroupName; track obj) {
+                            <ng-container
+                              *ngTemplateOutlet="columnGroupNameValueTemp;context: {item: obj,list:item.columnGroupName }"
+                              />
+                            }
+                          </div>
+                          <div class="input-group mb-5">
+                            Khai báo trường SUM dữ liệu:
+                            <a
+                              href="javascript:;"
+                              class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                              (click)="addcolumnGroupName(item.columnSumName)"
+                              >
+                              <i class="ki-duotone ki-plus fs-2"></i>
+                            </a>
+                            @for (obj of item.columnSumName; track obj) {
+                              <ng-container
+                                *ngTemplateOutlet="columnSumNameValueTemp;context: {item: obj,list:item.columnSumName}"
+                                />
+                              }
+                            </div>
+                            <div class="input-group mb-5">
+                              Khai báo số thứ tự cho nhóm dữ liệu:
+                              @if (!item.stt) {
+                                <a
+                                  href="javascript:;"
+                                  class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                                  (click)="addSttGroup(item)"
+                                  >
+                                  <i class="ki-duotone ki-plus fs-2"></i>
+                                </a>
+                              }
+                              <ng-container
+                                *ngTemplateOutlet="sttValueTemp;context: {item: item.stt,parent: item}"
+                                />
+                              </div>
+                              <!-- <a
+                              href="javascript:;"
+                              class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
 
-<ng-template #columnGroupNameValueTemp let-item="item" let-list="list">
-  <div class="input-group mb-5">
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Trường dữ liệu"
-      [(ngModel)]="item.data"
-    />
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Cột Excel"
-      [(ngModel)]="item.target"
-    />
-    <select class="form-select" [(ngModel)]="item.type">
-      <option [value]="obj.value" *ngFor="let obj of typeDatas">
-        {{obj.text}}
-      </option>
-    </select>
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Định dạng"
-      [(ngModel)]="item.format"
-    />
-    <a
-      href="javascript:;"
-      class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-      (click)="removecolumnGroupName(item,list)"
-    >
-      <i class="ki-duotone ki-trash fs-2">
-        <span class="path1"></span>
-        <span class="path2"></span>
-        <span class="path3"></span>
-        <span class="path4"></span>
-        <span class="path5"></span>
-      </i>
-    </a>
-  </div>
-</ng-template>
-<ng-template #columnSumNameValueTemp let-item="item" let-list="list">
-  <div class="input-group mb-5">
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Trường dữ liệu"
-      [(ngModel)]="item.data"
-    />
-    <a
-      href="javascript:;"
-      class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-      (click)="removecolumnSumName(item,list)"
-    >
-      <i class="ki-duotone ki-trash fs-2">
-        <span class="path1"></span>
-        <span class="path2"></span>
-        <span class="path3"></span>
-        <span class="path4"></span>
-        <span class="path5"></span>
-      </i>
-    </a>
-  </div>
-</ng-template>
+                              >
+                              <i class="ki-duotone ki-trash fs-2">
+                                <span class="path1"></span>
+                                <span class="path2"></span>
+                                <span class="path3"></span>
+                                <span class="path4"></span>
+                                <span class="path5"></span>
+                              </i>
+                            </a> -->
+                          </div>
+                        </ng-template>
 
-<ng-template #sttValueTemp let-item="item" let-parent="parent">
-  <div class="input-group mb-5" *ngIf="item">
-    <select class="form-select" [(ngModel)]="item.format">
-      <option [value]="obj.value" *ngFor="let obj of typeFormat">
-        {{obj.text}}
-      </option>
-    </select>
-    <select class="form-select" [(ngModel)]="item.type">
-      <option [value]="obj.value" *ngFor="let obj of typeShow">
-        {{obj.text}}
-      </option>
-    </select>
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Cột Excel"
-      [(ngModel)]="item.target"
-    />
-    <a
-      href="javascript:;"
-      class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-      (click)="removeSttGroup(parent)"
-    >
-      <i class="ki-duotone ki-trash fs-2">
-        <span class="path1"></span>
-        <span class="path2"></span>
-        <span class="path3"></span>
-        <span class="path4"></span>
-        <span class="path5"></span>
-      </i>
-    </a>
-  </div>
-</ng-template>
+                        <ng-template #columnGroupNameValueTemp let-item="item" let-list="list">
+                          <div class="input-group mb-5">
+                            <input
+                              type="text"
+                              class="form-control"
+                              placeholder="Trường dữ liệu"
+                              [(ngModel)]="item.data"
+                              />
+                              <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Cột Excel"
+                                [(ngModel)]="item.target"
+                                />
+                                <select class="form-select" [(ngModel)]="item.type">
+                                  @for (obj of typeDatas; track obj) {
+                                    <option [value]="obj.value">
+                                      {{obj.text}}
+                                    </option>
+                                  }
+                                </select>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Định dạng"
+                                  [(ngModel)]="item.format"
+                                  />
+                                  <a
+                                    href="javascript:;"
+                                    class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                                    (click)="removecolumnGroupName(item,list)"
+                                    >
+                                    <i class="ki-duotone ki-trash fs-2">
+                                      <span class="path1"></span>
+                                      <span class="path2"></span>
+                                      <span class="path3"></span>
+                                      <span class="path4"></span>
+                                      <span class="path5"></span>
+                                    </i>
+                                  </a>
+                                </div>
+                              </ng-template>
+                              <ng-template #columnSumNameValueTemp let-item="item" let-list="list">
+                                <div class="input-group mb-5">
+                                  <input
+                                    type="text"
+                                    class="form-control"
+                                    placeholder="Trường dữ liệu"
+                                    [(ngModel)]="item.data"
+                                    />
+                                    <a
+                                      href="javascript:;"
+                                      class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                                      (click)="removecolumnSumName(item,list)"
+                                      >
+                                      <i class="ki-duotone ki-trash fs-2">
+                                        <span class="path1"></span>
+                                        <span class="path2"></span>
+                                        <span class="path3"></span>
+                                        <span class="path4"></span>
+                                        <span class="path5"></span>
+                                      </i>
+                                    </a>
+                                  </div>
+                                </ng-template>
+
+                                <ng-template #sttValueTemp let-item="item" let-parent="parent">
+                                  @if (item) {
+                                    <div class="input-group mb-5">
+                                      <select class="form-select" [(ngModel)]="item.format">
+                                        @for (obj of typeFormat; track obj) {
+                                          <option [value]="obj.value">
+                                            {{obj.text}}
+                                          </option>
+                                        }
+                                      </select>
+                                      <select class="form-select" [(ngModel)]="item.type">
+                                        @for (obj of typeShow; track obj) {
+                                          <option [value]="obj.value">
+                                            {{obj.text}}
+                                          </option>
+                                        }
+                                      </select>
+                                      <input
+                                        type="text"
+                                        class="form-control"
+                                        placeholder="Cột Excel"
+                                        [(ngModel)]="item.target"
+                                        />
+                                        <a
+                                          href="javascript:;"
+                                          class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+                                          (click)="removeSttGroup(parent)"
+                                          >
+                                          <i class="ki-duotone ki-trash fs-2">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                            <span class="path3"></span>
+                                            <span class="path4"></span>
+                                            <span class="path5"></span>
+                                          </i>
+                                        </a>
+                                      </div>
+                                    }
+                                  </ng-template>

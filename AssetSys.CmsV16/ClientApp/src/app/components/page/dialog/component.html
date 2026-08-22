@@ -1,29 +1,31 @@
 <p-dialog header="Header" [visible]="(visibleSubject$ | async) || false" [modal]="true" [maximizable]="true"
-    [style]="{ width: width + 'vw' }" [draggable]="true" [resizable]="false"
-    [contentStyle]="{'background-color': '#fcfcfc' }" (visibleChange)="visibleChange($event)">
-    <ng-template pTemplate="header">
-        <span class="p-dialog-title">{{title}}</span>
-        <ng-content select="[title]"></ng-content>
-    </ng-template>
-    <ng-container *ngTemplateOutlet="(showFormSubject$ | async) ? editTemplate : null" />
-    <ng-template pTemplate="footer">
-        <ng-container *ngIf="showFormSubject$ | async">
-            <div class="d-flex justify-content-end">
-                <button href="javascript:;" class="btn btn-light me-5"
-                    [attr.disabled]="(submitSubject$ | async) ? true : null" (click)="close()">
-                    Đóng
-                </button>
-                <button type="submit" class="btn btn-primary"
-                    [attr.data-kt-indicator]="(submitSubject$ | async) ? 'on' : null"
-                    [attr.disabled]="(submitSubject$ | async) ? true : null" (click)="submit()" *ngIf="isEdit">
-                    <span class="indicator-label">
-                        Lưu thông tin
-                    </span>
-                    <span class="indicator-progress">
-                        vui lòng chờ... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                    </span>
-                </button>
-            </div>
-        </ng-container>
-    </ng-template>
+  [style]="{ width: width + 'vw' }" [draggable]="true" [resizable]="false"
+  [contentStyle]="{'background-color': '#fcfcfc' }" (visibleChange)="visibleChange($event)">
+  <ng-template pTemplate="header">
+    <span class="p-dialog-title">{{title}}</span>
+    <ng-content select="[title]"></ng-content>
+  </ng-template>
+  <ng-container *ngTemplateOutlet="(showFormSubject$ | async) ? editTemplate : null" />
+  <ng-template pTemplate="footer">
+    @if (showFormSubject$ | async) {
+      <div class="d-flex justify-content-end">
+        <button href="javascript:;" class="btn btn-light me-5"
+          [attr.disabled]="(submitSubject$ | async) ? true : null" (click)="close()">
+          Đóng
+        </button>
+        @if (isEdit) {
+          <button type="submit" class="btn btn-primary"
+            [attr.data-kt-indicator]="(submitSubject$ | async) ? 'on' : null"
+            [attr.disabled]="(submitSubject$ | async) ? true : null" (click)="submit()">
+            <span class="indicator-label">
+              Lưu thông tin
+            </span>
+            <span class="indicator-progress">
+              vui lòng chờ... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+            </span>
+          </button>
+        }
+      </div>
+    }
+  </ng-template>
 </p-dialog>

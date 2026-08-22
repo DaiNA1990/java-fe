@@ -16,29 +16,31 @@ import { FormConfig, keepConfig } from './services/form-config.service';
     template: `
     <!-- <div class="pb-3 pb-lg-6">
     <app-breadcrumb [module]="layout?.group.name || ''" group="Thông tin" name="Quản lý"></app-breadcrumb>
-  </div> -->
-    <app-info-page-form
-      [config]="getFormConfig()"
-      *ngIf="layout !== null && layout !== undefined"
-    />
-    <div
-      class="page-loader"
-      style="display: flex;position: absolute;text-align: center;justify-content: center;align-items: center;opacity: 0.9;"
-      *ngIf="layout === null || layout === undefined"
-    >
-      <span class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </span>
-    </div>
+    </div> -->
+    @if (layout !== null && layout !== undefined) {
+      <app-info-page-form
+        [config]="getFormConfig()"
+        />
+    }
+    @if (layout === null || layout === undefined) {
+      <div
+        class="page-loader"
+        style="display: flex;position: absolute;text-align: center;justify-content: center;align-items: center;opacity: 0.9;"
+        >
+        <span class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </span>
+      </div>
+    }
     <!--
-      p-toast / p-confirmDialog để ở đây, KHÔNG để trong form.component:
-      form lồng nhau (control loại layout, form trong modal) nên mỗi instance sẽ
-      render thêm một cái, mà MessageService lại là singleton của info-page.module
-      -> một message add() hiện ra trên tất cả các toast, nhìn thành chồng nhau.
+    p-toast / p-confirmDialog để ở đây, KHÔNG để trong form.component:
+    form lồng nhau (control loại layout, form trong modal) nên mỗi instance sẽ
+    render thêm một cái, mà MessageService lại là singleton của info-page.module
+    -> một message add() hiện ra trên tất cả các toast, nhìn thành chồng nhau.
     -->
     <p-toast></p-toast>
     <p-confirmDialog appendTo="body"></p-confirmDialog>
-  `,
+    `,
     providers: [
         InfoLayoutService
     ],

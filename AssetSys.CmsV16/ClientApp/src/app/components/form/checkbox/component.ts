@@ -8,8 +8,10 @@ import { NbBaseComponent } from '../../form.base';
   <nb-form-box [formCtrl]="formCtrl" [name]="name" [label]="label" [message]="message" [hint]="hint"
     [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
     <label class="form-check form-check-custom form-check-solid mt-2">
-        <input class="form-check-input" type="checkbox" [(ngModel)]="value" />
-        <span class="form-check-label" *ngIf="placeholder !== ''">{{placeholder}}</span>
+      <input class="form-check-input" type="checkbox" [(ngModel)]="value" />
+      @if (placeholder !== '') {
+        <span class="form-check-label">{{placeholder}}</span>
+      }
     </label>
   </nb-form-box>
   `,

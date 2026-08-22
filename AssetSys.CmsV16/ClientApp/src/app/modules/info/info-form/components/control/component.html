@@ -1,27 +1,31 @@
 <!-- https://preview.keenthemes.com/metronic8/demo1/dashboards/online-courses.html -->
 <p-panel header="Control" [toggleable]="true" [collapsed]="true">
-	<div class="pt-6" style="height: 40vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;" cdkDropList>
-		<ng-container *ngFor="let item of controls">
-			<span class="text-gray-800 fw-bold">{{item.text}}</span>
-			<div class="separator separator-dashed my-4"></div>
-			<div cdkDrag [cdkDragData]="item" [id]="item.value" *ngFor="let child of item.items">
-				<span>{{child.text}}</span>
-				<div class="separator separator-dashed my-4"></div>
-				<div class="flex-grow-1 me-2" *cdkDragPreview>
-					<span>{{child.text}}</span>
-				</div>
-			</div>
-		</ng-container>
-		<ng-container *ngFor="let item of controls">
-			<span class="text-gray-800 fw-bold">{{item.text}}</span>
-			<div class="separator separator-dashed my-4"></div>
-			<div cdkDrag [cdkDragData]="item" [id]="item.value" *ngFor="let child of item.items">
-				<span>{{child.text}}</span>
-				<div class="separator separator-dashed my-4"></div>
-				<div class="flex-grow-1 me-2" *cdkDragPreview>
-					<span>{{child.text}}</span>
-				</div>
-			</div>
-		</ng-container>
-	</div>
+  <div class="pt-6" style="height: 40vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;" cdkDropList>
+    @for (item of controls; track item) {
+      <span class="text-gray-800 fw-bold">{{item.text}}</span>
+      <div class="separator separator-dashed my-4"></div>
+      @for (child of item.items; track child) {
+        <div cdkDrag [cdkDragData]="item" [id]="item.value">
+          <span>{{child.text}}</span>
+          <div class="separator separator-dashed my-4"></div>
+          <div class="flex-grow-1 me-2" *cdkDragPreview>
+            <span>{{child.text}}</span>
+          </div>
+        </div>
+      }
+    }
+    @for (item of controls; track item) {
+      <span class="text-gray-800 fw-bold">{{item.text}}</span>
+      <div class="separator separator-dashed my-4"></div>
+      @for (child of item.items; track child) {
+        <div cdkDrag [cdkDragData]="item" [id]="item.value">
+          <span>{{child.text}}</span>
+          <div class="separator separator-dashed my-4"></div>
+          <div class="flex-grow-1 me-2" *cdkDragPreview>
+            <span>{{child.text}}</span>
+          </div>
+        </div>
+      }
+    }
+  </div>
 </p-panel>

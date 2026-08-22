@@ -1,14 +1,14 @@
-<ng-container *ngIf="appFooterContainerCSSClass">
+@if (appFooterContainerCSSClass) {
   <!--begin::Footer container-->
   <div class="app-container" [ngClass]="appFooterContainerCSSClass">
     <ng-container *ngTemplateOutlet="footerView"></ng-container>
   </div>
   <!--end::Footer container-->
-</ng-container>
+}
 
-<ng-container *ngIf="!appFooterContainerCSSClass">
+@if (!appFooterContainerCSSClass) {
   <ng-container *ngTemplateOutlet="footerView"></ng-container>
-</ng-container>
+}
 
 <ng-template #footerView>
   <!--begin::Copyright-->
