@@ -12,6 +12,7 @@ import { NbNumberModule } from '@appkkkh/components/form/number/module';
 import { NbTextModule } from '@appkkkh/components/form/text/module';
 import { NbCheckboxModule } from '@appkkkh/components/form/checkbox/module';
 import { NbTextareaModule } from '@appkkkh/components/form/textarea/module';
+import { NbSelectModule } from '@appkkkh/components/form/select/module';
 import { UserPageActionComponentsModule } from '../../user-page-action/components/user-page-action-components.module';
 import { SharedModule } from '@appkkkh/_metronic/shared/shared.module';
 
@@ -37,6 +38,7 @@ import { SharedModule } from '@appkkkh/_metronic/shared/shared.module';
         NbTextModule,
         NbCheckboxModule,
         NbTextareaModule,
+        NbSelectModule,
         UserPageActionComponentsModule
     ],
     providers: [],

@@ -3,7 +3,7 @@ import { AbstractControl } from '@angular/forms';
 import { InfoReportService } from '../../services/info-report.service';
 import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { BaseFormPage } from '../../../info-page/components/base.form';
+import { BaseFormPage } from '../../../base.form';
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -46,13 +46,28 @@ export class InfoReportFileUploadComponent
     this.formCtrl.setValue('');
   }
 
+  /**
+   * Tên file template lấy từ response của UploadTemplate.
+   *
+   * Backend trả thẳng chuỗi tên file đã đổi tên trên storage
+   * ('mau36_20261002075337269.xlsx'); bản cũ trả mảng [{ fileName }] nên vẫn đọc
+   * cả 2 dạng cho chắc.
+   */
+  readFileName(data: any): string {
+    if (typeof data === 'string') return data;
+
+    if (Array.isArray(data)) return data[0]?.fileName ?? data[0]?.filename ?? '';
+
+    return data?.fileName ?? data?.filename ?? '';
+  }
+
   submitFile(file: any) {
     const formData = new FormData();
     formData.append('file', file, file.name);
 
     this.infoReportService.uploadTemplate(formData).subscribe((res: any) => {
       if (res.statusCode === ResponseCode.ZERO) {
-        this.formCtrl.setValue(res.data[0].fileName);
+        this.formCtrl.setValue(this.readFileName(res.data));
         this.messageService.add({
           severity: 'success',
           summary: 'Thông báo',
@@ -80,7 +95,7 @@ export class InfoReportFileUploadComponent
             this.messageService.add({
               severity: 'error',
               summary: 'Thông báo',
-              detail: 'File không tồn tại',
+              detail: res.body.message ?? 'File không tồn tại',
               life: 3000,
             });
           } else {

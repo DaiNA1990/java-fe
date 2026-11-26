@@ -4,6 +4,10 @@
         "value": "btn-primary"
     },
     {
+        "text": "btn-secondary",
+        "value": "btn-secondary"
+    },
+    {
         "text": "d-block",
         "value": "d-block"
     },
@@ -30,5 +34,33 @@
     {
         "text": "mw-750px",
         "value": "mw-750px"
+    },
+    {
+        "text": "badge-auto",
+        "value": "badge-auto"
+    },
+    {
+        "text": "badge-light-primary",
+        "value": "badge-light-primary"
+    },
+    {
+        "text": "badge-light-success",
+        "value": "badge-light-success"
+    },
+    {
+        "text": "badge-light-warning",
+        "value": "badge-light-warning"
+    },
+    {
+        "text": "badge-light-danger",
+        "value": "badge-light-danger"
+    },
+    {
+        "text": "badge-light-info",
+        "value": "badge-light-info"
+    },
+    {
+        "text": "badge-light-dark",
+        "value": "badge-light-dark"
     }     
 ]

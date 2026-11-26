@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, forwardRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, forwardRef, Input } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NbBaseComponent } from '../../form.base';
 
@@ -7,7 +7,7 @@ import { NbBaseComponent } from '../../form.base';
   template: `
   <nb-form-box [formCtrl]="formCtrl" [name]="name" [label]="label" [message]="message" [hint]="hint"
     [tooltip]="tooltip" [iconStart]="iconStart" [iconEnd]="iconEnd" [readonly]="readonly" [hasValidator]="hasValidator">
-    <input type="text" [(ngModel)]="value" [readonly]="readonly" [disabled]="disabled"  pInputText [placeholder]="placeholder" (keyup)="changeFn($event)" />
+    <input [type]="type" [(ngModel)]="value" [readonly]="readonly" [disabled]="disabled"  pInputText [placeholder]="placeholder" (keyup)="changeFn($event)" />
   </nb-form-box>
   `,
   providers: [
@@ -24,6 +24,9 @@ import { NbBaseComponent } from '../../form.base';
   ]
 })
 export class NbTextComponent extends NbBaseComponent implements OnInit, OnDestroy, ControlValueAccessor {
+
+  // 'text' | 'password' | ...
+  @Input() type: string = 'text';
 
   constructor() {
     super();

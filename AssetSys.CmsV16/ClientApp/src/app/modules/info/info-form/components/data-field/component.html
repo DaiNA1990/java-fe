@@ -36,6 +36,14 @@
 						<div class="flex-grow-1 me-2">
 							<a href="javascript:;" class="text-gray-800 text-hover-primary fs-6 fw-bold"
 								(click)="open(item)">{{item.name}}</a>
+							<span *ngIf="item.isUnique" class="badge badge-light-danger fs-8 fw-bold ms-2"
+								title="Khoá duy nhất">Duy nhất</span>
+							<span *ngIf="item.isWorkflowManaged" class="badge badge-light-warning fs-8 fw-bold ms-2"
+								title="Chỉ cập nhật qua BPMN">BPMN</span>
+							<span *ngIf="item.isCompanyField" class="badge badge-light-primary fs-8 fw-bold ms-2"
+								title="Giới hạn dữ liệu theo đơn vị của user">Đơn vị</span>
+							<span *ngIf="item.isDepartmentField" class="badge badge-light-info fs-8 fw-bold ms-2"
+								title="Giới hạn dữ liệu theo phòng ban của user">Phòng ban</span>
 							<span class="text-muted fw-semibold d-block fs-7">{{item.code}}({{item.typeData}})</span>
 						</div>
 						<a href="javascript:;"

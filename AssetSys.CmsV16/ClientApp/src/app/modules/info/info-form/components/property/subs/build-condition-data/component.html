@@ -132,7 +132,7 @@
     >
       <label class="form-label mb-10">Thông tin điều kiện</label>
       <ng-container
-        *ngTemplateOutlet="condGroupTemp;context: {item: conditions}"
+        *ngTemplateOutlet="condGroupTemp;context: {item: conditions, depth: 0}"
       />
     </div>
 
@@ -300,11 +300,12 @@
   </div>
 </ng-template>
 
-<ng-template #condGroupTemp let-item="item" let-parent="parent">
-  <div class="border border-dashed border-gray-300 rounded px-7 py-3 mb-5">
-    <div class="row">
-      <div class="col-6">
-        <div class="btn-group mb-5">
+<ng-template #condGroupTemp let-item="item" let-parent="parent" let-depth="depth">
+  <div class="cond-group rounded px-4 py-3 mb-4" [attr.data-depth]="depth % 6">
+    <div class="row align-items-center mb-3">
+      <div class="col-6 d-flex align-items-center gap-3">
+        <span class="cond-depth-badge">L{{depth + 1}}</span>
+        <div class="btn-group btn-group-sm">
           <label
             class="btn btn-outline btn-color-muted btn-active-primary"
             [class.active]="item.condition === 'and'"
@@ -332,6 +333,7 @@
             OR
           </label>
         </div>
+        <span class="text-muted fs-7">{{item.rules.length}} điều kiện</span>
       </div>
       <div class="col-6 text-end">
         <a
@@ -372,15 +374,15 @@
     </div>
     <ng-container *ngFor="let rule of item.rules">
       <ng-container
-        *ngTemplateOutlet="rule.condition !== undefined ? condGroupTemp : condTemp;context: {item: rule, parent: item}"
+        *ngTemplateOutlet="rule.condition !== undefined ? condGroupTemp : condTemp;context: {item: rule, parent: item, depth: depth + 1}"
       />
     </ng-container>
   </div>
 </ng-template>
 
 <ng-template #condTemp let-item="item" let-parent="parent">
-  <div class="border border-dashed border-gray-300 rounded px-3 py-3 mb-5">
-    <div class="input-group mb-5">
+  <div class="cond-rule rounded px-3 py-2 mb-2">
+    <div class="input-group">
       <p-autoComplete
         [(ngModel)]="item.field"
         [suggestions]="lstAutoFields"

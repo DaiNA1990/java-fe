@@ -11,138 +11,13 @@
     "icon": "graph-up",
     "name": "Xây dựng chức năng",
     "link": "/info/info-group",
-    "permission": "USER_ADMIN"
+    "roles": ["DEVELOP"]
   },
   {
     "icon": "graph-up",
     "name": "Xây dựng báo cáo",
     "link": "/info/info-report",
-    "permission": "USER_ADMIN"
-  },
-   {
-    "name": "Kế hoạch DTQG"
-  },
-  {
-    "icon": "bank",
-    "name": "Chức năng dùng chung",
-    "subs": [
-      {
-        "name": "Danh mục dùng chung",
-        "link": "/common/common-category"
-      },
-      {
-        "name": "Khai báo mẫu báo cáo",
-        "link": "/common/report-template"
-      }
-    ]
-  },
-  {
-    "icon": "devices",
-    "name": "Lập và giao kế hoạch, dự toán",
-    "subs": [
-      {
-        "name": "Kế hoạch hàng DTQG đầu năm - Các bộ/ngành",
-        "link": "/info/info-page/5315"
-      },
-      {
-        "name": "Điều chỉnh KH hàng DTQG trong năm - Các bộ/ngành",
-        "link": "/plan-budget/kh-dt-02"
-      },
-      {
-        "name": "KH hàng DTQG bổ sung trong năm - Các bộ/ngành",
-        "link": "/plan-budget/kh-dt-03"
-      },
-      {
-        "name": "Giao kế hoạch và vốn đầu năm",
-        "link": "/info/info-page/5317"
-      },
-      {
-        "name": "Giao kế hoạch vốn mua bù, mua bổ sung",
-        "link": "/plan-budget/kh-dt-05"
-      },
-      {
-        "name": "Giao kế hoạch xuất giảm, xuất bán, xuất luân phiên đổi hàng",
-        "link": "/plan-budget/kh-dt-06"
-      },
-      {
-        "name": "Kế hoạch hàng DTQG đầu năm (tại Cục DTNN)",
-        "link": "/plan-budget/kh-dt-07"
-      },
-      {
-        "name": "Điều chỉnh KH hàng DTQG trong năm (tại Cục DTNN)",
-        "link": "/plan-budget/kh-dt-08"
-      },
-      {
-        "name": "KH hàng DTQG bổ sung trong năm (tại Cục DTNN)",
-        "link": "/plan-budget/kh-dt-09"
-      },
-      {
-        "name": "Thẩm định xuất cấp",
-        "link": "/plan-budget/kh-dt-10"
-      },
-      {
-        "name": "Xây dựng phương án giá mua, bán lương thực, muối ăn DTQG",
-        "link": "/plan-budget/kh-dt-11"
-      },
-      {
-        "name": "Xây dựng phương án giá mua, bán vật tư thiết bị DTQG",
-        "link": "/plan-budget/kh-dt-12"
-      },
-      {
-        "name": "Giao chỉ tiêu kế hoạch năm",
-        "link": "/plan-budget/kh-dt-13"
-      },
-      {
-        "name": "Điều chỉnh chỉ tiêu kế hoạch năm",
-        "link": "/plan-budget/kh-dt-14"
-      },
-      {
-        "name": "Lập kế hoạch tài chính 05 năm và dự toán NSNN hàng năm (Nội bộ DTNN)",
-        "link": "/plan-budget/kh-dt-15"
-      },
-      {
-        "name": "Tiếp nhận, rà soát và phản hồi số kiểm tra dự toán",
-        "link": "/plan-budget/kh-dt-16"
-      },
-      {
-        "name": "Thẩm định dự toán chi ngân sách nhà nước tại Cục DTNN",
-        "link": "/plan-budget/kh-dt-17"
-      },
-      {
-        "name": "Giao dự toán chi ngân sách nhà nước",
-        "link": "/plan-budget/kh-dt-18"
-      },
-      {
-        "name": "Điều chỉnh dự toán chi NSNN trong năm",
-        "link": "/plan-budget/kh-dt-19"
-      }
-    ]
-  },
-  {
-    "icon": "devices",
-    "name": "Thực hiện dự toán",
-    "subs": [
-      {
-        "name": "Cấp phát vốn mua hàng DTQG tại các Bộ/ngành quản lý DTQG",
-        "link": "/budget-execution/th-dt-01"
-      },
-      {
-        "name": "Cấp nguồn vốn chi DTQG tại Cục DTNN",
-        "link": "/budget-execution/th-dt-02"
-      },
-      {
-        "name": "Cấp vốn mua, bán, thanh toán tiền hàng DTQG (bằng ủy nhiệm chi)",
-        "link": "/budget-execution/th-dt-03"
-      },
-      {
-        "name": "Chuyển KH và dự toán sang năm sau Bộ/Ngành",
-        "link": "/budget-execution/th-dt-04"
-      },
-      {
-        "name": "Chuyển KH và dự toán sang năm sau của Cục DTNN",
-        "link": "/budget-execution/th-dt-05"
-      }
-    ]
+    "roles": ["DEVELOP"]
   },
   {
     "name": "Hệ thống"
@@ -151,37 +26,31 @@
     "icon": "profile-user",
     "name": "Tài khoản",
     "link": "/user",
-    "permission": "USER_ADMIN",
+    "roles": ["ADMIN"],
     "subs": [
       {
         "name": "Danh sách",
-        "link": "/user/user",
-        "permission": "USER_ADMIN"
+        "link": "/user/user"
       },
       {
         "name": "Chức năng",
-        "link": "/user/user-page",
-        "permission": "USER_ADMIN"
+        "link": "/user/user-page"
       },
       {
         "name": "Quyền truy cập",
-        "link": "/user/user-role",
-        "permission": "USER_ADMIN"
+        "link": "/user/user-role"
       },
       {
         "name": "Phòng ban",
-        "link": "/user/user-department",
-        "permission": "USER_ADMIN"
+        "link": "/user/user-department"
       },
       {
         "name": "Cấp bậc",
-        "link": "/user/user-level",
-        "permission": "USER_ADMIN"
+        "link": "/user/user-level"
       },
       {
         "name": "Chức danh",
-        "link": "/user/user-title",
-        "permission": "USER_ADMIN"
+        "link": "/user/user-title"
       }
     ]
   }

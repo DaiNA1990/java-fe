@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '@appkkkh/core/base/base.service';
+import { AppCons } from '@appkkkh/core/contants/app.cons';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,16 +9,19 @@ import { Observable } from 'rxjs';
 export class UserRoleService extends BaseService {
   constructor() {
     super();
-    this.setModule('UserRole');
-    this.setPath('userapi');
+    this.setResource(AppCons.API_BASE.MANAGE_SYSTEM, 'user-roles');
   }
 
-  getRolesByUser = (data: any): Observable<any> => this.get('GetRolesByUser', data);
+  getRolesByUser = (data: any): Observable<any> => this.get('', data);
 
-  getRolesCurrentUser = (): Observable<any> => this.get('GetRolesCurrentUser');
+  getRolesCurrentUser = (): Observable<any> => this.get('me');
 
-  addRole = (data: any): Observable<any> => this.post('AddRole', data);
+  addRole = (data: any): Observable<any> => this.post('assignments', data);
 
-  addActionForRole = (data: any): Observable<any> => this.post('AddActionForRole', data);
+  /** roleId lên path, body {actionIds}. */
+  addActionForRole = (data: any): Observable<any> => {
+    const { roleId, ...body } = data ?? {};
+    return this.put(`${this.idPath(roleId)}/actions`, body);
+  }
 
 }

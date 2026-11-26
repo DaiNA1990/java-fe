@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserRoleMapAssignComponent } from '@appkkkh/modules/user/user-role-map/components/assign/user-role-map-assign.component';
+import { AuthService } from '@appkkkh/modules/user/auth/services/auth.service';
 
 @Component({
     selector: 'app-user-list',
@@ -14,6 +15,7 @@ export class UserListComponent implements OnInit {
     @ViewChild(UserRoleMapAssignComponent) assignRoleModal: UserRoleMapAssignComponent;
 
     constructor(public userService: UserService,
+        public authService: AuthService,
         private formBuilder: FormBuilder) { }
 
     assignRole(userId: number) {

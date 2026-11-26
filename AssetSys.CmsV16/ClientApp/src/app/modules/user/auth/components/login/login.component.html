@@ -42,6 +42,9 @@
       </div>
     </div>
   </ng-container>
+  <!-- Cách đăng nhập đang bật do BE quyết định (GET /auth/session/config) -->
+  <ng-container *ngIf="authConfig$ | async as config">
+  <ng-container *ngIf="config.localEnabled">
   <div class="fv-row mb-8">
     <label class="form-label fs-6 fw-bolder text-gray-900">Tài khoản</label>
     <input class="form-control bg-transparent" type="email" name="email" formControlName="email" autocomplete="off"
@@ -85,6 +88,15 @@
       </ng-container>
     </button>
   </div>
+  </ng-container>
+
+  <!-- SSO Keycloak: chuyển cả trang sang Keycloak, đăng nhập xong quay về đúng trang đang mở -->
+  <div class="d-grid mb-10" *ngIf="config.ssoEnabled">
+    <button type="button" class="btn btn-light-primary" (click)="loginWithSSO()">
+      Đăng nhập bằng SSO
+    </button>
+  </div>
+  </ng-container>
   <div class="text-gray-500 text-center fw-semibold fs-6">
     Không có tài khoản?
     <a routerLink="/auth/registration" class="link-primary">

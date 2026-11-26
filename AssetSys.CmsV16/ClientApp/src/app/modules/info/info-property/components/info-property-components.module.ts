@@ -11,6 +11,7 @@ import { NbLayoutCardModule } from '@appkkkh/components/layout/card/module';
 import { NbNumberModule } from '@appkkkh/components/form/number/module';
 import { NbTextModule } from '@appkkkh/components/form/text/module';
 import { NbCheckboxModule } from '@appkkkh/components/form/checkbox/module';
+import { NbRadioModule } from '@appkkkh/components/form/radio/module';
 import { NbTextareaModule } from "../../../../components/form/textarea/module";
 import { NbSelectModule } from "../../../../components/form/select/module";
 
@@ -35,6 +36,7 @@ import { NbSelectModule } from "../../../../components/form/select/module";
         NbNumberModule,
         NbTextModule,
         NbCheckboxModule,
+        NbRadioModule,
         NbTextareaModule,
         NbSelectModule
     ],

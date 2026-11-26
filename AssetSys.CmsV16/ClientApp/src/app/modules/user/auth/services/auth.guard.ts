@@ -31,9 +31,22 @@ export class AuthGuard implements CanActivate {
         })),
       getUserInfo: this.authService.getInfo()
     }).pipe(map((res: any) => {
-      if (!res.getActionCodes)
+      if (!res.getActionCodes) {
         this.router.navigateByUrl(environment.isForNx ? '/403' : '/auth/signin');
-      return res.getActionCodes;
+        return false;
+      }
+
+      // route chỉ cho phép một số role (vd: data: { roles: ['ADMIN'] })
+      const roles: string[] = route.data?.['roles'] ?? [];
+      if (roles.length > 0) {
+        const roleCodes: string[] = res.getUserInfo?.data?.roleCodes ?? [];
+        if (!roles.some((r: string) => roleCodes.includes(r))) {
+          this.router.navigateByUrl('/403');
+          return false;
+        }
+      }
+
+      return true;
     }));
   }
 }

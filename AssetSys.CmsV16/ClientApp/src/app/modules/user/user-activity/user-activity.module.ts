@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthGuard } from '@appkkkh/modules/user/auth/services/auth.guard';
 import { NbBreadcrumbModule } from '@appkkkh/components/page/breadcrumb/module';
 import { UserActivityComponent } from './user-activity.component';
 import { UserActivityComponentsModule } from './components/user-activity-components.module';
@@ -15,6 +16,8 @@ import { UserActivityComponentsModule } from './components/user-activity-compone
             {
                 path: 'user/user-activity',
                 component: UserActivityComponent,
+                canActivate: [AuthGuard],
+                data: { roles: ['ADMIN'] },
             },
         ]),
         UserActivityComponentsModule,

@@ -9,7 +9,34 @@
 	<ng-template pTemplate>
 		<p-panel [toggleable]="true" class="w-100">
 			<ng-template pTemplate="header">
-				<b>Xây dựng giao diện: {{layoutItem?.name}}</b>
+				<div class="d-flex align-items-center flex-grow-1 me-3 gap-3">
+					<b class="text-nowrap">Xây dựng giao diện: {{layoutItem?.name}}</b>
+					<div class="d-flex align-items-center ms-auto gap-1">
+						<span class="p-input-icon-left">
+							<i class="pi pi-search"></i>
+							<input type="text" pInputText class="p-inputtext-sm" style="width: 260px"
+								placeholder="Nhập chính xác mã trường dữ liệu"
+								[(ngModel)]="searchKeyword"
+								(keydown.enter)="searchEnter(1); $event.preventDefault()"
+								(keydown.shift.enter)="searchEnter(-1); $event.preventDefault()"
+								(keydown.escape)="searchClear()" />
+						</span>
+						<ng-container *ngIf="searchedKeyword">
+							<span class="text-muted fs-7 text-nowrap px-1">
+								{{ searchMatches.length ? (searchIndex + 1) + '/' + searchMatches.length : 'Không tìm thấy' }}
+							</span>
+							<button class="p-panel-header-icon p-link" (click)="searchMove(-1)" [disabled]="!searchMatches.length" title="Trước (Shift+Enter)">
+								<i class="pi pi-chevron-up"></i>
+							</button>
+							<button class="p-panel-header-icon p-link" (click)="searchMove(1)" [disabled]="!searchMatches.length" title="Sau (Enter)">
+								<i class="pi pi-chevron-down"></i>
+							</button>
+							<button class="p-panel-header-icon p-link" (click)="searchClear()" title="Xoá tìm kiếm (Esc)">
+								<i class="pi pi-times"></i>
+							</button>
+						</ng-container>
+					</div>
+				</div>
 			</ng-template>
 			<ng-template pTemplate="icons">
 				<button class="p-panel-header-icon p-link mr-2" (click)="itemAdd()">
@@ -20,10 +47,12 @@
 				</button>
 			</ng-template>
 			<ng-template pTemplate="content">
-				<div class="px-2" style="height: calc(100vh - 130px); overflow-y: auto;" cdkDropListGroup>
+				<div class="design-canvas px-2" style="height: calc(100vh - 130px); overflow-y: auto;">
 					<ng-container *ngFor="let item of filterByParent()">
-						<ng-container *ngTemplateOutlet="showControlTemp;context: {item: item}"></ng-container>
+						<div *ngIf="isDropGap(null, item.id)" class="design-drop-gap"></div>
+						<ng-container *ngTemplateOutlet="showControlTemp;context: {item: item, path: [item.id]}"></ng-container>
 					</ng-container>
+					<div *ngIf="isDropGap(null, null)" class="design-drop-gap"></div>
 				</div>
 			</ng-template>
 		</p-panel>
@@ -33,17 +62,31 @@
 	</ng-template>
 </p-splitter>
 <!-- https://stackblitz.com/edit/angular-cdk-nested-drag-drop-demo -->
-<ng-template #showControlTemp let-item="item">
-	<div class="border border-dashed rounded px-2 py-2 mb-3 mx-0" [class.border-gray-300]="item.isDesignChosen !== true"
-		[class.border-gray-900]="item.isDesignChosen"
+<ng-template #showControlTemp let-item="item" let-path="path">
+	<div class="design-node border border-dashed rounded px-2 py-2 mb-3 mx-0"
+		[attr.data-depth]="(path.length - 1) % 6"
+		[class.design-node-chosen]="item.isDesignChosen"
+		[class.border-gray-300]="item.isDesignChosen !== true && !designErrors.has(item.id)"
+		[class.border-gray-900]="item.isDesignChosen && !designErrors.has(item.id)"
+		[class.border-danger]="designErrors.has(item.id)"
 		[ngClass]="item.controlType === 'grid-item' ? 'col-' + item.size : ''" [class.row]="item.controlType === 'grid'"
-		cdkDropList [cdkDropListData]="item" (cdkDropListDropped)="drop($event)" [id]="item.ddid"
-		[cdkDropListConnectedTo]="getConnectedDropListsIds(item.id)">
-		<div class="d-flex flex-stack mb-1 position-relative" [id]="item.ddid" cdkDrag [cdkDragData]="item">
+		[attr.data-design-node]="item.id"
+		cdkDropList [cdkDropListData]="item" [cdkDropListSortingDisabled]="true">
+		<div class="d-flex flex-stack mb-1 position-relative rounded" cdkDrag [cdkDragData]="item"
+			(cdkDragMoved)="dragMoved($event)" (cdkDragEnded)="dragEnded($event)"
+			[attr.data-design-id]="item.id"
+			[class.design-search-match]="searchMatchIds.has(item.id)"
+			[class.design-search-current]="searchMatches[searchIndex]?.id === item.id">
 			<div class="me-1">
-				<a href="javascript:;" class="text-gray-800 fw-bold"
-					(click)="itemChosen(item)">#{{item.displayOrder}}.{{item.name}}({{item.controlType}}){{item.hint}}</a>
+				<a href="javascript:;" class="d-inline-flex align-items-center flex-wrap gap-2 text-gray-800 fw-bold"
+					[title]="getPropertyLabel(item)" (click)="itemChosen(item)">
+					<span class="design-depth-badge">L{{path.length}}</span>
+					<span>#{{item.displayOrder}}.{{item.name}}</span>
+					<span class="design-type-badge">{{item.controlType}}</span>
+					<span class="text-muted fw-normal fs-7" *ngIf="item.hint">{{item.hint}}</span>
+				</a>
 			</div>
+			<div *cdkDragPlaceholder class="design-drop-placeholder"></div>
 			<div class="m-0">
 				<button class="btn btn-icon btn-color-gray-500 btn-active-color-primary justify-content-end"
 					(click)="itemPate($event, item)" title="Pate">
@@ -63,9 +106,16 @@
 				</button>
 			</div>
 		</div>
-		<ng-container *ngFor="let control of filterByParent(item.id)">
-			<ng-container *ngTemplateOutlet="showControlTemp;context: {item: control}"></ng-container>
+		<div *ngIf="designErrors.has(item.id)" class="text-danger fs-7 fw-semibold mb-2">
+			<i class="pi pi-exclamation-triangle me-1"></i>{{ designErrors.get(item.id) }}
+		</div>
+		<ng-container *ngFor="let control of filterByParent(item.id, path)">
+			<div *ngIf="isDropGap(item.id, control.id)" class="design-drop-gap"
+				[class.design-drop-gap-col]="item.controlType === 'grid'"></div>
+			<ng-container *ngTemplateOutlet="showControlTemp;context: {item: control, path: path.concat(control.id)}"></ng-container>
 		</ng-container>
+		<div *ngIf="isDropGap(item.id, null)" class="design-drop-gap"
+			[class.design-drop-gap-col]="item.controlType === 'grid'"></div>
 	</div>
 </ng-template>
 

@@ -1,81 +1,56 @@
 import { Injectable } from "@angular/core";
 import { HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse, HttpResponse } from "@angular/common/http";
 import { Observable, of, throwError } from "rxjs";
-import { catchError, switchMap } from 'rxjs/operators';
-import { Router } from "@angular/router";
+import { catchError } from 'rxjs/operators';
 import { AuthService } from "@appkkkh/modules/user/auth";
-import { AppCons } from "@appkkkh/core/contants/app.cons";
+import { toApiResponse } from "@appkkkh/core/base/api-response";
 
+/** API đăng nhập bằng session (login/logout/config/SSO) — tự xử lý 401 (vd sai mật khẩu). */
+const SESSION_API = '/auth/session/';
+
+/**
+ * Chỉ xử lý phiên đăng nhập. Đăng nhập bằng cookie SID (HttpOnly) nên không còn gắn/refresh token:
+ * 401 = phiên hết hoặc chưa đăng nhập -> về màn đăng nhập.
+ *
+ * Các status khác đã được ErrorInterceptor quy đổi về envelope { statusCode,
+ * message } nên không tới được đây nữa. Lưu ý 403 theo chuẩn mới là "không đủ
+ * quyền" (hoặc sai CSRF/Origin) chứ không phải phiên hết hạn, nên không đăng xuất người dùng.
+ */
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-    constructor(private router: Router,
-        private authService: AuthService) { }
+    constructor(private authService: AuthService) { }
 
-    setAuthToken(token: string, refresh: string) {
-        localStorage.setItem(AppCons.TOKEN_KEY, token);
-        localStorage.setItem(AppCons.TOKEN_REFRESH_KEY, refresh);
+    /**
+     * Response giả lập để caller không treo khi phiên đã hết.
+     *
+     * Dùng câu chung thay vì message của backend vì đây là lỗi kỹ thuật, người dùng
+     * chỉ cần biết phải đăng nhập lại.
+     */
+    private expiredResponse(error: HttpErrorResponse): Observable<any> {
+        return of(new HttpResponse({
+            status: 200, body: {
+                statusCode: 1,
+                message: 'Phiên làm việc đã hết hạn, bạn vui lòng đăng nhập lại.',
+                data: null,
+                err: error
+            }
+        }));
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
         return next.handle(req).pipe(
             catchError((error: HttpErrorResponse) => {
 
-                console.log('Error status code:', error.status);
-                console.log('Error body:', error.message);
-                console.log('req:', req);
+                if (error.status !== 401) return throwError(() => error);
 
-                if (error.status === 400) {
-                    this.router.navigate(['/error/403'], { queryParams: { returnUrl: this.router.url } });
-                    return throwError(error);
+                // Đăng nhập sai mật khẩu cũng là 401: trả envelope (message BE đã dịch) cho màn đăng nhập.
+                if (req.url.includes(SESSION_API)) {
+                    return of(new HttpResponse({ status: 200, body: toApiResponse(error) }));
                 }
 
-                if (error.status === 403) {
-                    this.setAuthToken('', '');
-                    this.router.navigate(['/auth/signin'], { queryParams: { url: document.location.pathname } });
-                    return throwError(error);
-                }
-
-                if (error && error.status === 401) {
-
-                    if(req.url.includes('/RefreshToken')) {
-                        this.setAuthToken('', '');
-                        this.router.navigate(['/auth/signin'], { queryParams: { url: document.location.pathname } });
-                        return of(new HttpResponse({
-                            status: 200, body: {
-                                statusCode: 1,
-                                message: 'Kết nối không thành công, bạn vui lòng thử lại.',
-                                data: null,
-                                err: error
-                            }
-                        }));
-                    }
-
-                    const refreshToken = localStorage.getItem(AppCons.TOKEN_REFRESH_KEY) ?? '';
-
-                    if (refreshToken === '') {
-                        this.setAuthToken('', '');
-                        this.router.navigate(['/auth/signin'], { queryParams: { url: document.location.pathname } });
-                        return of(new HttpResponse({
-                            status: 200, body: {
-                                statusCode: 1,
-                                message: 'Kết nối không thành công, bạn vui lòng thử lại.',
-                                data: null,
-                                err: error
-                            }
-                        }));
-                    }
-
-                    return this.authService.refreshToken(refreshToken).pipe(
-                        switchMap((res: any) => {
-                            this.setAuthToken(res.data.token, res.data.refreshToken);
-                            req = req.clone({ setHeaders: { 'Authorization': `Bearer ${res.data.token}` } });
-                            return next.handle(req);
-                        })
-                    );
-                }
-
-                return throwError(error);
+                this.authService.handleSessionExpired();
+                return this.expiredResponse(error);
             })
         );
     }

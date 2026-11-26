@@ -131,10 +131,16 @@ export class NbTreeComponent
     return this.highlightedKeys.has(node.key);
   }
 
-  processTree(parent: any, lst: []): [] {
+  processTree(parent: any, lst: any[]): any {
+    // Gốc: parentId rỗng/0 hoặc cha không có trong danh sách
+    const keys = new Set(lst.map((o: any) => o.value));
+    const isRoot = (o: any) =>
+      o.parentId === null || o.parentId === undefined || o.parentId === '' ||
+      o.parentId === 0 || !keys.has(o.parentId);
+
     return lst.reduce(
       (a: any, o: any) => (
-        o.parentId === parent &&
+        (parent === null ? isRoot(o) : o.parentId === parent) &&
           a.push({
             checked: o.value === this.formCtrl.value,
             key: o.value,

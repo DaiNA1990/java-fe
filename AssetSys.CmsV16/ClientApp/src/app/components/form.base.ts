@@ -40,7 +40,7 @@ export abstract class NbBaseComponent implements OnInit, OnDestroy {
 
 	set value(val) {
 		this._value = val;
-		this.setValueControl(val);
+		this.selfUpdate(() => this.setValueControl(val));
 		this.propagateChange(this._value);
 	}
 
@@ -52,7 +52,33 @@ export abstract class NbBaseComponent implements OnInit, OnDestroy {
 		if (obj === undefined) return;
 
 		this._value = obj;
-		this.formCtrl.setValue(obj);
+		this.selfUpdate(() => this.formCtrl.setValue(obj));
+	}
+
+	// đánh dấu formCtrl đang được set từ chính component để syncFromControl bỏ qua
+	// (vd datetime set formCtrl dạng chuỗi nhưng _value vẫn giữ Date)
+	private isSelfUpdate = false;
+
+	private selfUpdate(fn: () => void) {
+		this.isSelfUpdate = true;
+		try {
+			fn();
+		} finally {
+			this.isSelfUpdate = false;
+		}
+	}
+
+	// formCtrl truyền qua @Input (không qua formControlName) nên writeValue không được gọi
+	// khi bên ngoài setValue/patchValue -> tự lắng nghe valueChanges để cập nhật lại giao diện
+	private syncFromControl() {
+		const subscr = this.formCtrl.valueChanges.subscribe(val => {
+			if (this.isSelfUpdate || val === this._value) return;
+
+			this._value = val;
+			this.cdr.markForCheck();
+		});
+
+		this.subscriptions.push(subscr);
 	}
 
 	registerOnChange(fn: any): void {
@@ -90,7 +116,8 @@ export abstract class NbBaseComponent implements OnInit, OnDestroy {
 		if (res.statusCode !== ResponseCode.ZERO)
 			return;
 
-		this.items = res.data.list;
+		// Autocomplete trả data { list: [{ value, text }], total }
+		this.items = res.data?.list ?? [];
 
 		if (callback !== undefined)
 			callback();
@@ -120,6 +147,7 @@ export abstract class NbBaseComponent implements OnInit, OnDestroy {
 	ngOnInit(): void {
 		this.getData();
 		this.value = this.formCtrl.value;
+		this.syncFromControl();
 	}
 
 }

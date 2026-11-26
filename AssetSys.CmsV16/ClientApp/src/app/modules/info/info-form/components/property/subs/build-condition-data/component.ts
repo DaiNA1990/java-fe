@@ -3,6 +3,8 @@ import {
   Component,
   inject,
   Input,
+  Output,
+  EventEmitter,
   OnInit,
 } from '@angular/core';
 import {
@@ -20,6 +22,7 @@ import { InfoFormDesignComponent } from '../../../design/component';
 import { InfoFormService } from '@appkkkh/modules/info/info-form/services/info-form.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import condition from './condition.json';
+import { CONDITION_TREE_STYLES, insertConditionRule, sortConditionRules } from '../condition-tree';
 
 interface ConditionData {
   condition?: string;
@@ -36,11 +39,14 @@ interface ConditionDataRule {
 @Component({
   selector: 'app-info-form-property-build-condition-data',
   templateUrl: `./component.html`,
+  styles: [CONDITION_TREE_STYLES],
   providers: [ConfirmationService, MessageService],
 })
 export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
   @Input() groupId: any;
   @Input() formCtrl: AbstractControl = new FormControl();
+  // bắn ra sau khi bấm Lưu thông tin để component cha lưu control xuống DB
+  @Output() saved = new EventEmitter<void>();
 
   //private parent: any = inject(InfoFormDesignComponent, { optional: true });
 
@@ -144,6 +150,8 @@ export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
   save() {
     const _conds = [];
 
+    sortConditionRules(this.conditions);
+
     if (
       this.conditions.rules.length > 0 &&
       this.conditions.rules[0].field !== ''
@@ -193,6 +201,7 @@ export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
     else
       this.formCtrl.setValue(_conds.length > 0 ? JSON.stringify(_conds) : null);
     this.visible = false;
+    this.saved.emit();
   }
 
   hasConfig(typeData: any) {
@@ -302,7 +311,7 @@ export class InfoFormPropertyBuildConditionDataComponent implements OnInit {
   }
 
   addCondition(item: any) {
-    item.rules.push({
+    insertConditionRule(item, {
       field: '',
       operator: '',
       value: '',

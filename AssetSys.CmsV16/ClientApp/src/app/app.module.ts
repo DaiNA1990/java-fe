@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule } from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TranslateModule } from '@ngx-translate/core';
 import { InlineSVGModule } from 'ng-inline-svg-2';
@@ -21,6 +21,9 @@ import { AuthGuard } from './modules/user/auth/services/auth.guard';
     BrowserAnimationsModule,
     TranslateModule.forRoot(),
     HttpClientModule,
+    // Cookie XSRF-TOKEN (manage-system set khi đăng nhập) -> header X-CSRF-Token cho request ghi.
+    // Angular chỉ gắn cho URL tương đối, nên environment.apiUrl phải là '/api/' (cùng origin).
+    HttpClientXsrfModule.withOptions({ cookieName: 'XSRF-TOKEN', headerName: 'X-CSRF-Token' }),
     ClipboardModule,
     AppRoutingModule,
     InlineSVGModule.forRoot(),

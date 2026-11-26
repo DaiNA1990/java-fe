@@ -1,9 +1,10 @@
 import { ChangeDetectorRef, Component, forwardRef, inject } from '@angular/core';
+import { AppCons } from '@appkkkh/core/contants/app.cons';
 import { FormBuilder, Validators } from '@angular/forms';
 import { UserRoleMapService } from '../../services/user-role-map.service';
 import { UserRoleService } from '@appkkkh/modules/user/user-role/services/user-role.service';
 import { MessageService } from 'primeng/api';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 @Component({
     selector: 'app-user-role-map-assign',
@@ -30,8 +31,9 @@ export class UserRoleMapAssignComponent {
     open(userId: number) {
         this.userId = userId;
         this.isVisible = true;
-        this.getData();
-        this.getRoleAssign(userId);
+        this.source = [];
+        this.target = [];
+        this.loadData(userId);
     }
 
     close() {
@@ -50,18 +52,23 @@ export class UserRoleMapAssignComponent {
         this.changeDetectorRef.markForCheck();
     }
 
-    getData() {
-        this.userRoleService.getList({ pageSize: Number.MAX_SAFE_INTEGER }).subscribe(res => {
-            this.source = res.data.list;
-            this.changeDetectorRef.markForCheck();
-        })
-    }
+    /**
+     * Tải song song toàn bộ role và role đã gán cho user, rồi bỏ role đã gán khỏi
+     * danh sách bên trái để một role không nằm ở cả hai bên.
+     */
+    loadData(userId: number) {
+        forkJoin({
+            all: this.userRoleService.getList({ pageSize: AppCons.MAX_PAGE_SIZE }),
+            assigned: this.userRoleService.getRolesByUser({ userId: userId })
+        }).subscribe(({ all, assigned }: any) => {
+            // GetRolesByUser trả thẳng mảng UserRoleItem, không bọc { list, total }
+            const target: any[] = Array.isArray(assigned.data) ? assigned.data : assigned.data?.list ?? [];
+            const assignedIds = new Set(target.map(item => item.id));
 
-    getRoleAssign(userId: number) {
-        this.userRoleService.getRolesByUser({userId: userId}).subscribe(res => {
-            this.target = res.data.list;
+            this.source = (all.data?.list ?? []).filter((item: any) => !assignedIds.has(item.id));
+            this.target = target;
             this.changeDetectorRef.markForCheck();
-        })
+        });
     }
 
     ngOnInit(): void {

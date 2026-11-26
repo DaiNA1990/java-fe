@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthGuard } from '@appkkkh/modules/user/auth/services/auth.guard';
 import { NbBreadcrumbModule } from '@appkkkh/components/page/breadcrumb/module';
 import { UserConnectionComponent } from './user-connection.component';
 import { UserConnectionComponentsModule } from './components/user-connection-components.module';
@@ -15,6 +16,8 @@ import { UserConnectionComponentsModule } from './components/user-connection-com
             {
                 path: 'user/user-connection',
                 component: UserConnectionComponent,
+                canActivate: [AuthGuard],
+                data: { roles: ['ADMIN'] },
             },
         ]),
         UserConnectionComponentsModule,

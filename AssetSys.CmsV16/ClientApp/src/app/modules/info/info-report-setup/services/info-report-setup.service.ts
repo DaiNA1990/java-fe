@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '@appkkkh/core/base/base.service';
+import { AppCons } from '@appkkkh/core/contants/app.cons';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +8,7 @@ import { BaseService } from '@appkkkh/core/base/base.service';
 export class InfoReportSetupService extends BaseService {
   constructor() {
     super();
-    this.setModule('InfoReportSetup');
-    this.setPath('reportapi');
+    this.setResource(AppCons.API_BASE.DEVELOP_TOOL, 'info-report-setups');
   }
 
 }

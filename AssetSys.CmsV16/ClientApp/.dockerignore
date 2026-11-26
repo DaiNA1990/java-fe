@@ -1,6 +1,7 @@
 **/.angular
 **/dist
 **/Dockerfile*
+*.ps1
 **/node_modules
 LICENSE
 README.md

@@ -5,13 +5,16 @@
     </ng-template>
     <p-pickList [source]="source" [target]="target" sourceHeader="Chức năng truy cập" targetHeader="Chức năng được gán"
         [dragdrop]="true" [responsive]="true" [sourceStyle]="{ height: '20rem' }" [targetStyle]="{ height: '20rem' }"
-        filterBy="name" sourceFilterPlaceholder="Từ khoá tìm kiếm..." targetFilterPlaceholder="Từ khoá tìm kiếm...">
+        filterBy="name,pagePath,pageCode,pageRouter"
+        sourceFilterPlaceholder="Tìm theo tên, nhóm cha, mã, đường dẫn..."
+        targetFilterPlaceholder="Tìm theo tên, nhóm cha, mã, đường dẫn...">
         <ng-template let-action pTemplate="item">
-            <div class="flex flex-wrap p-2 align-items-center gap-3">
-                <div class="flex-1 flex flex-column gap-2">
-                    <span class="font-bold">
-                        {{ action.name }}
-                    </span>
+            <div class="d-flex flex-column gap-1 py-1">
+                <span class="fs-8 text-muted" *ngIf="action.pagePath">{{ action.pagePath }} ›</span>
+                <span class="fs-6 fw-semibold text-gray-800">{{ action.name }}</span>
+                <div class="d-flex flex-wrap gap-2" *ngIf="action.pageCode || action.pageRouter">
+                    <span class="badge badge-light-primary fs-9" *ngIf="action.pageCode">{{ action.pageCode }}</span>
+                    <span class="badge badge-light fs-9 text-gray-600" *ngIf="action.pageRouter">{{ action.pageRouter }}</span>
                 </div>
             </div>
         </ng-template>

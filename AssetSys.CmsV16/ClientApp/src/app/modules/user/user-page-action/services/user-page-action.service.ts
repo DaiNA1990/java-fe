@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '@appkkkh/core/base/base.service';
+import { AppCons } from '@appkkkh/core/contants/app.cons';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +9,10 @@ import { BaseService } from '@appkkkh/core/base/base.service';
 export class UserPageActionService extends BaseService {
   constructor() {
     super();
-    this.setModule('UserPageAction');
-    this.setPath('userapi');
+    this.setResource(AppCons.API_BASE.MANAGE_SYSTEM, 'user-page-actions');
   }
+
+  /** Action đã gán cho role: GET ?roleId= (handler riêng phía BE, trả {list, total}). */
+  getActionsByRole = (roleId: number): Observable<any> => this.get('', { roleId });
 
 }

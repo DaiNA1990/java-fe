@@ -103,7 +103,8 @@
     <div class="card-body p-0">
         <nb-table [items]="list$ | async" [totalRecords]="totalRecords" [columns]="columns" [minWidth]="minWidth"
             [rowActionWidth]="rowActionWidth" [isRowCheckbox]="isRowCheckbox" [isShowPagingReport]="isShowPagingReport"
-            [isScrollable]="isScrollable" [scrollHeight]="scrollHeight" (onChange)="tableChange($event)">
+            [isScrollable]="isScrollable" [scrollHeight]="scrollHeight" (onChange)="tableChange($event)"
+            [isTree]="treeParentField !== null" [treeNodes]="tree$ | async" [treeToggleField]="treeToggleField">
             <ng-template #rowActions let-item="item">
                 <ng-container *ngTemplateOutlet="rowActionsTemplate;context: {item: item}"></ng-container>
                 <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1"

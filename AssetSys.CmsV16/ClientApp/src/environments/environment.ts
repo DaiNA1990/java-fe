@@ -8,9 +8,9 @@ export const environment = {
   appVersion: 'v8.1.8',
   USERDATA_KEY: 'authf649fc9a5f55',
   isMockEnabled: true,
-  apiUrl: document.location.hostname.indexOf('localhost') > -1
-    ? 'http://10.15.24.231:8686/'
-    : 'https://asset-sys.thebdev.com/',
+  // Gọi gateway CÙNG ORIGIN qua "/api/" (đăng nhập bằng cookie SID + XSRF-TOKEN; Angular chỉ gắn header
+  // X-CSRF-Token cho URL tương đối). Dev: src/proxy.conf.json chuyển /api -> gateway (bỏ tiền tố /api).
+  apiUrl: '/api/',
   appThemeName: 'FPT',
   appHost: 'http://localhost:4205',
   tinymceBaseUrl: '/tinymce'

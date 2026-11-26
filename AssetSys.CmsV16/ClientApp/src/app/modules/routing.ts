@@ -13,11 +13,6 @@ const Routing: Routes = [
 	},
 	{
 		path: '',
-		loadChildren: () => import('./info/info-page/info-page.module').then((m) => m.InfoPageModule),
-		data: { layout: 'light-sidebar' },
-	},
-	{
-		path: '',
 		loadChildren: () => import('./info/info-form/info-form.module').then((m) => m.InfoFormModule),
 		data: { layout: 'light-sidebar' },
 	},

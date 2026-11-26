@@ -1,0 +1,9 @@
+{
+  "/api": {
+    "target": "http://10.15.24.231:9000",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": { "^/api": "" },
+    "logLevel": "debug"
+  }
+}

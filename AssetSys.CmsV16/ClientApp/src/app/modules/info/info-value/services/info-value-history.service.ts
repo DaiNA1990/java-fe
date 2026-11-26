@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '@appkkkh/core/base/base.service';
+import { AppCons } from '@appkkkh/core/contants/app.cons';
 
 @Injectable({
   providedIn: 'root'
@@ -7,7 +8,7 @@ import { BaseService } from '@appkkkh/core/base/base.service';
 export class InfoValueHistoryService extends BaseService {
   constructor() {
     super();
-    this.setModule('InfoValueHistory');
+    this.setResource(AppCons.API_BASE.BUDGET_PLAN, 'info-value-histories');
   }
 
 }

@@ -4,9 +4,9 @@ import { InfoFormService } from '../../services/info-form.service';
 import { firstValueFrom } from 'rxjs';
 import { InfoPropertyService } from '@appkkkh/modules/info/info-property/services/info-property.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import icons from '@appkkkh/_metronic/shared/keenicon/icons.json';
 import controlTypes from './controls.json';
 import cssClass from './css-class.json';
+import iconClass from './icon-class.json';
 import { InfoFormDesignComponent } from '../design/component';
 import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 
@@ -24,7 +24,7 @@ export class InfoFormPropertyComponent implements OnInit {
     formControl: FormGroup;
     controlTypes: any[] | undefined = controlTypes;
     classItems: any[] = cssClass;
-    iconItems: any[] = Object.entries(icons.categories).map((c: any) => c[1]).join().split(',').map(s => ({ text: s, value: s }));
+    iconItems: any[] = iconClass;
     sizeItems: any[] = [...Array(12).keys()].map((i: any) => ({
         "text": `${i + 1}`,
         "value": i + 1
@@ -104,6 +104,13 @@ export class InfoFormPropertyComponent implements OnInit {
             return;
         }
 
+        if (this.formControl.invalid) {
+            this.formControl.markAllAsTouched();
+            this.changeDetectorRef.detectChanges();
+            this.messageService.add({ severity: 'warn', summary: 'Thông báo', detail: 'Vui lòng nhập đầy đủ thông tin bắt buộc.', life: 3000 });
+            return;
+        }
+
         Object.assign(this.parent.controls[index], this.formControl.value);
 
         if (this.formControl.controls['id'].value !== null && this.formControl.controls['id'].value < 1)
@@ -117,8 +124,13 @@ export class InfoFormPropertyComponent implements OnInit {
             return;
         }
 
+        const data = await firstValueFrom(this.infoFormService.getById({ id: res.data.id }));
+
         this.parent.controls[index].id = res.data.id;
         this.formControl.controls['id'].setValue(res.data.id);
+
+        if (data?.statusCode === ResponseCode.ZERO && data.data)
+            this.formControl.controls['code'].setValue(data.data.code);
 
         this.saveLastValue();
 

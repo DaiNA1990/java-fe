@@ -1,11 +1,22 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription, Observable, BehaviorSubject } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { first, shareReplay } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ResponseCode } from '@appkkkh/core/contants/app.enum';
-import { AppCons } from '@appkkkh/core/contants/app.cons';
-import { AuthService } from '../../services/auth.service';
+import { AuthModeConfig, AuthService } from '../../services/auth.service';
+
+/** Mã lỗi BE gắn vào "?error=" khi luồng SSO quay về màn đăng nhập. */
+const SSO_ERROR_MESSAGES: Record<string, string> = {
+  SSO_USER_NOT_FOUND: 'Tài khoản SSO chưa được cấp quyền trong hệ thống.',
+  SSO_DISABLED: 'Đăng nhập SSO đang tắt.',
+  SSO_FAILED: 'Đăng nhập SSO không thành công, vui lòng thử lại.',
+};
+
+/** Chỉ nhận đường dẫn nội bộ ("/..."), chặn "//host" hoặc URL tuyệt đối (open redirect). */
+function safeReturnPath(value: unknown): string {
+  return typeof value === 'string' && value.startsWith('/') && !value.startsWith('//') ? value : '/';
+}
 
 @Component({
   selector: 'app-login',
@@ -38,6 +49,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   isLoadingSubject: BehaviorSubject<boolean>;
 
+  /** Cách đăng nhập đang bật (BE): ẩn/hiện form user/pass và nút SSO. */
+  authConfig$: Observable<AuthModeConfig>;
+
   private unsubscribe: Subscription[] = [];
 
   constructor(
@@ -53,7 +67,23 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initForm();
-    this.returnUrl = this.activatedRoute.snapshot.queryParams['url'.toString()] || '/';
+    this.returnUrl = safeReturnPath(this.activatedRoute.snapshot.queryParams['url']);
+
+    const ssoError: string | undefined = this.activatedRoute.snapshot.queryParams['error'];
+    if (ssoError) {
+      this.hasError = true;
+      this.message = SSO_ERROR_MESSAGES[ssoError] ?? SSO_ERROR_MESSAGES['SSO_FAILED'];
+    }
+
+    this.authConfig$ = this.authService.getAuthConfig().pipe(shareReplay(1));
+
+    // Chỉ bật SSO -> chuyển thẳng sang Keycloak. Vừa quay về kèm lỗi thì đứng lại để người dùng đọc lỗi
+    // (không thì lặp vòng Keycloak <-> màn đăng nhập).
+    this.unsubscribe.push(
+      this.authConfig$.pipe(first()).subscribe((config) => {
+        if (config.ssoEnabled && !config.localEnabled && !ssoError) this.loginWithSSO();
+      })
+    );
   }
 
   get f() {
@@ -86,21 +116,24 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.hasError = false;
     this.isLoadingSubject.next(true);
     const loginSubscr = this.authService
-      .login({ username: this.f.email.value, password: this.f.password.value })
+      .sessionLogin({ username: this.f.email.value, password: this.f.password.value })
       .pipe(first())
       .subscribe((res: any) => {
         this.isLoadingSubject.next(false);
+        // Thành công: BE đã đặt cookie SID + XSRF-TOKEN, response không có token.
         if (res.statusCode === ResponseCode.ZERO) {
-          localStorage.setItem(AppCons.TOKEN_KEY, res.data.token);
-          localStorage.setItem(AppCons.TOKEN_REFRESH_KEY, res.data.refreshToken);
           localStorage.setItem('username', this.f.email.value);
-          this.router.navigate([this.returnUrl ?? '/']);
+          this.router.navigateByUrl(this.returnUrl);
         }
         this.hasError = res.statusCode !== ResponseCode.ZERO;
         this.message = res.message;
         this.changeDetectorRef.markForCheck();
       });
     this.unsubscribe.push(loginSubscr);
+  }
+
+  loginWithSSO() {
+    this.authService.ssoLogin(this.returnUrl);
   }
 
   ngOnDestroy() {

@@ -41,16 +41,16 @@
             "value": "MAP_FIELD"
         },
         {
+            "name": "Map child",
+            "value": "MAP_CHILD"
+        },
+        {
             "name": "Pre action",
             "value": "PRE_ACTION"
         },
         {
             "name": "Post action",
             "value": "POST_ACTION"
-        },
-        {
-            "name": "Send email",
-            "value": "SEND_EMAIL"
         }
     ],
     "events": [
@@ -83,16 +83,16 @@
             "value": "FORM_UPDATE_FIELD"
         },
         {
-            "name": "Form update line field",
-            "value": "FORM_UPDATE_LINE_FIELD"
-        },
-        {
             "name": "Form set value",
             "value": "FORM_SET_VALUE"
         },
         {
             "name": "Table import excel",
             "value": "TABLE_IMPORT_EXCEL"
+        },
+        {
+            "name": "Table import excel (chỉ cập nhật)",
+            "value": "TABLE_IMPORT_EXCEL_UPDATE"
         },
         {
             "name": "Table export excel",
@@ -125,6 +125,10 @@
         {
             "name": "Table select receive",
             "value": "TABLE_SELECT_RECEIVE"
+        },
+        {
+            "name": "Gỡ đánh dấu đã chọn khi xoá (bảng đích)",
+            "value": "TABLE_SELECT_REVERT"
         },
         {
             "name": "Table sum",
@@ -163,24 +167,20 @@
             "value": "FORM_VALIDATE"
         },
         {
-            "name": "Form Clone",
+            "name": "Lấy CT từ mẫu",
             "value": "FORM_CLONE"
         },
         {
-            "name": "Form Collection",
+            "name": "Form Clone",
+            "value": "FORM_COPY"
+        },
+        {
+            "name": "Tổng hợp dữ liệu",
             "value": "FORM_COLLECTION"
         },
         {
             "name": "Form bind data",
             "value": "FORM_BIND_VALUE"
-        },
-        {
-            "name": "Duyệt All",
-            "value": "FORM_APPROVE_ALL"
-        },
-        {
-            "name": "Duyệt PB",
-            "value": "FORM_APPROVE_PB"
         },
         {
             "name": "Xuất báo cáo",
@@ -191,28 +191,32 @@
             "value": "DOWNLOAD_FILE"
         },
         {
-            "name": "Email send",
-            "value": "EMAIL_SEND"
+            "name": "Tính chỉ tiêu",
+            "value": "FORM_CACULATOR"
         },
         {
-            "name": "Email send to email",
-            "value": "EMAIL_SEND_TO_EMAIL"
+            "name": "Khởi tạo BPMN",
+            "value": "WORKFLOW_START"
         },
         {
-            "name": "Email send to user",
-            "value": "EMAIL_SEND_TO_USER"
+            "name": "Hoàn thành bước BPMN",
+            "value": "WORKFLOW_COMPLETE"
         },
         {
-            "name": "Email send to role",
-            "value": "EMAIL_SEND_TO_ROLE"
+            "name": "Sum dữ liệu từ con lên cha",
+            "value": "FORM_SUM_PARENT"
         },
         {
-            "name": "Email send to department",
-            "value": "EMAIL_SEND_TO_DEPARTMENT"
+            "name": "Sao chép dữ liệu từ cột - đến cột",
+            "value": "FORM_COPY_FIELD"
         },
         {
-            "name": "Email send to field",
-            "value": "EMAIL_SEND_TO_FIELD"
+            "name": "Dựng lại cây mã cha con",
+            "value": "FORM_BUILD_PARENT_FORMULA"
+        },
+        {
+            "name": "Cập nhật số liệu từ nguồn (vd tồn kho)",
+            "value": "FORM_LOOKUP_UPDATE"
         }
     ]
 }

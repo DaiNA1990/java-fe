@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
 import { BaseService } from '@appkkkh/core/base/base.service';
+import { AppCons } from '@appkkkh/core/contants/app.cons';
 
 @Injectable({
   providedIn: 'root'
@@ -8,14 +9,17 @@ import { BaseService } from '@appkkkh/core/base/base.service';
 export class UserService extends BaseService {
   constructor() {
     super();
-    this.setModule('User');
-    this.setPath('userapi');
+    this.setResource(AppCons.API_BASE.MANAGE_SYSTEM, 'users');
   }
 
-  changePasswordUser = (data: any): Observable<any> => this.post('ChangePasswordUser', data);
+  /** Admin đặt lại mật khẩu: userId lên path, body {password, confirmPassword}. */
+  changePasswordUser = (data: any): Observable<any> => {
+    const { id, userId, ...body } = data ?? {};
+    return this.put(`${this.idPath(userId ?? id)}/password`, body);
+  }
 
-  changePassword = (data: any): Observable<any> => this.post('ChangePassword', data);
+  changePassword = (data: any): Observable<any> => this.put('me/password', data);
 
-  updateInfo = (data: any): Observable<any> => this.post('UpdateInfo', data);
+  updateInfo = (data: any): Observable<any> => this.put('me', data);
 
 }

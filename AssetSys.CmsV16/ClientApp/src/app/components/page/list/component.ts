@@ -3,9 +3,10 @@ import { FormGroup } from '@angular/forms';
 import { NbTableColumnComponent } from '@appkkkh/components/data/table/col';
 import { BehaviorSubject, Subscription, forkJoin } from 'rxjs';
 import { NbDialogBaseComponent } from '../dialog/dialog.base';
-import { ConfirmationService, MessageService, ConfirmEventType } from 'primeng/api';
+import { ConfirmationService, MessageService, ConfirmEventType, TreeNode } from 'primeng/api';
 import { NbTableComponent } from '@appkkkh/components/data/table/component';
 import { ResponseCode } from '@appkkkh/core/contants/app.enum';
+import { AppCons } from '@appkkkh/core/contants/app.cons';
 
 interface ListQueryDefault {
   keyword: string;
@@ -37,8 +38,17 @@ export class NbPageListComponent implements OnInit, OnDestroy {
   @Input() isScrollable = false;
   @Input() scrollHeight = '';
 
+  // Hiển thị dạng cây: field trỏ tới id cha (vd 'parentId'). Chế độ cây tải hết rồi phân trang theo nút gốc ở client, không chọn dòng.
+  @Input() treeParentField: string | null = null;
+  // cột đặt nút mở/đóng (null = cột đầu) và field sắp xếp các nút cùng cấp
+  @Input() treeToggleField: string | null = null;
+  @Input() treeSortField: string | null = null;
+
   listSubject = new BehaviorSubject<any[]>([]);
   list$ = this.listSubject.asObservable();
+
+  treeSubject = new BehaviorSubject<TreeNode[]>([]);
+  tree$ = this.treeSubject.asObservable();
 
   totalRecords = 0;
 
@@ -82,14 +92,68 @@ export class NbPageListComponent implements OnInit, OnDestroy {
 
   getList() {
 
-    let filter = Object.assign(this.queryDefault, this.formFilter.value);
+    let filter = this.treeParentField === null
+      ? Object.assign(this.queryDefault, this.formFilter.value)
+      : { ...this.queryDefault, ...this.formFilter.value, page: 1, pageSize: AppCons.MAX_PAGE_SIZE };
 
     const subscr = this.service.getList(filter).subscribe((res: any) => {
-      this.listSubject.next(res.data.list);
-      this.totalRecords = res.data.total;
+      // lỗi đã được ErrorInterceptor quy đổi về envelope (data null, message đã dịch)
+      if (res.statusCode !== ResponseCode.ZERO) {
+        this.messageService.add({ severity: 'error', summary: 'Fail', detail: res.message, life: 3000 });
+        this.listSubject.next([]);
+        this.treeSubject.next([]);
+        this.totalRecords = 0;
+        return;
+      }
+
+      // GetList trả data { list, total }
+      const list = res.data?.list ?? [];
+      this.listSubject.next(list);
+      this.totalRecords = res.data?.total ?? 0;
+
+      if (this.treeParentField !== null)
+        this.treeSubject.next(this.buildTree(list));
     });
 
     this.unsubscribe.push(subscr);
+  }
+
+  /**
+   * Dựng cây theo treeParentField. Cha không có trong danh sách (vd bị lọc theo từ khoá) -> lên gốc.
+   * `seen` chặn vòng lặp cha-con trong dữ liệu lỗi; nút thuộc vòng lặp cũng đưa lên gốc.
+   */
+  private buildTree(items: any[]): TreeNode[] {
+    const parentField = this.treeParentField!;
+    const ids = new Set(items.map(i => i.id));
+    const childrenOf = new Map<any, any[]>();
+    const roots: any[] = [];
+
+    items.forEach(item => {
+      const parentId = item[parentField];
+      if (parentId === null || parentId === undefined || parentId === item.id || !ids.has(parentId)) {
+        roots.push(item);
+        return;
+      }
+      childrenOf.set(parentId, [...(childrenOf.get(parentId) ?? []), item]);
+    });
+
+    // mặc định thu gọn cho gọn trang; đang tìm theo từ khoá thì mở hết để thấy kết quả
+    const expanded = !!this.queryDefault.keyword;
+    const seen = new Set<any>();
+    const build = (level: any[]): TreeNode[] => this.sortTreeLevel(level)
+      .filter(item => !seen.has(item.id))
+      .map(item => {
+        seen.add(item.id);
+        return { data: item, expanded, children: build(childrenOf.get(item.id) ?? []) };
+      });
+
+    const tree = build(roots);
+    return [...tree, ...build(items.filter(item => !seen.has(item.id)))];
+  }
+
+  private sortTreeLevel(level: any[]): any[] {
+    const field = this.treeSortField;
+    return field === null ? level : [...level].sort((a, b) => (a[field] ?? 0) - (b[field] ?? 0));
   }
 
   keywordChanged(e: any) {

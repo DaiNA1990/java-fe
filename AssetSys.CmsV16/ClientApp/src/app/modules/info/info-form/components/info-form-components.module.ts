@@ -37,7 +37,10 @@ import { InfoFormPropertyBuildConditionUIComponent } from './property/subs/build
 import { InfoFormPropertyBuildConditionReadOnlyComponent } from './property/subs/build-condition-readonly/component';
 import { InfoFormPropertyBuildConditionDataComponent } from './property/subs/build-condition-data/component';
 import { InfoFormPropertyBuildActionComponent } from './property/subs/build-action/component';
+import { InfoFormPropertyBuildPreValidateComponent } from './property/subs/build-pre-validate/component';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { ChipsModule } from 'primeng/chips';
 
 @NgModule({
     declarations: [
@@ -53,7 +56,8 @@ import { DropdownModule } from 'primeng/dropdown';
         InfoFormPropertyBuildConditionUIComponent,
         InfoFormPropertyBuildConditionReadOnlyComponent,
         InfoFormPropertyBuildConditionDataComponent,
-        InfoFormPropertyBuildActionComponent
+        InfoFormPropertyBuildActionComponent,
+        InfoFormPropertyBuildPreValidateComponent
     ],
     exports: [
         InfoFormListComponent,
@@ -70,6 +74,8 @@ import { DropdownModule } from 'primeng/dropdown';
         DialogModule,
         ConfirmDialogModule,
         DropdownModule,
+        InputTextModule,
+        ChipsModule,
         NbSelectModule,
         ToastModule,
         TabViewModule,

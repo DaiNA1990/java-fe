@@ -13,7 +13,6 @@ import { Table } from 'primeng/table';
 
 import { JobScheduleService } from '../../services/job-schedule.service';
 import { JobReportService } from '../../services/job-report.service';
-import { FileService } from '@appkkkh/modules/file/file/file.service';
 import { ResponseCode } from '@appkkkh/core/contants/app.enum';
 import { JobDetailsComponent } from '../edit/job-details.component';
 
@@ -31,7 +30,6 @@ interface PagedResponse<T> {
   selector: 'app-job-schedule-list',
   templateUrl: './job-schedule-list.component.html',
   styleUrls: ['./job-schedule-list.component.scss'],
-  providers: [FileService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class JobScheduleListComponent implements OnInit, OnDestroy {
@@ -87,14 +85,12 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
   constructor(
     private jobScheduleService: JobScheduleService,
     private jobReportService: JobReportService,
-    private fileService: FileService,
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.fileService.setPath('jobapi');
     // initial loads
     this.loadStats();
     this.loadQueues();
@@ -431,7 +427,7 @@ export class JobScheduleListComponent implements OnInit, OnDestroy {
     fd.append('isReplace', 'true');
     fd.append('isTransfer', 'true');
 
-    this.fileService.uploadTemp(fd).pipe(takeUntil(this.destroy$)).subscribe({
+    this.jobScheduleService.uploadTemp(fd).pipe(takeUntil(this.destroy$)).subscribe({
       next: (res: any) => {
         if (res?.statusCode === ResponseCode.ZERO) {
           this.messageService.add({ severity: 'success', summary: 'Thông báo', detail: res.message, life: 3000 });

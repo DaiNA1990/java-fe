@@ -27,13 +27,6 @@ export class InfoFormPropertyBuildValidateComponent implements OnInit {
             message: null
         },
         {
-            name: 'Duy nhất',
-            code: 'unique',
-            enable: false,
-            value: null,
-            message: null
-        },
-        {
             name: 'Giới hạn ký tự từ',
             code: 'min-length',
             enable: false,

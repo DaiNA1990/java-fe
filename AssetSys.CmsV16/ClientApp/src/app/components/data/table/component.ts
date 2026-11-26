@@ -2,13 +2,15 @@ import { Component, ContentChild, ContentChildren, EventEmitter, Input, OnDestro
 import { NbTableColumnComponent } from './col';
 import { DatePipe } from '@angular/common';
 import op from 'object-path';
+import { TreeNode } from 'primeng/api';
 
 @Component({
   selector: 'nb-table',
   templateUrl: './component.html',
   styles: [`
   ::ng-deep {
-    .p-datatable .p-datatable-tbody > tr > td {
+    .p-datatable .p-datatable-tbody > tr > td,
+    .p-treetable .p-treetable-tbody > tr > td {
       border: 1px dashed #f1f1f4;
       border-width: 0 0 1px 0;
     }
@@ -30,6 +32,12 @@ export class NbTableComponent implements OnInit, OnDestroy {
   @Input() isShowPagingReport = true;
   @Input() isScrollable = false;
   @Input() scrollHeight = '';
+
+  // chế độ cây (p-treeTable) thay cho p-table
+  @Input() isTree = false;
+  @Input() treeNodes: TreeNode[] | null = [];
+  // field của cột đặt nút mở/đóng; null = cột đầu tiên
+  @Input() treeToggleField: string | null = null;
 
   // @ContentChild('header') headerTemplate!: TemplateRef<any>;
   // @ContentChild('body') bodyTemplate!: TemplateRef<any>;
@@ -64,6 +72,10 @@ export class NbTableComponent implements OnInit, OnDestroy {
     }
 
     return op.get(item, col.field);
+  }
+
+  isToggleColumn(col: NbTableColumnComponent, index: number) {
+    return this.treeToggleField === null ? index === 0 : col.field === this.treeToggleField;
   }
 
   onSelectionChange(e: any) {

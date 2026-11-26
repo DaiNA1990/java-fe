@@ -10,7 +10,7 @@
     <ng-container filter></ng-container>
 	<ng-template #rowActionsTemplate let-item="item">
         <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="Gán chức năng"
-            (click)="assignAction(item.id)" *appPermission="['USER_ADMIN']">
+            (click)="assignAction(item.id)" *ngIf="authService.hasRole('ADMIN')">
             <app-keenicon name="shield" class="fs-2"></app-keenicon>
         </a>
     </ng-template>

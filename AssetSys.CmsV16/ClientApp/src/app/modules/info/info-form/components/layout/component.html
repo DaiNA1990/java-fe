@@ -9,6 +9,7 @@
 			</i>
 		</button>
 	</ng-template>
+	<nb-text [formCtrl]="keywordCtrl" placeholder="Mã giao diện..." (onChange)="keywordChange($event)" />
 	<div class="pt-6" style="height: 40vh; max-width: 100%; overflow-y: auto; overflow-x: hidden;">
 		<ng-container *ngFor="let item of layouts">
 			<div class="d-flex flex-stack" cdkDrag [cdkDragData]="item">
@@ -26,7 +27,7 @@
 					<div class="flex-grow-1 me-2">
 						<a href="javascript:;" class="text-gray-800 text-hover-primary fs-6 fw-bold"
 							(click)="open(item)">{{item.name}}</a>
-						<a href="/info/info-page/{{item.id}}" target="_blank"
+						<a href="http://10.15.24.231:9001/info/info-page/{{item.id}}" target="_blank"
 							class="text-gray-800 text-hover-primary fs-6 fw-bold mx-3">
 							<i class="ki-duotone ki-fasten">
 								<span class="path1"></span>

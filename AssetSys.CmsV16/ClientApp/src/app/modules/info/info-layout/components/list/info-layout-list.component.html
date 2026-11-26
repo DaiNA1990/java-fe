@@ -10,7 +10,7 @@
 	[scrollHeight]="'25vh'">
 	<nb-table-col header="Tên" field="name" [columnTemplate]="nameTmp">
 		<ng-template #nameTmp let-item="item">
-			<a [href]="'info/info-page/' + item.id" target="_blank" class="text-gray-800 text-hover-primary" style="text-decoration: underline;" [title]="item.name">
+			<a [href]="'http://10.15.24.231:9001/info/info-page/' + item.id" target="_blank" class="text-gray-800 text-hover-primary" style="text-decoration: underline;" [title]="item.name">
 				{{item.name}}
 			</a>
 		</ng-template>

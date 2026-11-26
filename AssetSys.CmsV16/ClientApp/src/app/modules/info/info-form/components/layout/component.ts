@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, inject, Input, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl, FormControl } from '@angular/forms';
 import { InfoFormService } from '../../services/info-form.service';
 import { firstValueFrom } from 'rxjs';
 import { InfoPropertyService } from '@appkkkh/modules/info/info-property/services/info-property.service';
@@ -27,6 +27,10 @@ export class InfoFormLayoutComponent implements OnInit {
     private parent: any = inject(InfoFormDesignComponent, { optional: true });
 
     groups: any[] = [];
+
+    keywordCtrl: AbstractControl = new FormControl();
+
+    lstLayout: any[] = [];
 
     layouts: any[] = [];
 
@@ -70,10 +74,21 @@ export class InfoFormLayoutComponent implements OnInit {
 
     async getList() {
         const res = await firstValueFrom(this.infoLayoutService.getList({ groupId: this.groupId, pageSize: Number.MAX_SAFE_INTEGER }));
-        this.layouts = res.data.list;
+        this.lstLayout = res.data.list;
+        // giữ nguyên từ khoá đang tìm khi tải lại danh sách
+        this.filter(this.keywordCtrl.value ?? '');
+        /*if (res.data.list.length > 0)
+            this.builder(res.data.list[0]);*/
+    }
+
+    keywordChange(event: any) {
+        this.filter(event);
+    }
+
+    filter(keyword: any) {
+        const kw = (keyword ?? '').toLowerCase();
+        this.layouts = this.lstLayout.filter(x => (x.code ?? '').toLowerCase().includes(kw));
         this.changeDetectorRef.detectChanges();
-        if (res.data.list.length > 0)
-            this.builder(res.data.list[0]);
     }
 
     onSubmit(e: any) {
@@ -84,7 +99,7 @@ export class InfoFormLayoutComponent implements OnInit {
 
         this.currentItem = item;
 
-        const res = await firstValueFrom(this.infoLayoutService.editing({ id: item.id }));
+        const res = await firstValueFrom(this.infoLayoutService.lockEdit(item.id));
 
         this.messageService.add({
             severity: res.statusCode === ResponseCode.ZERO ? 'success' : 'warn',
@@ -101,7 +116,7 @@ export class InfoFormLayoutComponent implements OnInit {
 
     async unlock(item: any) {
 
-        const res = await firstValueFrom(this.infoLayoutService.editing({ id: item.id, isEnd: true }));
+        const res = await firstValueFrom(this.infoLayoutService.unlockEdit(item.id));
 
         this.messageService.add({
             severity: res.statusCode === ResponseCode.ZERO ? 'success' : 'warn',

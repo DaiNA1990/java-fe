@@ -55,7 +55,7 @@
 				<nb-text [formCtrl]="formControl.controls.cssStyle" label="Style" placeholder="Nhập thông tin" />
 			</nb-layout-grid-item>
 			<nb-layout-grid-item size="12">
-				<app-info-form-property-build-action [formCtrl]="formControl.controls.action" [groupId]="groupId"
+				<app-info-form-property-build-action [formCtrl]="formControl.controls.action" (saved)="itemSave()" [groupId]="groupId"
 					[layoutId]="layoutId" />
 			</nb-layout-grid-item>
 			<nb-layout-grid-item size="12">
@@ -95,15 +95,15 @@
 				<app-info-form-property-build-validate [formCtrl]="formControl.controls.expressionValidate" />
 			</nb-layout-grid-item>
 			<nb-layout-grid-item size="12">
-				<app-info-form-property-build-condition-ui [formCtrl]="formControl.controls.expressionDisplay"
+				<app-info-form-property-build-condition-ui [formCtrl]="formControl.controls.expressionDisplay" (saved)="itemSave()"
 					[label]="'Điều kiện hiển thị'" [groupId]="groupId" />
 			</nb-layout-grid-item>
 			<nb-layout-grid-item size="12">
-				<app-info-form-property-build-condition-readonly [formCtrl]="formControl.controls.expressionReadonly"
+				<app-info-form-property-build-condition-readonly [formCtrl]="formControl.controls.expressionReadonly" (saved)="itemSave()"
 					[label]="'Điều kiện ReadOnly'" [groupId]="groupId" />
 			</nb-layout-grid-item>
 			<nb-layout-grid-item size="12">
-				<app-info-form-property-build-condition-data [formCtrl]="formControl.controls.expressionData"
+				<app-info-form-property-build-condition-data [formCtrl]="formControl.controls.expressionData" (saved)="itemSave()"
 					[groupId]="groupId" />
 			</nb-layout-grid-item>
 		</nb-layout-grid>

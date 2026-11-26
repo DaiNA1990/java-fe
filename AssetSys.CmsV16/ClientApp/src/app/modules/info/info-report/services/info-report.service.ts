@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '@appkkkh/core/base/base.service';
+import { AppCons } from '@appkkkh/core/contants/app.cons';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -8,19 +9,19 @@ import { Observable } from 'rxjs';
 export class InfoReportService extends BaseService {
   constructor() {
     super();
-    this.setModule('InfoReport');
-    this.setPath('reportapi');
+    this.setResource(AppCons.API_BASE.DEVELOP_TOOL, 'info-reports');
   }
-  executeReport = (data: any): Observable<any> => this.post('ExecuteReport', data);
-  getStatusProcessReport = (data: any): Observable<any> => this.get('GetStatusProcessReport', data);
+
+  /** Chạy báo cáo ở service Report, trả file xlsx hoặc pdf. */
+  executeReport = (data: any): Observable<any> =>
+    this.request('POST', this.urlOf(AppCons.API_BASE.REPORT, 'info-reports', 'execute'), data,
+      { responseType: 'blob', observe: 'response' });
+
   uploadTemplate(data: any): Observable<any> {
-    return this.post('UploadTemplate', data);
+    return this.post('templates', data);
   }
 
   downloadTemplate(data: any): Observable<any> {
-    return this.downloadFile('DonwloadTemplate', data, { responseType: 'blob', observe: 'response' });
-  }
-  donwloadReportFile(data: any): Observable<any> {
-    return this.downloadFile('DonwloadReportFile', data, { responseType: 'blob', observe: 'response' });
+    return this.downloadFile(`templates/${this.filePath(data?.filename)}`, null, { responseType: 'blob', observe: 'response' });
   }
 }

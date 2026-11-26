@@ -4,83 +4,120 @@ import { Observable } from "rxjs";
 import { first, take } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AppCons } from '../contants/app.cons';
+import { Language } from '../contants/app.enum';
 
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+
+export interface RequestOptions {
+  responseType?: 'json' | 'blob' | 'text';
+  observe?: 'body' | 'response';
+  /** Query string cho POST/PUT/PATCH (GET/DELETE lấy query từ data). */
+  params?: any;
+}
+
+/**
+ * Service gọi API theo chuẩn REST: /gateway/<BasePath>/v1/<resource>[/<sub>].
+ *
+ * Tên method CRUD giữ như cũ để component không phải đổi:
+ * getList → GET {resource}, getById → GET {resource}/{id},
+ * addOrEdit → POST {resource} | PUT {resource}/{id}, onOff → PATCH {resource}/{id}/visibility,
+ * delete → DELETE {resource}/{id} (tham số phụ lên query).
+ */
 @Injectable()
 export class BaseService {
 
   private http = inject(HttpClient);
 
-  protected module!: string;
-  protected path: string = 'planapi';
+  protected basePath!: string;
+  protected resource!: string;
 
   constructor() {}
 
-  protected setModule(module: string) {
-    this.module = module;
+  protected setResource(basePath: string, resource: string) {
+    this.basePath = basePath;
+    this.resource = resource;
   }
 
-  setPath(path: string) {
-    this.path = path;
+  getList = (data: any): Observable<any> => this.get('', data);
+
+  autocomplete = (data: any): Observable<any> => this.get('autocomplete', data);
+
+  getById = (data: any): Observable<any> => this.get(this.idPath(data?.id));
+
+  addOrEdit = (data: any): Observable<any> => this.hasId(data?.id)
+    ? this.put(this.idPath(data.id), data)
+    : this.post('', data);
+
+  onOff = (data: any): Observable<any> => this.patch(`${this.idPath(data?.id)}/visibility`, { status: data?.status });
+
+  delete = (data: any): Observable<any> => {
+    const { id, ...params } = data ?? {};
+    return this.del(this.idPath(id), params);
   }
 
-  //getUrlRequset = (action: string): string => `${environment.apiUrl}${this.module}/${action}`;
+  get = (api: string, data: any = null, options?: RequestOptions) => this.httpRequest('GET', api, data, options);
 
-  getList = (data: any): Observable<any> => this.get('GetList', data);
+  post = (api: string, data: any = null, options?: RequestOptions) => this.httpRequest('POST', api, data, options);
 
-  autocomplete = (data: any): Observable<any> => this.get('Autocomplete', data);
+  put = (api: string, data: any = null, options?: RequestOptions) => this.httpRequest('PUT', api, data, options);
 
-  getById = (data: any): Observable<any> => this.get('GetById', data);
+  patch = (api: string, data: any = null, options?: RequestOptions) => this.httpRequest('PATCH', api, data, options);
 
-  addOrEdit = (data: any): Observable<any> => this.post('AddOrEdit', data);
+  del = (api: string, data: any = null, options?: RequestOptions) => this.httpRequest('DELETE', api, data, options);
 
-  onOff = (data: any): Observable<any> => this.post('OnOff', data);
+  downloadFile = (api: string, data: any = null, options?: RequestOptions) => this.httpRequest('GET', api, data, options);
 
-  delete = (data: any): Observable<any> => this.post('Delete', data);
+  protected hasId = (id: any): boolean => id !== undefined && id !== null && id !== '';
 
-  // importExcel = (data: any): Observable<any> => this.post('ImportExcel', data);
+  protected idPath = (id: any): string => encodeURIComponent(String(id ?? ''));
 
-  // exportExcel = (api: string, data: any = null, options: any) => this.httpRequest('POST', api, data, options);
+  /**
+   * Encode tên file đặt trên path. Giữ nguyên dấu '/' của file dạng groupCode/x.docx
+   * vì server từ chối %2F.
+   */
+  protected filePath = (filename: string): string =>
+    String(filename ?? '').split('/').map(encodeURIComponent).join('/');
 
-  getImportTemplate = (): Observable<any> => this.get('GetTemplateImport');
+  protected urlOf(basePath: string, resource: string, api: string = ''): string {
+    const url = `${environment.apiUrl}${AppCons.API_GATEWAY}/${basePath}/${AppCons.API_VERSION}/${resource}`;
+    return api ? `${url}/${api}` : url;
+  }
 
-  post = (api: string, data: any = null) => this.httpRequest('POST', api, data);
+  protected buildUrl(api: string): string {
+    return this.urlOf(this.basePath, this.resource, api);
+  }
 
-  get = (api: string, data: any = null) => this.httpRequest('GET', api, data);
+  httpRequest(method: HttpMethod, api: string, data: any, options?: RequestOptions) {
+    return this.request(method, this.buildUrl(api), data, options);
+  }
 
-  downloadFile = (api: string, data: any = null, options: any) => this.httpRequest('GET', api, data, options);
+  protected request(method: HttpMethod, url: string, data: any, options?: RequestOptions) {
+    const isQueryMethod = method === 'GET' || method === 'DELETE';
 
-  httpRequest(method: string, api: string, data: any,
-  options?: {
-    responseType?: 'json' | 'blob' | 'text';
-    observe?: 'body' | 'response';
-  }) {
-    const url = environment.apiUrl + this.path + '/' + this.module + '/' + api;
+    const query: any = { ...((isQueryMethod ? data : options?.params) ?? {}) };
+    Object.keys(query).forEach(key => { if (query[key] === undefined || query[key] === null) delete query[key]; });
 
-    if (method === 'GET' && data !== undefined && data !== null)
-      Object.keys(data).forEach(key => { if (data[key] === undefined || data[key] === null) delete data[key]; });
+    // server lấy ngôn ngữ qua query param lang (không đọc header Accept-Language),
+    // gửi cho mọi request để message trong response về đúng ngôn ngữ đang chọn
+    const lang = localStorage.getItem(AppCons.LANGUAGE_KEY) || Language.VI;
 
     const httpOptions = {
       headers: new HttpHeaders({
-        'Accept-Language': localStorage.getItem(AppCons.LANGUAGE_KEY) ?? ''
+        'Accept-Language': lang
       }),
-      params: method === 'GET' ? data : null,
+      params: { ...query, lang },
+      body: isQueryMethod ? undefined : data,
       responseType: options?.responseType ?? 'json',
       observe: options?.observe ?? 'body'
     };
 
-    const token = localStorage.getItem(AppCons.TOKEN_KEY) ?? '';
-
-    if (token !== '')
-      httpOptions.headers = httpOptions.headers.set('Authorization', `Bearer ${token}`);
+    // Không gắn Authorization: đăng nhập bằng cookie SID (HttpOnly) trình duyệt tự gửi, gateway đổi lấy JWT.
+    // Header X-CSRF-Token do HttpClientXsrfModule (app.module) gắn cho request ghi — URL phải tương đối.
 
     if (!(data instanceof FormData) && httpOptions.responseType === 'json') {
       httpOptions.headers = httpOptions.headers.set('Content-Type', 'application/json');
     }
 
-    const actionMethod = method === 'POST'
-      ? this.http.post(url, data, httpOptions as any)
-      : this.http.get(url, httpOptions as any);
-
-    return actionMethod.pipe(first(), take(1));
+    return this.http.request(method, url, httpOptions as any).pipe(first(), take(1));
   }
 }

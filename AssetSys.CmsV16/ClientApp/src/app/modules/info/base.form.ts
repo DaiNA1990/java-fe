@@ -52,7 +52,7 @@ export class BaseFormPage{
           path = 'inventoryapi';
           break;
         case 'RPT':
-          path = 'reportapi';
+          path = 'configapi';
           break;
         default:
           path = 'planapi';

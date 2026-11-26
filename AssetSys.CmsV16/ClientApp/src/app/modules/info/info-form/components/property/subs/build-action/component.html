@@ -15,7 +15,7 @@
 	</div>
 </div>
 
-<p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{ width: '70rem' }">
+<p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{ width: '60vw', maxWidth: '1600px' }">
 	<ng-template pTemplate="header">
 		<div class="inline-flex align-items-center justify-content-center gap-2">
 			<span class="font-bold white-space-nowrap">Thao tác</span>
@@ -23,7 +23,7 @@
 	</ng-template>
 	<div class="table-responsive mb-10">
 		<label class="form-label mb-10">Thông tin hành động</label>
-		<ng-container *ngTemplateOutlet="condGroupTemp;context: {item: dataActions}" />
+		<ng-container *ngTemplateOutlet="condGroupTemp;context: {item: dataActions, depth: 0}" />
 	</div>
 	<ng-template pTemplate="footer">
 		<p-button label="Đóng" [text]="true" severity="secondary" styleClass="mx-3" (click)="visible = false" />
@@ -31,19 +31,25 @@
 	</ng-template>
 </p-dialog>
 
-<ng-template #condGroupTemp let-item="item" let-parent="parent">
-	<div class="border border-dashed border-gray-300 rounded px-7 py-3 mb-5">
-		<div class="row mb-3">
-			<div class="col-6"></div>
+<!-- popup cấu hình rule Pre action + Form Validate (mở từ nút bánh răng trên dòng thao tác) -->
+<app-info-form-property-build-pre-validate [groupId]="groupId" (changed)="onPreValidateChanged()" />
+
+<ng-template #condGroupTemp let-item="item" let-parent="parent" let-depth="depth">
+	<div class="cond-group rounded px-4 py-3" [class.mb-4]="parent === undefined" [attr.data-depth]="depth % 6">
+		<div class="row align-items-center mb-3">
+			<div class="col-6 d-flex align-items-center gap-3">
+				<span class="cond-depth-badge">L{{depth + 1}}</span>
+				<span class="text-muted fs-7">{{item.rules?.length || 0}} thao tác</span>
+			</div>
 			<div class="col-6 text-end">
 				<a href="javascript:;"
 					class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-					(click)="addCondition(item)">
+					(click)="addCondition(item)" title="Thêm thao tác">
 					<i class="ki-duotone ki-plus fs-2"></i>
 				</a>
 				<a href="javascript:;"
 					class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-					(click)="addConditionGroup(item)">
+					(click)="addConditionGroup(item)" title="Thêm nhóm">
 					<i class="ki-duotone ki-element-plus fs-2">
 						<span class="path1"></span>
 						<span class="path2"></span>
@@ -54,7 +60,7 @@
 				</a>
 				<a href="javascript:;"
 					class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-					(click)="removeConditionGroup(item, parent)" *ngIf="parent !== undefined">
+					(click)="removeConditionGroup(item, parent)" *ngIf="parent !== undefined" title="Xoá nhóm">
 					<i class="ki-duotone ki-trash fs-2">
 						<span class="path1"></span>
 						<span class="path2"></span>
@@ -65,32 +71,84 @@
 				</a>
 			</div>
 		</div>
-		<ng-container *ngFor="let rule of item.rules">
-			<ng-container *ngTemplateOutlet="rule.condition !== undefined ? condGroupTemp : condTemp;context: {item: rule, parent: item}" />
-		</ng-container>
+		<ng-container *ngTemplateOutlet="actionListTemp;context: {item: item, depth: depth, childDepth: depth}" />
 	</div>
 </ng-template>
 
-<ng-template #condTemp let-item="item" let-parent="parent">
-	<div class="border border-dashed border-gray-300 rounded px-3 py-3 mb-5">
-		<div class="input-group mb-5">
-			<select class="form-select" [(ngModel)]="item.action">
-				<option>Thao tác</option>
-				<option [value]="action.value" *ngFor="let action of actions">{{action.name}}</option>
-			</select>
+<!--
+	Danh sách kéo thả: cdkDrag + cdkDragHandle phải nằm CÙNG template với cdkDropList.
+	CDK tìm list/drag cha qua DI, mà view tạo bằng ngTemplateOutlet lấy DI theo nơi khai báo template
+	nên nếu đặt cdkDrag bên trong condTemp/condGroupTemp sẽ không thấy list -> thành kéo tự do.
+-->
+<ng-template #actionListTemp let-item="item" let-childDepth="childDepth">
+	<div class="action-list" style="min-height: 40px" cdkDropList [id]="listId(item.rules)" [cdkDropListData]="item.rules"
+		[cdkDropListConnectedTo]="dropListIds" [cdkDropListEnterPredicate]="canEnter"
+		(cdkDropListDropped)="dropAction($event)">
+		<div class="d-flex align-items-start gap-2 mb-2" *ngFor="let rule of item.rules" cdkDrag [cdkDragData]="rule"
+			(cdkDragMoved)="dragMoved($event)">
+			<span class="btn btn-sm btn-icon btn-bg-light w-30px h-30px mt-3 action-drag-handle" cdkDragHandle
+				title="Kéo để sắp xếp">
+				<i class="pi pi-bars"></i>
+			</span>
+			<div class="flex-grow-1 min-w-0">
+				<ng-container *ngTemplateOutlet="rule.condition !== undefined ? condGroupTemp : condTemp;context: {item: rule, parent: item, depth: childDepth}" />
+			</div>
+		</div>
+	</div>
+</ng-template>
+
+<!-- depth = cấp của nhóm chứa thao tác; thao tác con hiển thị trong khung cấp depth + 1 -->
+<ng-template #condTemp let-item="item" let-parent="parent" let-depth="depth">
+	<div class="cond-rule rounded px-3 py-2">
+		<div class="input-group">
+			<p-dropdown class="action-select" [options]="actionGroups" [(ngModel)]="item.action" [group]="true"
+				optionLabel="name" optionValue="value" [filter]="true" filterBy="name,value"
+				filterPlaceholder="Tìm thao tác..." placeholder="Thao tác" emptyFilterMessage="Không tìm thấy"
+				[showClear]="true" appendTo="body" panelStyleClass="action-select-panel">
+				<ng-template let-group pTemplate="group">
+					<ng-container *ngTemplateOutlet="groupTemp;context: {group: group}" />
+				</ng-template>
+				<ng-template let-opt pTemplate="selectedItem">
+					<ng-container *ngTemplateOutlet="selectedTemp;context: {opt: opt}" />
+				</ng-template>
+				<ng-template let-opt pTemplate="item">
+					<ng-container *ngTemplateOutlet="optionTemp;context: {opt: opt}" />
+				</ng-template>
+			</p-dropdown>
 			<p-autoComplete [(ngModel)]="item.target" [suggestions]="targets" (completeMethod)="search($event)"
 				inputStyleClass="form-control" [inputStyle]="{'border-radius': 0}" (onSelect)="select($event, item)" />
-			<select class="form-select" [(ngModel)]="item.event">
-				<option>Sự kiện</option>
-				<option [value]="event.value" *ngFor="let event of events">{{event.name}}</option>
-			</select>
-			<input type="text" class="form-control" placeholder="Thông tin khác" [(ngModel)]="item.data" />
+			<p-dropdown class="action-select" [options]="eventGroups" [(ngModel)]="item.event" [group]="true"
+				optionLabel="name" optionValue="value" [filter]="true" filterBy="name,value"
+				filterPlaceholder="Tìm sự kiện..." placeholder="Sự kiện" emptyFilterMessage="Không tìm thấy"
+				[showClear]="true" appendTo="body" panelStyleClass="action-select-panel">
+				<ng-template let-group pTemplate="group">
+					<ng-container *ngTemplateOutlet="groupTemp;context: {group: group}" />
+				</ng-template>
+				<ng-template let-opt pTemplate="selectedItem">
+					<ng-container *ngTemplateOutlet="selectedTemp;context: {opt: opt}" />
+				</ng-template>
+				<ng-template let-opt pTemplate="item">
+					<ng-container *ngTemplateOutlet="optionTemp;context: {opt: opt}" />
+				</ng-template>
+			</p-dropdown>
+			<!-- Pre action + Form Validate: data là JSON cấu hình -> nhập qua popup, ô chỉ hiện tóm tắt -->
+			<ng-container *ngIf="isPreValidate(item); else dataInputTemp">
+				<input type="text" class="form-control bg-light cursor-pointer" readonly
+					[value]="preValidateSummary(item)" [title]="preValidateSummary(item)" (click)="openPreValidate(item)" />
+				<a href="javascript:;" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+					(click)="openPreValidate(item)" title="Cấu hình kiểm tra trước khi thực hiện">
+					<i class="pi pi-cog"></i>
+				</a>
+			</ng-container>
+			<ng-template #dataInputTemp>
+				<input type="text" class="form-control" placeholder="Thông tin khác" [(ngModel)]="item.data" />
+			</ng-template>
 			<a href="javascript:;" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-				(click)="addCondition(item)">
+				(click)="addCondition(item)" title="Thêm thao tác con">
 				<i class="ki-duotone ki-plus fs-2"></i>
 			</a>
 			<a href="javascript:;" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
-				(click)="removeCondition(item, parent)">
+				(click)="removeCondition(item, parent)" title="Xoá">
 				<i class="ki-duotone ki-trash fs-2">
 					<span class="path1"></span>
 					<span class="path2"></span>
@@ -100,8 +158,35 @@
 				</i>
 			</a>
 		</div>
-		<ng-container *ngFor="let rule of item.rules">
-			<ng-container *ngTemplateOutlet="condTemp;context: {item: rule, parent: item}" />
-		</ng-container>
+		<div class="cond-group rounded px-3 py-2 mt-2" [attr.data-depth]="(depth + 1) % 6" *ngIf="item.rules?.length">
+			<div class="d-flex align-items-center gap-3 mb-2">
+				<span class="cond-depth-badge">L{{depth + 2}}</span>
+				<span class="text-muted fs-7">{{item.rules.length}} thao tác con</span>
+			</div>
+			<ng-container *ngTemplateOutlet="actionListTemp;context: {item: item, childDepth: depth + 1}" />
+		</div>
 	</div>
+</ng-template>
+
+<!-- dùng chung cho dropdown Thao tác / Sự kiện -->
+<ng-template #groupTemp let-group="group">
+	<div class="d-flex align-items-center px-4 py-2 bg-light-{{group.color}} border-start border-4 border-{{group.color}}">
+		<span class="fs-8 fw-bolder text-uppercase text-{{group.color}}">{{group.label}}</span>
+		<span class="badge badge-{{group.color}} fs-9 ms-auto">{{group.items.length}}</span>
+	</div>
+</ng-template>
+
+<ng-template #optionTemp let-opt="opt">
+	<div class="d-flex align-items-center gap-3">
+		<span class="action-option-bar bg-{{opt.color}}"></span>
+		<div class="d-flex flex-column lh-sm">
+			<span class="fs-7 fw-semibold text-gray-800">{{opt.name}}</span>
+			<span class="fs-9 text-{{opt.color}}">{{opt.value}}</span>
+		</div>
+	</div>
+</ng-template>
+
+<!-- giá trị đang chọn: badge màu theo nhóm để nhìn lướt là biết loại -->
+<ng-template #selectedTemp let-opt="opt">
+	<span class="badge badge-light-{{opt.color}} fs-7 fw-semibold text-truncate mw-100" *ngIf="opt">{{opt.name}}</span>
 </ng-template>

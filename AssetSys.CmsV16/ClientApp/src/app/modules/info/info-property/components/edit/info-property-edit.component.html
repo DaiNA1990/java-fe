@@ -16,10 +16,27 @@
 				<nb-textarea [formCtrl]="form.controls.description" label="Mô tả" placeholder="Nhập thông tin" />
 			</nb-layout-grid-item>
 			<nb-layout-grid-item size="12">
-				<nb-checkbox [formCtrl]="form.controls.isShow" label="Hoạt động" placeholder="On/Off" />
+				<nb-checkbox [formCtrl]="form.controls.isUnique" label="Khoá duy nhất"
+					placeholder="Giá trị không được trùng trong nhóm" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-checkbox [formCtrl]="form.controls.isWorkflowManaged" label="Quản lý bởi quy trình"
+					placeholder="Chỉ cập nhật qua BPMN" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-radio [formCtrl]="orgUnitField" [dataSource]="orgUnitFields" label="Giới hạn theo tổ chức"
+					hint="Giới hạn dữ liệu theo đơn vị / phòng ban của user" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-text [formCtrl]="form.controls.orgUnits" label="Đơn vị/phòng ban được tiếp nhận"
+					placeholder="VD: 0015.01;0015.02 hoặc 0015"
+					hint="Mã dv_pb trong DTNN-PQ, cách nhau bởi dấu ;. Chỉ user thuộc đơn vị này hoặc cấp cha của nó mới xem/sửa được trường. Để trống = không giới hạn" />
 			</nb-layout-grid-item>
 			<nb-layout-grid-item size="12">
 				<nb-textarea [formCtrl]="form.controls.permission" label="Phân quyền" placeholder="Nhập thông tin" />
+			</nb-layout-grid-item>
+			<nb-layout-grid-item size="12">
+				<nb-checkbox [formCtrl]="form.controls.isShow" label="Hoạt động" placeholder="On/Off" />
 			</nb-layout-grid-item>
 		</nb-layout-grid>
 	</ng-template>

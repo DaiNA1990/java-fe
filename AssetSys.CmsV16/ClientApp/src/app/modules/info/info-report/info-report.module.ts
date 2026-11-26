@@ -15,7 +15,7 @@ import { AuthGuard } from '@appkkkh/modules/user/auth/services/auth.guard';
         path: 'info/info-report',
         component: InfoReportComponent,
         canActivate: [AuthGuard],
-        data: { permission: 'USER_ADMIN' },
+        data: { roles: ['DEVELOP'] },
       },
     ]),
     InfoReportComponentsModule,

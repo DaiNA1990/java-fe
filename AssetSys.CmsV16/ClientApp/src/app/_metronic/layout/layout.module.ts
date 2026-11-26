@@ -40,6 +40,7 @@ import {SharedModule} from "../shared/shared.module";
 import { NbDirectivesModule } from '@appkkkh/infrastructure/directives/directives.module';
 import { AuthGuard } from '@appkkkh/modules/user/auth/services/auth.guard';
 import { environment } from '@srckkkh/environments/environment';
+import { UserChangePasswordModule } from '@appkkkh/modules/user/user/components/change-password/user-change-password.module';
 
 const routes: Routes = [
   {
@@ -86,7 +87,8 @@ const routes: Routes = [
     NgbTooltipModule,
     TranslateModule,
     ThemeModeModule,
-    SharedModule
+    SharedModule,
+    UserChangePasswordModule
   ],
   exports: [RouterModule],
   providers: environment.isForNx ? [AuthGuard] : [],

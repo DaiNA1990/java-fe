@@ -4,6 +4,7 @@ import { UserComponent } from './user.component';
 import { RouterModule } from '@angular/router';
 import { UserComponentsModule } from './components/user-components.module';
 import { NbBreadcrumbModule } from '@appkkkh/components/page/breadcrumb/module';
+import { AuthGuard } from '@appkkkh/modules/user/auth/services/auth.guard';
 
 @NgModule({
     declarations: [
@@ -15,6 +16,8 @@ import { NbBreadcrumbModule } from '@appkkkh/components/page/breadcrumb/module';
             {
                 path: 'user/user',
                 component: UserComponent,
+                canActivate: [AuthGuard],
+                data: { roles: ['ADMIN'] },
             },
         ]),
         UserComponentsModule,

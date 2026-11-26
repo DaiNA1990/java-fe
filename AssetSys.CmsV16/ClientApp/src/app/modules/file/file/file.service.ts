@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from '@appkkkh/core/base/base.service';
+import { AppCons } from '@appkkkh/core/contants/app.cons';
 import { Observable ,throwError} from "rxjs";
 import { tap ,catchError} from 'rxjs/operators';
 
@@ -8,26 +9,29 @@ export class FileService extends BaseService {
 
   constructor() {
     super();
-    this.setModule('UploadFile');
+    this.setResource(AppCons.API_BASE.BUDGET_PLAN, 'files');
   }
 
-  uploadTemp(data: any): Observable<any> {
-    return this.post('UploadTemp', data);
+  /** params: {isReplace} lên query, body multipart giữ nguyên. */
+  uploadTemp(data: any, params: any = null): Observable<any> {
+    return this.post('temp', data, { params });
   }
 
   DonwloadTemp(data: any): Observable<any> {
-    return this.downloadFile('DonwloadTemp', data, { responseType: 'blob', observe: 'response' });
+    return this.downloadFile(`temp/${this.filePath(data?.filename)}`, null, { responseType: 'blob', observe: 'response' });
   }
 
-  upload(data: any): Observable<any> {
-    return this.post('Upload', data);
+  /** params: {groupCode} lên query, body multipart giữ nguyên. */
+  upload(data: any, params: any = null): Observable<any> {
+    return this.post('', data, { params });
   }
 
   download(data: any): Observable<any> {
     // return this.get('Donwload', data);
     //return this.downloadFile('DownloadFile', data, { responseType: 'blob', observe: 'response' });
     const viewableExts = ['.pdf', '.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg', '.webp'];
-    return this.downloadFile('DownloadFile', data, { responseType: 'blob', observe: 'response' as 'response' }).pipe(
+    const { filename, ...params } = data ?? {};
+    return this.downloadFile(this.filePath(filename), params, { responseType: 'blob', observe: 'response' as 'response' }).pipe(
       tap((resp: any) => {
         try {
           // resp có thể là Blob hoặc HttpResponse<Blob>
@@ -114,14 +118,6 @@ export class FileService extends BaseService {
         return throwError(() => err);
       })
     );
-  }
-
-  uploadTemplate(data: any): Observable<any> {
-    return this.post('UploadTemplate', data);
-  }
-
-  downloadTemplate(data: any): Observable<any> {
-    return this.get('DonwloadTemplate', data);
   }
 
 }

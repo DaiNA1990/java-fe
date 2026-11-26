@@ -1,0 +1,157 @@
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '70vw', maxWidth: '1200px' }">
+	<ng-template pTemplate="header">
+		<div class="d-flex flex-column">
+			<span class="font-bold white-space-nowrap">Kiểm tra trước khi thực hiện</span>
+			<span class="text-muted fs-7">Pre action · Form Validate - kiểm bản ghi của layout khác trước khi lưu / trình / duyệt</span>
+		</div>
+	</ng-template>
+
+	<div class="mb-6">
+		<label class="form-label required">Layout cần kiểm</label>
+		<p-autoComplete class="pv-layout" [(ngModel)]="layout" [suggestions]="layoutSuggestions"
+			(completeMethod)="searchLayout($event)" field="label" [forceSelection]="true" [dropdown]="true"
+			[delay]="300" placeholder="Tìm theo tên / mã layout (mọi group)" appendTo="body"
+			inputStyleClass="form-control" (onSelect)="onLayoutSelect()" (onClear)="onLayoutClear()" />
+		<div class="form-text">Đếm bản ghi của group chứa layout này, không lọc theo quyền của người bấm.</div>
+	</div>
+
+	<div class="mb-6">
+		<label class="form-label required">Kiểu kiểm tra</label>
+		<div class="d-flex flex-wrap gap-8">
+			<label class="form-check form-check-custom form-check-solid">
+				<input class="form-check-input" type="radio" name="pvRule" value="EXISTS" [(ngModel)]="rule" />
+				<span class="form-check-label">Phải có bản ghi thỏa điều kiện</span>
+			</label>
+			<label class="form-check form-check-custom form-check-solid">
+				<input class="form-check-input" type="radio" name="pvRule" value="NOT_EXISTS" [(ngModel)]="rule" />
+				<span class="form-check-label">Không được có bản ghi thỏa điều kiện</span>
+			</label>
+		</div>
+	</div>
+
+	<div class="mb-6">
+		<label class="form-label required">Thông báo khi không đạt</label>
+		<input type="text" class="form-control" [(ngModel)]="falsemsg" placeholder="vd: Kế hoạch vốn chưa được phê duyệt" />
+	</div>
+
+	<div class="mb-6">
+		<label class="form-label">Chỉ kiểm khi bấm nút quy trình</label>
+		<p-chips class="pv-chips" [(ngModel)]="workflowActions" [addOnBlur]="true" separator=","
+			placeholder="Nhập mã nút rồi Enter (vd DUYET)" />
+		<div class="form-text">
+			Để trống = kiểm với mọi nút (Lưu, Trình, Duyệt, Từ chối...). Mã nút lấy theo thuộc tính
+			<code>actions</code> của bước BPMN, vd chỉ nhập <code>DUYET</code> để nút Từ chối không bị chặn.
+		</div>
+	</div>
+
+	<div class="mb-4">
+		<label class="form-label required">Điều kiện lọc bản ghi của layout cần kiểm</label>
+		<div class="form-text mb-3">
+			Cột trái: field của layout cần kiểm. Giá trị nhập như expressionData: <code>03</code> = hằng,
+			<code>&#123;don_vi&#125;</code> = JSONata trên bản ghi đang thao tác (có <code>id</code>, <code>parentId</code>,
+			<code>parentData.x</code>, <code>currentUser.x</code>), <code>&#123;don_vi&#125;.&#123;phong_ban&#125;</code> = ghép
+			chuỗi, <code>new Date()</code> = ngày hiện tại. Dùng nút "Chèn" để chọn field cho khỏi gõ sai.
+			Toán tử in / not in: nhiều giá trị cách nhau bởi dấu phẩy.
+		</div>
+		<ng-container *ngTemplateOutlet="groupTemp; context: {item: where, depth: 0}" />
+	</div>
+
+	<div class="alert alert-danger py-3 mb-0" *ngIf="errorText">{{errorText}}</div>
+
+	<ng-template pTemplate="footer">
+		<p-button label="Đóng" [text]="true" severity="secondary" styleClass="mx-3" (click)="visible = false" />
+		<p-button label="Áp dụng" [outlined]="true" severity="secondary" (click)="apply()" />
+	</ng-template>
+</p-dialog>
+
+<ng-template #groupTemp let-item="item" let-parent="parent" let-depth="depth">
+	<div class="cond-group rounded px-4 py-3 mb-3" [attr.data-depth]="depth % 6">
+		<div class="d-flex align-items-center justify-content-between mb-3">
+			<div class="d-flex align-items-center gap-3">
+				<span class="cond-depth-badge">L{{depth + 1}}</span>
+				<div class="btn-group btn-group-sm">
+					<label class="btn btn-outline btn-color-muted btn-active-primary" [class.active]="item.condition === 'and'">
+						<input class="btn-check" type="radio" value="and" [name]="'pvCond' + item.id" [(ngModel)]="item.condition" />
+						AND
+					</label>
+					<label class="btn btn-outline btn-color-muted btn-active-primary" [class.active]="item.condition === 'or'">
+						<input class="btn-check" type="radio" value="or" [name]="'pvCond' + item.id" [(ngModel)]="item.condition" />
+						OR
+					</label>
+				</div>
+				<span class="text-muted fs-7">{{item.rules.length}} điều kiện</span>
+			</div>
+			<div>
+				<a href="javascript:;" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+					(click)="addRule(item)" title="Thêm điều kiện">
+					<i class="ki-duotone ki-plus fs-2"></i>
+				</a>
+				<a href="javascript:;" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+					(click)="addGroup(item)" title="Thêm nhóm">
+					<i class="ki-duotone ki-element-plus fs-2">
+						<span class="path1"></span>
+						<span class="path2"></span>
+						<span class="path3"></span>
+						<span class="path4"></span>
+						<span class="path5"></span>
+					</i>
+				</a>
+				<a href="javascript:;" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+					(click)="remove(item, parent)" *ngIf="parent !== undefined" title="Xoá nhóm">
+					<i class="ki-duotone ki-trash fs-2">
+						<span class="path1"></span>
+						<span class="path2"></span>
+						<span class="path3"></span>
+						<span class="path4"></span>
+						<span class="path5"></span>
+					</i>
+				</a>
+			</div>
+		</div>
+		<ng-container *ngFor="let rule of item.rules">
+			<ng-container *ngTemplateOutlet="isGroup(rule) ? groupTemp : ruleTemp; context: {item: rule, parent: item, depth: depth + 1}" />
+		</ng-container>
+	</div>
+</ng-template>
+
+<ng-template #ruleTemp let-item="item" let-parent="parent">
+	<div class="cond-rule rounded px-3 py-2 mb-2">
+		<div class="input-group flex-nowrap">
+			<p-dropdown class="pv-field" [options]="targetFields" [(ngModel)]="item.field" optionLabel="name"
+				optionValue="value" [filter]="true" filterBy="name" placeholder="Field của layout cần kiểm"
+				emptyMessage="Chọn layout trước" emptyFilterMessage="Không tìm thấy" appendTo="body" />
+			<select class="form-select pv-operator" [(ngModel)]="item.operator">
+				<option value="" disabled>Toán tử</option>
+				<option *ngFor="let op of operators" [value]="op.value">{{op.name}}</option>
+			</select>
+			<ng-container *ngIf="!isNoValue(item.operator)">
+				<input type="text" class="form-control font-monospace" [(ngModel)]="item.value"
+					[placeholder]="valuePlaceholder(item.operator)" />
+				<p-dropdown class="pv-insert" [options]="tokenGroups" [group]="true" [(ngModel)]="item.pick"
+					optionLabel="name" optionValue="value" [filter]="true" filterBy="name,value"
+					placeholder="Chèn" emptyFilterMessage="Không tìm thấy" appendTo="body"
+					panelStyleClass="pv-insert-panel" (onChange)="insertToken(item)">
+					<ng-template let-group pTemplate="group">
+						<span class="fs-8 fw-bolder text-uppercase text-muted">{{group.label}}</span>
+					</ng-template>
+					<ng-template let-opt pTemplate="item">
+						<div class="d-flex flex-column lh-sm">
+							<span class="fs-7 text-gray-800">{{opt.name}}</span>
+							<span class="fs-9 text-primary font-monospace">{{opt.value}}</span>
+						</div>
+					</ng-template>
+				</p-dropdown>
+			</ng-container>
+			<a href="javascript:;" class="btn btn-sm btn-icon btn-bg-light btn-active-color-primary w-30px h-30px mx-2"
+				(click)="remove(item, parent)" title="Xoá điều kiện">
+				<i class="ki-duotone ki-trash fs-2">
+					<span class="path1"></span>
+					<span class="path2"></span>
+					<span class="path3"></span>
+					<span class="path4"></span>
+					<span class="path5"></span>
+				</i>
+			</a>
+		</div>
+	</div>
+</ng-template>

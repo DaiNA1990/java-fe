@@ -8,7 +8,7 @@ export const environment = {
   appVersion: 'v8.1.8',
   USERDATA_KEY: 'authf649fc9a5f55',
   isMockEnabled: true,
-  apiUrl: '/',
+  apiUrl: '/api/',
   appThemeName: 'FPT',
   appHost: '/kkkh',
   tinymceBaseUrl: '/tinymce'

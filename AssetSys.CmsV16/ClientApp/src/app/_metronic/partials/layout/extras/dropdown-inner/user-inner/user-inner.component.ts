@@ -2,7 +2,7 @@ import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { TranslationService } from '@appkkkh/infrastructure/i18n';
 import { AuthService } from '@appkkkh/modules/user/auth';
-import { AppCons } from '@appkkkh/core/contants/app.cons';
+import { UserChangePasswordService } from '@appkkkh/modules/user/user/components/change-password/user-change-password.service';
 
 @Component({
   selector: 'app-user-inner',
@@ -20,7 +20,8 @@ export class UserInnerComponent implements OnInit, OnDestroy {
 
   constructor(
     private auth: AuthService,
-    private translationService: TranslationService
+    private translationService: TranslationService,
+    private changePasswordService: UserChangePasswordService
   ) {}
 
   ngOnInit(): void {
@@ -29,10 +30,12 @@ export class UserInnerComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    localStorage.removeItem(AppCons.TOKEN_KEY);
-    localStorage.removeItem(AppCons.TOKEN_REFRESH_KEY);
+    // Xoá phiên ở BE (cookie SID); phiên SSO thì chuyển sang Keycloak để đăng xuất luôn.
     this.auth.logout();
-    document.location.href = '/auth/signin';
+  }
+
+  changePassword() {
+    this.changePasswordService.open();
   }
 
   selectLanguage(lang: string) {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { InfoPropertyService } from '@appkkkh/modules/info/info-property/services/info-property.service';
@@ -7,10 +7,12 @@ import icons from '@appkkkh/_metronic/shared/keenicon/icons.json';
 import { InfoFormDesignComponent } from '../../../design/component';
 import { InfoFormService } from '@appkkkh/modules/info/info-form/services/info-form.service';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { CONDITION_TREE_STYLES, insertConditionRule, sortConditionRules } from '../condition-tree';
 
 @Component({
     selector: 'app-info-form-property-build-condition-readonly',
     templateUrl: `./component.html`,
+    styles: [CONDITION_TREE_STYLES],
     providers: [ConfirmationService, MessageService]
 })
 export class InfoFormPropertyBuildConditionReadOnlyComponent implements OnInit {
@@ -18,6 +20,8 @@ export class InfoFormPropertyBuildConditionReadOnlyComponent implements OnInit {
     @Input() groupId: any;
     @Input() formCtrl: AbstractControl = new FormControl();
     @Input() label: any;
+    // bắn ra sau khi bấm Lưu thông tin để component cha lưu control xuống DB
+    @Output() saved = new EventEmitter<void>();
 
     //private parent: any = inject(InfoFormDesignComponent, { optional: true });
 
@@ -119,7 +123,7 @@ export class InfoFormPropertyBuildConditionReadOnlyComponent implements OnInit {
     }
 
     addCondition(item: any) {
-        item.rules.push({
+        insertConditionRule(item, {
             field: '',
             operator: '',
             value: ''
@@ -165,8 +169,11 @@ export class InfoFormPropertyBuildConditionReadOnlyComponent implements OnInit {
 
     save() {
 
+        sortConditionRules(this.conditions);
+
         this.formCtrl.setValue(this.conditions?.rules?.length > 0 ? JSON.stringify(this.conditions) : null);
         this.visible = false;
+        this.saved.emit();
 
         if (this.formControl.invalid) {
             this.formControl.markAllAsTouched();
