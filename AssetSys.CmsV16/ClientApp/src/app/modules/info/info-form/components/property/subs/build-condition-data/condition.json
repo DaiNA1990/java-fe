@@ -123,6 +123,10 @@
         {
             "name": "starts with",
             "value": "starts with"
+        },
+        {
+            "name": "not starts with",
+            "value": "not starts with"
         }
     ]
 }
