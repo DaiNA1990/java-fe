@@ -33,4 +33,5 @@ import { NbCheckboxModule } from '@appkkkh/components/form/checkbox/module';
     ],
     providers: [],
 })
+
 export class InfoDataComponentsModule { }
