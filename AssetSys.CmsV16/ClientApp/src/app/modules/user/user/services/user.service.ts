@@ -22,4 +22,10 @@ export class UserService extends BaseService {
 
   updateInfo = (data: any): Observable<any> => this.put('me', data);
 
+  /**
+   * Đồng bộ toàn bộ tài khoản sang Keycloak (tạo user chưa có kèm mật khẩu hiện tại, cập nhật email/họ tên/trạng thái).
+   * data: { totalUsers, created, updated, unchanged, skipped, failed, aborted, abortReason, failures[], warnings[] }.
+   */
+  syncKeycloak = (): Observable<any> => this.post('keycloak-sync');
+
 }

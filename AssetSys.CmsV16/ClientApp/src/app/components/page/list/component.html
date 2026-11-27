@@ -66,6 +66,8 @@
         </div>
         <div class="card-toolbar flex-row-fluid justify-content-end gap-5" *ngIf="!isLimitAction">
             <div class="d-flex justify-content-end" data-kt-filemanager-table-toolbar="base">
+                <!-- nút riêng của từng màn (vd Đồng bộ Keycloak ở màn tài khoản): <ng-container toolbar>...</ng-container> -->
+                <ng-content select="[toolbar]"></ng-content>
                 <a href="javascript:;" class="btn btn-icon btn-primary" (click)="onAdd()" *ngIf="isButtonAddIcon">
                     <i class="ki-duotone ki-plus fs-2"></i>
                 </a>

@@ -19,6 +19,9 @@ import { NbCheckboxModule } from '@appkkkh/components/form/checkbox/module';
 import { SharedModule } from '@appkkkh/_metronic/shared/shared.module';
 import { UserRoleMapComponentsModule } from '../../user-role-map/components/user-role-map-components.module';
 import { NbDirectivesModule } from '@appkkkh/infrastructure/directives/directives.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
     declarations: [
@@ -47,7 +50,10 @@ import { NbDirectivesModule } from '@appkkkh/infrastructure/directives/directive
         NbTreeModule,
         NbEditorModule,
         NbDirectivesModule,
-        UserRoleMapComponentsModule
+        UserRoleMapComponentsModule,
+        ConfirmDialogModule,
+        DialogModule,
+        ToastModule,
     ],
     providers: [],
 })

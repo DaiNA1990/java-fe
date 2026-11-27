@@ -27,6 +27,15 @@
             </nb-layout-grid-item>
         </nb-layout-grid>
     </ng-container>
+    <ng-container toolbar>
+        <button type="button" class="btn btn-flex btn-light-primary me-3" (click)="confirmSyncKeycloak($event)"
+            [disabled]="syncingKeycloak" *ngIf="authService.hasRole('ADMIN')"
+            title="Tạo / cập nhật tài khoản trên Keycloak theo danh sách tài khoản">
+            <span class="spinner-border spinner-border-sm me-2" *ngIf="syncingKeycloak"></span>
+            <app-keenicon name="arrows-circle" class="fs-2" *ngIf="!syncingKeycloak"></app-keenicon>
+            Đồng bộ Keycloak
+        </button>
+    </ng-container>
     <app-user-edit edit></app-user-edit>
     <ng-template #rowActionsTemplate let-item="item">
         <a href="javascript:;" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1" title="Phân quyền"
@@ -37,3 +46,51 @@
 </nb-page-list>
 
 <app-user-role-map-assign></app-user-role-map-assign>
+
+<p-confirmDialog [style]="{ width: '32rem' }"></p-confirmDialog>
+<p-toast></p-toast>
+
+<p-dialog header="Kết quả đồng bộ Keycloak" [(visible)]="keycloakSyncDialogVisible" [modal]="true"
+    [style]="{ width: '56rem' }" [breakpoints]="{ '960px': '92vw' }">
+    <ng-container *ngIf="keycloakSyncResult as r">
+        <p class="mb-4">
+            Tổng {{ r.totalUsers }} tài khoản: tạo {{ r.created }}, cập nhật {{ r.updated }}, giữ nguyên {{ r.unchanged }},
+            bỏ qua {{ r.skipped }}, lỗi {{ r.failed }}.
+        </p>
+        <div class="alert alert-danger" *ngIf="r.aborted">Dừng giữa chừng: {{ r.abortReason }}</div>
+        <ng-container *ngIf="r.failures?.length">
+            <h6 class="text-danger">Lỗi ({{ r.failures.length }})</h6>
+            <table class="table table-row-bordered table-sm gy-2 mb-5">
+                <thead>
+                    <tr class="fw-bold">
+                        <th class="w-200px">Tài khoản</th>
+                        <th>Lý do</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let i of r.failures">
+                        <td class="text-nowrap">{{ i.userName }}</td>
+                        <td>{{ i.message }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+        <ng-container *ngIf="r.warnings?.length">
+            <h6 class="text-warning">Cảnh báo ({{ r.warnings.length }})</h6>
+            <table class="table table-row-bordered table-sm gy-2">
+                <thead>
+                    <tr class="fw-bold">
+                        <th class="w-200px">Tài khoản</th>
+                        <th>Nội dung</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let i of r.warnings">
+                        <td class="text-nowrap">{{ i.userName }}</td>
+                        <td>{{ i.message }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+    </ng-container>
+</p-dialog>
