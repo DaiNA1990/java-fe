@@ -67,6 +67,10 @@
             "value": "FORM_SUBMIT"
         },
         {
+            "name": "Form delete",
+            "value": "FORM_DELETE"
+        },
+        {
             "name": "Form reset",
             "value": "FORM_RESET"
         },
